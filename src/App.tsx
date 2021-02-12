@@ -1,4 +1,7 @@
 import React, { useState, useEffect } from 'react';
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
+import { TouchBackend } from 'react-dnd-touch-backend';
 import Board from './Board';
 import Shape, { shapes } from './Shape';
 
@@ -49,22 +52,32 @@ function App({}: AppProps) {
   });
 
   return (
-    <div className="container mx-auto bg-blue-300 min-h-screen">
-      <Board width={width} height={height} board={state.board} />
+    <DndProvider
+      debugMode={true}
+      backend={TouchBackend}
+      options={{
+        enableMouseEvents: true,
+      }}
+    >
+      <div className="container mx-auto bg-blue-300 min-h-screen">
+        <header className="h-12 bg-red-500"></header>
 
-      <div className="grid grid-cols-3 my-3 mx-3 gap-3">
-        {[0, 1, 2].map((idx) => (
-          <div className="square rounded-2xl border-solid border-2 border-black relative">
-            <div className="square-content">
-              <Shape
-                shape={state.currentSelection[idx]}
-                className="center-shape"
-              />
+        <Board width={width} height={height} board={state.board} />
+
+        <div className="grid grid-cols-3 my-3 mx-3 gap-3">
+          {[0, 1, 2].map((idx) => (
+            <div className="square rounded-2xl border-solid border-2 border-black relative">
+              <div className="square-content">
+                <Shape
+                  shape={state.currentSelection[idx]}
+                  className="center-shape"
+                />
+              </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
-    </div>
+    </DndProvider>
   );
 }
 

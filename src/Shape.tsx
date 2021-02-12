@@ -1,6 +1,13 @@
 import classNames from 'classnames';
 import React from 'react';
+import { useDrag } from 'react-dnd';
 import { Tile } from './Tile';
+
+export const SHAPE = Symbol('Shape');
+export type DragShape = {
+  type: typeof SHAPE;
+  shape: string;
+};
 
 function normalize(shape: string): string {
   return shape
@@ -36,37 +43,49 @@ type ShapeProps = {
   shape: string;
 };
 export default function Shape({ shape, className }: ShapeProps) {
+  const [{ isDragging }, dragRef] = useDrag({
+    item: {
+      type: SHAPE,
+      shape,
+    },
+    collect: (monitor) => ({
+      isDragging: !!monitor.isDragging(),
+    }),
+  });
   const rows = shape.trim().split('\n');
   const numRows = rows.length;
   const numColumns = rows.reduce(
     (maxWidth, row) => Math.max(maxWidth, row.length),
     0,
   );
-
-  console.log(shape, numRows, numColumns);
-
-  const tiles = rows.flatMap((row, rowIndex) => {
-    return row
-      .split('')
-      .map((tile, columnIndex) => (
-        <Tile
-          key={`${rowIndex}x${columnIndex}`}
-          row={rowIndex + 1}
-          column={columnIndex + 1}
-          value={tile}
-        />
-      ));
-  });
-  console.log('tiles', tiles);
-
   const maxSize = 80; // %
-
   const width = (numColumns / MAX_SHAPE_SIZE) * maxSize;
   const height = (numRows / MAX_SHAPE_SIZE) * maxSize;
 
+  console.log('isDragging', isDragging);
+  const tiles = rows.flatMap((row, rowIndex) => {
+    return row
+      .split('')
+      .flatMap((tile, columnIndex) =>
+        tile === '0'
+          ? []
+          : [
+              <Tile
+                key={`${rowIndex}x${columnIndex}`}
+                row={rowIndex}
+                column={columnIndex}
+                value={tile}
+              />,
+            ],
+      );
+  });
   return (
     <div
-      className={classNames(className, 'shape grid absolute')}
+      ref={dragRef}
+      tabIndex={1}
+      className={classNames(className, 'shape grid absolute', {
+        'opacity-40': isDragging,
+      })}
       style={{
         gridTemplateColumns: `repeat(${numColumns}, minMax(0, 1fr))`,
         gridTemplateRows: `repeat(${numRows}, minMax(0, 1fr))`,
