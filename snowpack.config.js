@@ -1,3 +1,4 @@
+/* global module */
 /** @type {import("snowpack").SnowpackUserConfig } */
 module.exports = {
   mount: {
@@ -16,7 +17,7 @@ module.exports = {
   ],
   optimize: {
     /* Example: Bundle your final build: */
-    // "bundle": true,
+    bundle: true,
   },
   packageOptions: {
     /* ... */
@@ -25,6 +26,9 @@ module.exports = {
     /* ... */
   },
   buildOptions: {
-    /* ... */
+    // https://blog.kaiserapps.com/snowpack-github-actions/
+    out: 'docs',
+    metaUrlPath: 'snowpack',
+    baseUrl: './',
   },
 };

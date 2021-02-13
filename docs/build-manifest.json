@@ -1,0 +1,373 @@
+{
+  "inputs": {
+    "snowpack/env.js": {
+      "bytes": 97,
+      "imports": []
+    },
+    "snowpack/pkg/common/_commonjsHelpers-668e6127.js": {
+      "bytes": 451,
+      "imports": []
+    },
+    "snowpack/pkg/common/index-4f86a9c5.js": {
+      "bytes": 8631,
+      "imports": [
+        {
+          "path": "snowpack/pkg/common/_commonjsHelpers-668e6127.js",
+          "kind": "import-statement"
+        }
+      ]
+    },
+    "snowpack/pkg/react.js": {
+      "bytes": 164,
+      "imports": [
+        {
+          "path": "snowpack/pkg/common/index-4f86a9c5.js",
+          "kind": "import-statement"
+        },
+        {
+          "path": "snowpack/pkg/common/index-4f86a9c5.js",
+          "kind": "import-statement"
+        },
+        {
+          "path": "snowpack/pkg/common/_commonjsHelpers-668e6127.js",
+          "kind": "import-statement"
+        }
+      ]
+    },
+    "snowpack/pkg/react-dom.js": {
+      "bytes": 127525,
+      "imports": [
+        {
+          "path": "snowpack/pkg/common/_commonjsHelpers-668e6127.js",
+          "kind": "import-statement"
+        },
+        {
+          "path": "snowpack/pkg/common/index-4f86a9c5.js",
+          "kind": "import-statement"
+        }
+      ]
+    },
+    "snowpack/pkg/common/invariant.esm-0fb995cf.js": {
+      "bytes": 1114,
+      "imports": []
+    },
+    "snowpack/pkg/react-dnd.js": {
+      "bytes": 113972,
+      "imports": [
+        {
+          "path": "snowpack/pkg/common/index-4f86a9c5.js",
+          "kind": "import-statement"
+        },
+        {
+          "path": "snowpack/pkg/common/invariant.esm-0fb995cf.js",
+          "kind": "import-statement"
+        },
+        {
+          "path": "snowpack/pkg/common/_commonjsHelpers-668e6127.js",
+          "kind": "import-statement"
+        }
+      ]
+    },
+    "snowpack/pkg/react-dnd-touch-backend.js": {
+      "bytes": 22694,
+      "imports": [
+        {
+          "path": "snowpack/pkg/common/invariant.esm-0fb995cf.js",
+          "kind": "import-statement"
+        }
+      ]
+    },
+    "snowpack/pkg/classnames.js": {
+      "bytes": 1099,
+      "imports": [
+        {
+          "path": "snowpack/pkg/common/_commonjsHelpers-668e6127.js",
+          "kind": "import-statement"
+        }
+      ]
+    },
+    "dist/types.js": {
+      "bytes": 189,
+      "imports": []
+    },
+    "dist/Tile.js": {
+      "bytes": 616,
+      "imports": [
+        {
+          "path": "snowpack/pkg/classnames.js",
+          "kind": "import-statement"
+        },
+        {
+          "path": "snowpack/pkg/react.js",
+          "kind": "import-statement"
+        },
+        {
+          "path": "dist/types.js",
+          "kind": "import-statement"
+        }
+      ]
+    },
+    "dist/Shape.js": {
+      "bytes": 2735,
+      "imports": [
+        {
+          "path": "snowpack/pkg/classnames.js",
+          "kind": "import-statement"
+        },
+        {
+          "path": "snowpack/pkg/react.js",
+          "kind": "import-statement"
+        },
+        {
+          "path": "snowpack/pkg/react-dnd.js",
+          "kind": "import-statement"
+        },
+        {
+          "path": "dist/Tile.js",
+          "kind": "import-statement"
+        },
+        {
+          "path": "dist/types.js",
+          "kind": "import-statement"
+        }
+      ]
+    },
+    "dist/utils.js": {
+      "bytes": 918,
+      "imports": [
+        {
+          "path": "dist/types.js",
+          "kind": "import-statement"
+        }
+      ]
+    },
+    "dist/app-state.js": {
+      "bytes": 3377,
+      "imports": [
+        {
+          "path": "dist/Shape.js",
+          "kind": "import-statement"
+        },
+        {
+          "path": "dist/types.js",
+          "kind": "import-statement"
+        },
+        {
+          "path": "dist/utils.js",
+          "kind": "import-statement"
+        }
+      ]
+    },
+    "dist/AppDragLayer.js": {
+      "bytes": 1187,
+      "imports": [
+        {
+          "path": "snowpack/pkg/react.js",
+          "kind": "import-statement"
+        },
+        {
+          "path": "snowpack/pkg/react-dnd.js",
+          "kind": "import-statement"
+        },
+        {
+          "path": "dist/Shape.js",
+          "kind": "import-statement"
+        }
+      ]
+    },
+    "dist/BoardTile.js": {
+      "bytes": 1370,
+      "imports": [
+        {
+          "path": "snowpack/pkg/react.js",
+          "kind": "import-statement"
+        },
+        {
+          "path": "dist/Tile.js",
+          "kind": "import-statement"
+        },
+        {
+          "path": "snowpack/pkg/react-dnd.js",
+          "kind": "import-statement"
+        },
+        {
+          "path": "dist/Shape.js",
+          "kind": "import-statement"
+        },
+        {
+          "path": "dist/utils.js",
+          "kind": "import-statement"
+        }
+      ]
+    },
+    "dist/Board.js": {
+      "bytes": 2315,
+      "imports": [
+        {
+          "path": "snowpack/pkg/react.js",
+          "kind": "import-statement"
+        },
+        {
+          "path": "snowpack/pkg/react-dnd.js",
+          "kind": "import-statement"
+        },
+        {
+          "path": "dist/BoardTile.js",
+          "kind": "import-statement"
+        },
+        {
+          "path": "dist/Shape.js",
+          "kind": "import-statement"
+        },
+        {
+          "path": "dist/types.js",
+          "kind": "import-statement"
+        },
+        {
+          "path": "dist/utils.js",
+          "kind": "import-statement"
+        }
+      ]
+    },
+    "dist/App.js": {
+      "bytes": 1753,
+      "imports": [
+        {
+          "path": "snowpack/pkg/react.js",
+          "kind": "import-statement"
+        },
+        {
+          "path": "snowpack/pkg/react-dnd.js",
+          "kind": "import-statement"
+        },
+        {
+          "path": "snowpack/pkg/react-dnd-touch-backend.js",
+          "kind": "import-statement"
+        },
+        {
+          "path": "dist/app-state.js",
+          "kind": "import-statement"
+        },
+        {
+          "path": "dist/AppDragLayer.js",
+          "kind": "import-statement"
+        },
+        {
+          "path": "dist/Board.js",
+          "kind": "import-statement"
+        },
+        {
+          "path": "dist/Shape.js",
+          "kind": "import-statement"
+        }
+      ]
+    },
+    "dist/index.css": {
+      "bytes": 6789329,
+      "imports": []
+    },
+    "dist/index.js": {
+      "bytes": 510,
+      "imports": [
+        {
+          "path": "snowpack/env.js",
+          "kind": "import-statement"
+        },
+        {
+          "path": "snowpack/pkg/react.js",
+          "kind": "import-statement"
+        },
+        {
+          "path": "snowpack/pkg/react-dom.js",
+          "kind": "import-statement"
+        },
+        {
+          "path": "dist/App.js",
+          "kind": "import-statement"
+        },
+        {
+          "path": "dist/index.css",
+          "kind": "import-statement"
+        }
+      ]
+    }
+  },
+  "outputs": {
+    "../~~bundle~~/dist/index.js": {
+      "imports": [],
+      "exports": [],
+      "inputs": {
+        "snowpack/pkg/react-dnd.js": {
+          "bytesInOutput": 102257
+        },
+        "snowpack/env.js": {
+          "bytesInOutput": 186
+        },
+        "snowpack/pkg/common/_commonjsHelpers-668e6127.js": {
+          "bytesInOutput": 418
+        },
+        "snowpack/pkg/common/index-4f86a9c5.js": {
+          "bytesInOutput": 10627
+        },
+        "snowpack/pkg/react.js": {
+          "bytesInOutput": 0
+        },
+        "snowpack/pkg/react-dom.js": {
+          "bytesInOutput": 188736
+        },
+        "snowpack/pkg/common/invariant.esm-0fb995cf.js": {
+          "bytesInOutput": 650
+        },
+        "dist/App.js": {
+          "bytesInOutput": 1488
+        },
+        "snowpack/pkg/react-dnd-touch-backend.js": {
+          "bytesInOutput": 19736
+        },
+        "snowpack/pkg/classnames.js": {
+          "bytesInOutput": 1163
+        },
+        "dist/Shape.js": {
+          "bytesInOutput": 2545
+        },
+        "dist/types.js": {
+          "bytesInOutput": 182
+        },
+        "dist/Tile.js": {
+          "bytesInOutput": 474
+        },
+        "dist/utils.js": {
+          "bytesInOutput": 508
+        },
+        "dist/app-state.js": {
+          "bytesInOutput": 3200
+        },
+        "dist/AppDragLayer.js": {
+          "bytesInOutput": 1114
+        },
+        "dist/Board.js": {
+          "bytesInOutput": 2110
+        },
+        "dist/BoardTile.js": {
+          "bytesInOutput": 1231
+        },
+        "dist/index.css": {
+          "bytesInOutput": 0
+        },
+        "dist/index.js": {
+          "bytesInOutput": 244
+        }
+      },
+      "bytes": 338689
+    },
+    "../~~bundle~~/dist/index.css": {
+      "imports": [],
+      "inputs": {
+        "dist/index.css": {
+          "bytesInOutput": 6719142
+        }
+      },
+      "bytes": 6719163
+    }
+  }
+}
