@@ -1,6 +1,6 @@
 import classNames from 'classnames';
 import React from 'react';
-import { useDrag } from 'react-dnd';
+import { DragElementWrapper, DragSourceOptions, useDrag } from 'react-dnd';
 import { Tile } from './Tile';
 import { BoardAddress, ShapeData, TileStates } from './types';
 
@@ -9,8 +9,6 @@ export type DragShape = {
   type: typeof SHAPE;
   shape: ShapeData;
   shapeIndex: number;
-  height: number;
-  width: number;
 };
 
 function parseShape(shape: string): ShapeData {
@@ -53,14 +51,36 @@ export const shapes = [
   `
   x
   x
-  xx
+  xxx
   `,
   `
-  _x
-  _x
+  x
   xx
   `,
+  `x`,
+  `xx`,
+  `xxx`,
+  `xxxx`,
+  `xxxxx`,
 ].map(parseShape);
+
+type Collected = { isDragging: boolean };
+function useShapeDrag(shape: ShapeData, shapeIndex: number) {
+  return useDrag<DragShape, unknown, Collected>({
+    item: {
+      type: SHAPE,
+      shape,
+      shapeIndex,
+    },
+    isDragging(monitor) {
+      const item = monitor.getItem();
+      return item && item.type === SHAPE && Object.is(item.shape, shape);
+    },
+    collect: (monitor) => ({
+      isDragging: !!monitor.isDragging(),
+    }),
+  });
+}
 
 const MAX_SHAPE_SIZE = 5;
 type ShapeProps = {
@@ -73,39 +93,14 @@ export default function Shape({
   shapeIndex,
   className,
 }: ShapeProps): JSX.Element {
-  const shapeRef = React.useRef<HTMLDivElement | null>(null);
-  type Collected = { isDragging: boolean };
-  const [{ isDragging }, dragRef] = useDrag<DragShape, unknown, Collected>({
-    item: {
-      type: SHAPE,
-      shape,
-      shapeIndex,
-      width: 0,
-      height: 0,
-    },
-    begin() {
-      const bbox = shapeRef.current?.getBoundingClientRect();
-      console.log('begin', bbox?.width, bbox?.height);
+  const [{ isDragging }, dragRef] = useShapeDrag(shape, shapeIndex);
 
-      return {
-        type: SHAPE,
-        shape,
-        shapeIndex,
-        width: bbox?.width ?? 0,
-        height: bbox?.height ?? 0,
-      };
-    },
-    collect: (monitor) => ({
-      isDragging: !!monitor.isDragging(),
-    }),
-  });
   const maxSize = 80; // %
   const width = (shape.columns / MAX_SHAPE_SIZE) * maxSize;
   const height = (shape.rows / MAX_SHAPE_SIZE) * maxSize;
 
   return (
     <div
-      ref={dragRef}
       className={classNames(className, 'absolute', {
         'opacity-40': isDragging,
       })}
@@ -116,20 +111,25 @@ export default function Shape({
         left: `${(100 - width) / 2}%`,
       }}
     >
-      <ShapeUI shape={shape} ref={shapeRef} />
+      <ShapeUI shape={shape} ref={dragRef} />
     </div>
   );
 }
 
 type ShapeUIProps = {
+  className?: string;
   shape: ShapeData;
 };
 // eslint-disable-next-line react/display-name
 export const ShapeUI = React.forwardRef(
-  ({ shape }: ShapeUIProps, ref: React.ForwardedRef<HTMLDivElement>) => {
+  (
+    { shape, className }: ShapeUIProps,
+    ref: React.ForwardedRef<HTMLDivElement>,
+  ) => {
     const tiles = shape.offsets.flatMap(({ row, column }) => {
       return [
         <Tile
+          className={className}
           key={`${row}x${column}`}
           row={row}
           column={column}

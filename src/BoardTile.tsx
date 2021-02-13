@@ -34,7 +34,6 @@ function BoardTileImpl({
       return false;
     },
     drop(item) {
-      console.log('drop', item);
       dispatch({
         type: 'PlaceShape',
         payload: {

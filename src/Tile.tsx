@@ -20,10 +20,10 @@ export const Tile = React.forwardRef(
         ref={ref}
         className={classNames(
           className,
-          'rounded-lg square border-2 border-black',
+          'rounded-lg square border-2 border-color',
           {
-            'bg-green-800': value === TileStates.Empty,
-            'bg-blue-800': value === TileStates.Filled,
+            'bg-tile-empty': value === TileStates.Empty,
+            'bg-tile-filled': value === TileStates.Filled,
           },
         )}
         style={{

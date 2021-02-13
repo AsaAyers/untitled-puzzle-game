@@ -1,5 +1,6 @@
 import React from 'react';
 import { useDrop } from 'react-dnd';
+import { AppDragLayer } from './AppDragLayer';
 import { BoardTile } from './BoardTile';
 import { DragShape, SHAPE } from './Shape';
 import { AppDispatch, BoardAddress, BoardSize, TileStates } from './types';
@@ -10,19 +11,19 @@ type BoardProps = {
   boardSize: BoardSize;
   board: TileStates[];
   dispatch: AppDispatch;
+  children?: React.ReactNode;
 };
 export default function Board({
   boardSize,
   board,
   dispatch,
+  children,
 }: BoardProps): JSX.Element {
-  const [{ isOver, item }, dropRef] = useDrop({
+  // const boardRef = React.useRef(undefined) as any;
+  const [isOver, boardRef] = useDrop({
     accept: SHAPE,
     collect(monitor) {
-      return {
-        isOver: monitor.isOver(),
-        item: monitor.getItem() as null | DragShape,
-      };
+      return monitor.isOver();
     },
   });
 
@@ -38,36 +39,25 @@ export default function Board({
     }
   }, [isOver]);
   const onHover = React.useCallback((addr: HoverAddress | null) => {
-    setHover(addr);
-  }, []);
-
-  const tilesPreview = React.useMemo(() => {
-    if (hover && item) {
-      const offsets = shiftShape(item.shape, hover);
-
-      const indexes = offsets.flatMap((addr) => {
-        if (!isTileValid(addr)) {
-          return [];
-        }
-
-        return [addressToIndex(boardSize, addr)];
-      });
-
-      if (indexes.length === item.shape.offsets.length) {
-        const tmpBoard = [...board];
-        indexes.forEach((i) => (tmpBoard[i] = TileStates.Filled));
-        return tmpBoard;
+    setHover((current) => {
+      if (
+        !current ||
+        !addr ||
+        current.row !== addr.row ||
+        current.column !== addr?.column
+      ) {
+        return addr;
       }
-    }
-    return board;
-  }, [hover, item, board, isTileValid, boardSize]);
+      return current;
+    });
+  }, []);
 
   const tiles = React.useMemo(() => {
     const tiles: JSX.Element[] = [];
     for (let column = 0; column < boardSize; column++) {
       for (let row = 0; row < boardSize; row++) {
         const index = addressToIndex(boardSize, { row, column });
-        const value = tilesPreview[index] || TileStates.Empty;
+        const value = board[index] || TileStates.Empty;
 
         tiles.push(
           <BoardTile
@@ -83,17 +73,19 @@ export default function Board({
       }
     }
     return tiles;
-  }, [tilesPreview, boardSize, onHover, isTileValid, dispatch]);
+  }, [boardSize, board, onHover, isTileValid, dispatch]);
   return (
     <div
-      ref={dropRef}
+      ref={boardRef}
       style={{
         gridTemplateColumns: `repeat(${boardSize}, minMax(0, 1fr))`,
         gridTemplateRows: `repeat(${boardSize}, minMax(0, 1fr))`,
       }}
-      className="grid max-w-lg"
+      className="grid relative mx-3 my-3"
     >
+      <AppDragLayer isOver={isOver} hoverAddress={hover} />
       {tiles}
+      {children}
     </div>
   );
 }

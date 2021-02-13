@@ -60,7 +60,6 @@ export const processActions: React.Reducer<State, Action> = (
         if (indexes.length === shape.offsets.length) {
           const board = [...state.board];
           indexes.forEach((i) => (board[i] = TileStates.Filled));
-          console.log(shapeIndex, currentSelection, board);
 
           return {
             ...state,
@@ -158,8 +157,6 @@ export const reducer: React.Reducer<State, Action> = (
   state = defaultState,
   action: Action,
 ): State => {
-  console.log('action', action);
-
   let nextState = processActions(state, action);
   nextState = processCurrentSelection(nextState);
   nextState = processLines(nextState);

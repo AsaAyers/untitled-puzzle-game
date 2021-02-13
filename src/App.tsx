@@ -13,6 +13,7 @@ function App(): JSX.Element {
 
   React.useEffect(() => {
     document.body.classList.add('overflow-hidden');
+    document.body.classList.add('bg-body');
   }, []);
 
   return (
@@ -23,8 +24,7 @@ function App(): JSX.Element {
         enableMouseEvents: true,
       }}
     >
-      <AppDragLayer />
-      <div className="container mx-auto bg-blue-300 min-h-screen ">
+      <div className="container mx-auto max-w-lg bg-container min-h-screen ">
         <header className="h-12 text-center">
           <div>Untitled Puzzle Game</div>
           Points: {state.points}
@@ -34,13 +34,13 @@ function App(): JSX.Element {
           boardSize={state.boardSize}
           board={state.board}
           dispatch={dispatch}
-        />
+        ></Board>
 
         <div className="grid grid-cols-3 my-3 mx-3 gap-3">
           {state.currentSelection.map((shape, index) => (
             <div
               key={index}
-              className="square rounded-2xl border-solid border-2 border-black relative"
+              className="square rounded-2xl border-solid border-2 border-color relative"
             >
               <div className="square-content">
                 {shape != null && (

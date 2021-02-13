@@ -35,3 +35,27 @@ code {
   height: 100%;
   width: 100%;
 }
+.bg-body {
+  background-color: #3a5a40;
+}
+
+.bg-container {
+  background-color: #588157;
+}
+
+.bg-tile-filled {
+  background-color: #dad7cd;
+}
+.bg-tile-empty {
+  background-color: #a3b18a;
+}
+
+.border-color {
+  border-color: #344e41;
+}
+
+.ring-preview {
+  --tw-ring-opacity: 1;
+  /* #344e41 */
+  --tw-ring-color: rgba(52, 78, 65, var(--tw-ring-opacity));
+}
