@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import React from 'react';
 import { DndProvider } from 'react-dnd';
 import { TouchBackend } from 'react-dnd-touch-backend';
@@ -5,10 +6,42 @@ import { defaultState, reducer } from './app-state';
 import Board from './Board/Board';
 import Shape from './shared/Shape';
 
-function App(): JSX.Element {
-  const [state, dispatch] = React.useReducer(reducer, defaultState, (state) => {
-    return reducer(state, { type: 'Init' });
+const key = 'gameState';
+const useLocalStorageReducer = (
+  r: typeof reducer,
+  initializerArg: typeof defaultState,
+  initializer: (i: typeof defaultState) => typeof defaultState,
+) => {
+  const [i] = React.useState(() => {
+    try {
+      console.log('getItem');
+      // @ts-ignore
+      return JSON.parse(localStorage.getItem(key));
+    } catch (error) {
+      // ignore parse errors and start with a clean game state
+      console.error(error);
+    }
+    return initializerArg;
   });
+
+  const [state, dispatch] = React.useReducer(r, i, initializer);
+
+  React.useEffect(() => {
+    const value = JSON.stringify(state);
+    console.log('setItem', value);
+    localStorage.setItem(key, value);
+  }, [state]);
+  return [state, dispatch];
+};
+
+function App(): JSX.Element {
+  const [state, dispatch] = useLocalStorageReducer(
+    reducer,
+    defaultState,
+    (state) => {
+      return reducer(state, { type: 'Init' });
+    },
+  );
 
   React.useEffect(() => {
     document.body.classList.add('overflow-hidden');

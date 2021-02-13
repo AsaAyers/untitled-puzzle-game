@@ -37,7 +37,8 @@ export const processActions: React.Reducer<State, Action> = (
 ): State => {
   switch (action.type) {
     case 'Init': {
-      return defaultState;
+      // Init triggers the rules section to setup the game
+      return state;
     }
     case 'PlaceShape': {
       const { shapeIndex, boardAddress } = action.payload;
