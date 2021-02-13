@@ -2,20 +2,45 @@ import classNames from 'classnames';
 import React from 'react';
 import { useDrag } from 'react-dnd';
 import { Tile } from './Tile';
+import { BoardAddress, ShapeData, TileStates } from './types';
 
 export const SHAPE = Symbol('Shape');
 export type DragShape = {
   type: typeof SHAPE;
-  shape: string;
+  shape: ShapeData;
+  shapeIndex: number;
 };
 
-function normalize(shape: string): string {
-  return shape
+function parseShape(shape: string): ShapeData {
+  const rowStrings = shape
+    .trim()
     .split('\n')
-    .map((line) => line.trim())
-    .join('\n')
-    .replaceAll('x', '1')
-    .replaceAll('_', '0');
+    .map((str) => str.trim());
+  const rows = rowStrings.length;
+  const columns = rowStrings.reduce(
+    (maxWidth, row) => Math.max(maxWidth, row.length),
+    0,
+  );
+  const offsets: BoardAddress[] = rowStrings.flatMap((rowString, row) => {
+    const rowTiles = [];
+    for (let column = 0; column < columns; column++) {
+      const element = rowString[column];
+      switch (element) {
+        case 'x':
+          rowTiles.push({ row, column });
+          break;
+        default:
+        // rowTiles.push(TileStates.Empty);
+      }
+    }
+    return rowTiles;
+  });
+
+  return {
+    columns,
+    rows,
+    offsets,
+  };
 }
 
 export const shapes = [
@@ -33,51 +58,42 @@ export const shapes = [
   _x
   xx
   `,
-].map(normalize);
-
-shapes.forEach((s) => console.log(s));
+].map(parseShape);
 
 const MAX_SHAPE_SIZE = 5;
 type ShapeProps = {
   className?: string;
-  shape: string;
+  shape: ShapeData;
+  shapeIndex: number;
 };
-export default function Shape({ shape, className }: ShapeProps) {
+export default function Shape({
+  shape,
+  shapeIndex,
+  className,
+}: ShapeProps): JSX.Element {
   const [{ isDragging }, dragRef] = useDrag({
     item: {
       type: SHAPE,
       shape,
+      shapeIndex,
     },
     collect: (monitor) => ({
       isDragging: !!monitor.isDragging(),
     }),
   });
-  const rows = shape.trim().split('\n');
-  const numRows = rows.length;
-  const numColumns = rows.reduce(
-    (maxWidth, row) => Math.max(maxWidth, row.length),
-    0,
-  );
   const maxSize = 80; // %
-  const width = (numColumns / MAX_SHAPE_SIZE) * maxSize;
-  const height = (numRows / MAX_SHAPE_SIZE) * maxSize;
+  const width = (shape.columns / MAX_SHAPE_SIZE) * maxSize;
+  const height = (shape.rows / MAX_SHAPE_SIZE) * maxSize;
 
-  console.log('isDragging', isDragging);
-  const tiles = rows.flatMap((row, rowIndex) => {
-    return row
-      .split('')
-      .flatMap((tile, columnIndex) =>
-        tile === '0'
-          ? []
-          : [
-              <Tile
-                key={`${rowIndex}x${columnIndex}`}
-                row={rowIndex}
-                column={columnIndex}
-                value={tile}
-              />,
-            ],
-      );
+  const tiles = shape.offsets.flatMap(({ row, column }) => {
+    return [
+      <Tile
+        key={`${row}x${column}`}
+        row={row}
+        column={column}
+        value={TileStates.Filled}
+      />,
+    ];
   });
   return (
     <div
@@ -87,8 +103,8 @@ export default function Shape({ shape, className }: ShapeProps) {
         'opacity-40': isDragging,
       })}
       style={{
-        gridTemplateColumns: `repeat(${numColumns}, minMax(0, 1fr))`,
-        gridTemplateRows: `repeat(${numRows}, minMax(0, 1fr))`,
+        gridTemplateColumns: `repeat(${shape.columns}, minMax(0, 1fr))`,
+        gridTemplateRows: `repeat(${shape.rows}, minMax(0, 1fr))`,
         width: `${width}%`,
         height: `${height}%`,
         top: `${(100 - height) / 2}%`,

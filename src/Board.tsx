@@ -1,54 +1,48 @@
 import React from 'react';
-import { Tile } from './Tile';
 import { useDrop } from 'react-dnd';
-import { SHAPE } from './Shape';
+import type { AppDispatch } from './app-state';
+import { BoardTile } from './BoardTile';
+import { DragShape, SHAPE } from './Shape';
+import {
+  addressToIndex,
+  BoardAddress,
+  BoardSize,
+  shiftShape,
+  TileStates,
+} from './types';
 
-type BoardTileProps = {
-  value: string;
-  row: number;
-  column: number;
-  onHover: (addr: HoverAddress) => void;
-};
-function BoardTile({ value, row, column, onHover }: BoardTileProps) {
-  const [isOver, dropRef] = useDrop({
-    accept: SHAPE,
-    collect(monitor) {
-      return monitor.isOver();
-    },
-  });
-
-  React.useEffect(() => {
-    if (isOver) {
-      console.log('isOver', row, column);
-      onHover({ row, column });
-    }
-  });
-
-  return <Tile ref={dropRef} value={value} row={row} column={column} />;
-}
-const MemoBoardTile = React.memo(BoardTile);
-
-type HoverAddress = { row: number; column: number };
+type HoverAddress = BoardAddress;
 type BoardProps = {
-  width: number;
-  height: number;
-  board: string;
+  boardSize: BoardSize;
+  board: TileStates[];
+  dispatch: AppDispatch;
 };
 export default function Board({
-  width,
-  height,
+  boardSize,
   board,
+  dispatch,
 }: BoardProps): JSX.Element {
-  const myRef = React.useRef<HTMLDivElement | null>();
-  const [isOver, dropRef] = useDrop({
+  const [{ isOver, item }, dropRef] = useDrop({
     accept: SHAPE,
-    canDrop() {
-      return false;
-    },
     collect(monitor) {
-      return monitor.isOver();
+      return {
+        isOver: monitor.isOver(),
+        item: monitor.getItem() as null | DragShape,
+      };
     },
   });
+
+  const isTileValid = React.useCallback(
+    (addr: BoardAddress) => {
+      if (addr.row >= boardSize.rows || addr.column >= boardSize.columns) {
+        return false;
+      }
+      const i = addressToIndex(boardSize, addr);
+
+      return board[i] === TileStates.Empty;
+    },
+    [board, boardSize],
+  );
 
   const [hover, setHover] = React.useState<null | HoverAddress>();
   React.useEffect(() => {
@@ -56,44 +50,62 @@ export default function Board({
       setHover(null);
     }
   }, [isOver]);
-  const onHover = React.useCallback((addr: HoverAddress) => {
-    console.log('set hover', addr);
+  const onHover = React.useCallback((addr: HoverAddress | null) => {
     setHover(addr);
   }, []);
 
   const tilesPreview = React.useMemo(() => {
-    const tmp = board.split('');
-    if (hover) {
-      tmp[hover.row * width + hover.column] = '1';
+    if (hover && item) {
+      const offsets = shiftShape(item.shape, hover);
+
+      const indexes = offsets.flatMap((addr) => {
+        if (!isTileValid(addr)) {
+          return [];
+        }
+
+        return [addressToIndex(boardSize, addr)];
+      });
+
+      if (indexes.length === item.shape.offsets.length) {
+        const tmpBoard = [...board];
+        indexes.forEach((i) => (tmpBoard[i] = TileStates.Filled));
+        return tmpBoard;
+      }
     }
-    return tmp;
-  }, [board, hover, width]);
+    return board;
+  }, [hover, item, board, isTileValid, boardSize]);
 
   const tiles = React.useMemo(() => {
     return tilesPreview.map((value, index) => {
-      const row = Math.floor(index / height);
-      const column = index % width;
+      const row = Math.floor(index / boardSize.rows);
+      const column = index % boardSize.columns;
 
       return (
-        <MemoBoardTile
+        <BoardTile
           key={index}
           value={value}
           row={row}
           column={column}
           onHover={onHover}
+          isTileValid={isTileValid}
+          dispatch={dispatch}
         />
       );
     });
-  }, [height, onHover, tilesPreview, width]);
+  }, [
+    tilesPreview,
+    boardSize.rows,
+    boardSize.columns,
+    onHover,
+    isTileValid,
+    dispatch,
+  ]);
   return (
     <div
-      ref={(el) => {
-        myRef.current = el;
-        return dropRef(el);
-      }}
+      ref={dropRef}
       style={{
-        gridTemplateColumns: `repeat(${width}, minMax(0, 1fr))`,
-        gridTemplateRows: `repeat(${height}, minMax(0, 1fr))`,
+        gridTemplateColumns: `repeat(${boardSize.columns}, minMax(0, 1fr))`,
+        gridTemplateRows: `repeat(${boardSize.rows}, minMax(0, 1fr))`,
       }}
       className="grid max-w-lg"
     >
