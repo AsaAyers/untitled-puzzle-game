@@ -1,4 +1,4 @@
-import { shapes } from './Shape';
+import { shapes } from './shared/Shape';
 import { BoardSize, ShapeData, TileStates } from './types';
 import { addressToIndex, isTileValidUtil, shiftShape } from './utils';
 

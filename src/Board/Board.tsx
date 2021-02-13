@@ -1,10 +1,10 @@
 import React from 'react';
 import { useDrop } from 'react-dnd';
+import { SHAPE } from '../shared/Shape';
+import { AppDispatch, BoardAddress, BoardSize, TileStates } from '../types';
+import { addressToIndex, isTileValidUtil } from '../utils';
 import { AppDragLayer } from './AppDragLayer';
-import { BoardTile } from './BoardTile';
-import { DragShape, SHAPE } from './Shape';
-import { AppDispatch, BoardAddress, BoardSize, TileStates } from './types';
-import { addressToIndex, isTileValidUtil, shiftShape } from './utils';
+import { BoardTile } from './Tile';
 
 type HoverAddress = BoardAddress;
 type BoardProps = {

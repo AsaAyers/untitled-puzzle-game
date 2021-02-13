@@ -1,8 +1,8 @@
 import classNames from 'classnames';
 import React from 'react';
 import { useDragLayer } from 'react-dnd';
-import { DragShape, ShapeUI } from './Shape';
-import type { BoardAddress } from './types';
+import { DragShape, ShapeUI } from '../shared/Shape';
+import type { BoardAddress } from '../types';
 
 function useDragDebug<T>(data: T, update: boolean): T {
   const debugRef = React.useRef<T>(data);

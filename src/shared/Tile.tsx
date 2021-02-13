@@ -1,6 +1,6 @@
 import classNames from 'classnames';
 import React, { ForwardedRef } from 'react';
-import { TileStates } from './types';
+import { TileStates } from '../types';
 
 export type TileProps = {
   className?: string;

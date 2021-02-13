@@ -1,9 +1,14 @@
 import React from 'react';
-import { Tile } from './Tile';
 import { useDrop } from 'react-dnd';
-import { DragShape, SHAPE } from './Shape';
-import type { AppDispatch, BoardAddress, ShapeData, TileStates } from './types';
-import { shiftShape } from './utils';
+import { DragShape, SHAPE } from '../shared/Shape';
+import { Tile } from '../shared/Tile';
+import type {
+  AppDispatch,
+  BoardAddress,
+  ShapeData,
+  TileStates,
+} from '../types';
+import { shiftShape } from '../utils';
 
 export type BoardTileProps = {
   value: TileStates;

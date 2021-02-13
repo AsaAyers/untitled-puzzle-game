@@ -2,9 +2,8 @@ import React from 'react';
 import { DndProvider } from 'react-dnd';
 import { TouchBackend } from 'react-dnd-touch-backend';
 import { defaultState, reducer } from './app-state';
-import { AppDragLayer } from './AppDragLayer';
-import Board from './Board';
-import Shape from './Shape';
+import Board from './Board/Board';
+import Shape from './shared/Shape';
 
 function App(): JSX.Element {
   const [state, dispatch] = React.useReducer(reducer, defaultState, (state) => {

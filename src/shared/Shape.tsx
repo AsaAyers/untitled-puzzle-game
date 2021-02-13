@@ -1,8 +1,8 @@
 import classNames from 'classnames';
 import React from 'react';
-import { DragElementWrapper, DragSourceOptions, useDrag } from 'react-dnd';
+import { useDrag } from 'react-dnd';
+import { BoardAddress, ShapeData, TileStates } from '../types';
 import { Tile } from './Tile';
-import { BoardAddress, ShapeData, TileStates } from './types';
 
 export const SHAPE = Symbol('Shape');
 export type DragShape = {
