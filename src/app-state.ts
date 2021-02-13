@@ -13,8 +13,6 @@ const boardSize: BoardSize = 10;
 export const defaultState: State = {
   currentSelection: [null, null, null],
   boardSize,
-  // TODO: Maybe use a sparse array here instead?
-  // board: Array(boardSize * boardSize).fill(TileStates.Empty),
   board: [],
   points: 0,
 };

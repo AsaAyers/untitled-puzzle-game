@@ -9,6 +9,8 @@ export type DragShape = {
   type: typeof SHAPE;
   shape: ShapeData;
   shapeIndex: number;
+  height: number;
+  width: number;
 };
 
 function parseShape(shape: string): ShapeData {
@@ -71,11 +73,27 @@ export default function Shape({
   shapeIndex,
   className,
 }: ShapeProps): JSX.Element {
-  const [{ isDragging }, dragRef] = useDrag({
+  const shapeRef = React.useRef<HTMLDivElement | null>(null);
+  type Collected = { isDragging: boolean };
+  const [{ isDragging }, dragRef] = useDrag<DragShape, unknown, Collected>({
     item: {
       type: SHAPE,
       shape,
       shapeIndex,
+      width: 0,
+      height: 0,
+    },
+    begin() {
+      const bbox = shapeRef.current?.getBoundingClientRect();
+      console.log('begin', bbox?.width, bbox?.height);
+
+      return {
+        type: SHAPE,
+        shape,
+        shapeIndex,
+        width: bbox?.width ?? 0,
+        height: bbox?.height ?? 0,
+      };
     },
     collect: (monitor) => ({
       isDragging: !!monitor.isDragging(),
@@ -85,33 +103,51 @@ export default function Shape({
   const width = (shape.columns / MAX_SHAPE_SIZE) * maxSize;
   const height = (shape.rows / MAX_SHAPE_SIZE) * maxSize;
 
-  const tiles = shape.offsets.flatMap(({ row, column }) => {
-    return [
-      <Tile
-        key={`${row}x${column}`}
-        row={row}
-        column={column}
-        value={TileStates.Filled}
-      />,
-    ];
-  });
   return (
     <div
       ref={dragRef}
-      tabIndex={1}
-      className={classNames(className, 'shape grid absolute', {
+      className={classNames(className, 'absolute', {
         'opacity-40': isDragging,
       })}
       style={{
-        gridTemplateColumns: `repeat(${shape.columns}, minMax(0, 1fr))`,
-        gridTemplateRows: `repeat(${shape.rows}, minMax(0, 1fr))`,
         width: `${width}%`,
         height: `${height}%`,
         top: `${(100 - height) / 2}%`,
         left: `${(100 - width) / 2}%`,
       }}
     >
-      {tiles}
+      <ShapeUI shape={shape} ref={shapeRef} />
     </div>
   );
 }
+
+type ShapeUIProps = {
+  shape: ShapeData;
+};
+// eslint-disable-next-line react/display-name
+export const ShapeUI = React.forwardRef(
+  ({ shape }: ShapeUIProps, ref: React.ForwardedRef<HTMLDivElement>) => {
+    const tiles = shape.offsets.flatMap(({ row, column }) => {
+      return [
+        <Tile
+          key={`${row}x${column}`}
+          row={row}
+          column={column}
+          value={TileStates.Filled}
+        />,
+      ];
+    });
+    return (
+      <div
+        ref={ref}
+        className="shape grid"
+        style={{
+          gridTemplateColumns: `repeat(${shape.columns}, minMax(0, 1fr))`,
+          gridTemplateRows: `repeat(${shape.rows}, minMax(0, 1fr))`,
+        }}
+      >
+        {tiles}
+      </div>
+    );
+  },
+);

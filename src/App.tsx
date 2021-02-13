@@ -2,6 +2,7 @@ import React from 'react';
 import { DndProvider } from 'react-dnd';
 import { TouchBackend } from 'react-dnd-touch-backend';
 import { defaultState, reducer } from './app-state';
+import { AppDragLayer } from './AppDragLayer';
 import Board from './Board';
 import Shape from './Shape';
 
@@ -9,6 +10,10 @@ function App(): JSX.Element {
   const [state, dispatch] = React.useReducer(reducer, defaultState, (state) => {
     return reducer(state, { type: 'Init' });
   });
+
+  React.useEffect(() => {
+    document.body.classList.add('overflow-hidden');
+  }, []);
 
   return (
     <DndProvider
@@ -18,7 +23,8 @@ function App(): JSX.Element {
         enableMouseEvents: true,
       }}
     >
-      <div className="container mx-auto bg-blue-300 min-h-screen">
+      <AppDragLayer />
+      <div className="container mx-auto bg-blue-300 min-h-screen ">
         <header className="h-12 text-center">
           <div>Untitled Puzzle Game</div>
           Points: {state.points}
