@@ -2,8 +2,8 @@ import React from 'react';
 import { Tile } from './Tile';
 import { useDrop } from 'react-dnd';
 import { DragShape, SHAPE } from './Shape';
-import { BoardAddress, ShapeData, shiftShape, TileStates } from './types';
-import type { AppDispatch } from './app-state';
+import type { AppDispatch, BoardAddress, ShapeData, TileStates } from './types';
+import { shiftShape } from './utils';
 
 export type BoardTileProps = {
   value: TileStates;
@@ -33,7 +33,7 @@ function BoardTileImpl({
       }
       return false;
     },
-    drop(item, monitor) {
+    drop(item) {
       console.log('drop', item);
       dispatch({
         type: 'PlaceShape',

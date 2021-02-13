@@ -19,7 +19,10 @@ function App(): JSX.Element {
       }}
     >
       <div className="container mx-auto bg-blue-300 min-h-screen">
-        <header className="h-12 text-center">Untitled Puzzle Game</header>
+        <header className="h-12 text-center">
+          <div>Untitled Puzzle Game</div>
+          Points: {state.points}
+        </header>
 
         <Board
           boardSize={state.boardSize}

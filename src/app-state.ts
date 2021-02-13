@@ -1,27 +1,22 @@
 import { shapes } from './Shape';
-import {
-  addressToIndex,
-  BoardSize,
-  ShapeData,
-  shiftShape,
-  TileStates,
-} from './types';
+import { BoardSize, ShapeData, TileStates } from './types';
+import { addressToIndex, isTileValidUtil, shiftShape } from './utils';
 
 type State = {
   board: TileStates[];
   boardSize: BoardSize;
   currentSelection: [ShapeData | null, ShapeData | null, ShapeData | null];
+  points: number;
 };
 
-const boardSize: BoardSize = {
-  rows: 10,
-  columns: 10,
-};
+const boardSize: BoardSize = 10;
 export const defaultState: State = {
   currentSelection: [null, null, null],
   boardSize,
   // TODO: Maybe use a sparse array here instead?
-  board: Array(boardSize.rows * boardSize.columns).fill(TileStates.Empty),
+  // board: Array(boardSize * boardSize).fill(TileStates.Empty),
+  board: [],
+  points: 0,
 };
 
 type PlaceShape = {
@@ -36,17 +31,15 @@ type PlaceShape = {
 };
 type Init = { type: 'Init' };
 
-type Action = PlaceShape | Init;
+export type Action = PlaceShape | Init;
 
-export const reducer: React.Reducer<State, Action> = (
+export const processActions: React.Reducer<State, Action> = (
   state = defaultState,
   action: Action,
 ): State => {
-  console.log('action', action);
   switch (action.type) {
     case 'Init': {
-      state = defaultState;
-      break;
+      return defaultState;
     }
     case 'PlaceShape': {
       const { shapeIndex, boardAddress } = action.payload;
@@ -59,9 +52,9 @@ export const reducer: React.Reducer<State, Action> = (
         const offsets = shiftShape(shape, boardAddress);
 
         const indexes = offsets.flatMap((addr) => {
-          // if (!isTileValid(addr)) {
-          //   return [];
-          // }
+          if (!isTileValidUtil(addr, state.boardSize, state.board)) {
+            return [];
+          }
 
           return [addressToIndex(boardSize, addr)];
         });
@@ -71,7 +64,7 @@ export const reducer: React.Reducer<State, Action> = (
           indexes.forEach((i) => (board[i] = TileStates.Filled));
           console.log(shapeIndex, currentSelection, board);
 
-          state = {
+          return {
             ...state,
             board,
             currentSelection,
@@ -80,11 +73,10 @@ export const reducer: React.Reducer<State, Action> = (
       }
     }
   }
-
-  return runRules(state);
+  return state;
 };
 
-function runRules(state: State): State {
+function processCurrentSelection(state: State): State {
   if (state.currentSelection.every((s) => s == null)) {
     const currentSelection: State['currentSelection'] = [
       ...state.currentSelection,
@@ -94,7 +86,7 @@ function runRules(state: State): State {
       currentSelection[index] =
         shapes[Math.floor(Math.random() * shapes.length)];
     });
-    state = {
+    return {
       ...state,
       currentSelection,
     };
@@ -103,4 +95,75 @@ function runRules(state: State): State {
   return state;
 }
 
-export type AppDispatch = React.Dispatch<Action>;
+const rangeArray = (length: number) =>
+  Array(length)
+    .fill(null)
+    .map((v, i) => i);
+
+function processLines(state: State): State {
+  const tmp = rangeArray(state.boardSize);
+  const fullRows: number[] = [];
+  const fullColumns: number[] = [];
+  for (let i = 0; i < state.boardSize; i++) {
+    const fullRow = tmp.every((j) => {
+      const idx = addressToIndex(state.boardSize, {
+        row: i,
+        column: j,
+      });
+      return state.board[idx] === TileStates.Filled;
+    });
+    if (fullRow) {
+      fullRows.push(i);
+    }
+    const fullColumn = tmp.every((j) => {
+      const idx = addressToIndex(state.boardSize, {
+        row: j,
+        column: i,
+      });
+      return state.board[idx] === TileStates.Filled;
+    });
+    if (fullColumn) {
+      fullColumns.push(i);
+    }
+  }
+
+  if (fullRows.length > 0 || fullColumns.length > 0) {
+    const board = [...state.board];
+    let newPoints = 0;
+
+    fullRows.forEach((row) => {
+      tmp.forEach((column) => {
+        const idx = addressToIndex(state.boardSize, { row, column });
+        board[idx] = TileStates.Empty;
+        newPoints++;
+      });
+    });
+    fullColumns.forEach((column) => {
+      tmp.forEach((row) => {
+        const idx = addressToIndex(state.boardSize, { row, column });
+        board[idx] = TileStates.Empty;
+        newPoints++;
+      });
+    });
+
+    return {
+      ...state,
+      board,
+      points: state.points + newPoints,
+    };
+  }
+
+  return state;
+}
+
+export const reducer: React.Reducer<State, Action> = (
+  state = defaultState,
+  action: Action,
+): State => {
+  console.log('action', action);
+
+  let nextState = processActions(state, action);
+  nextState = processCurrentSelection(nextState);
+  nextState = processLines(nextState);
+  return nextState;
+};

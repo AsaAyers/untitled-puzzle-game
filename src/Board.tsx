@@ -1,15 +1,9 @@
 import React from 'react';
 import { useDrop } from 'react-dnd';
-import type { AppDispatch } from './app-state';
 import { BoardTile } from './BoardTile';
 import { DragShape, SHAPE } from './Shape';
-import {
-  addressToIndex,
-  BoardAddress,
-  BoardSize,
-  shiftShape,
-  TileStates,
-} from './types';
+import { AppDispatch, BoardAddress, BoardSize, TileStates } from './types';
+import { addressToIndex, isTileValidUtil, shiftShape } from './utils';
 
 type HoverAddress = BoardAddress;
 type BoardProps = {
@@ -33,14 +27,7 @@ export default function Board({
   });
 
   const isTileValid = React.useCallback(
-    (addr: BoardAddress) => {
-      if (addr.row >= boardSize.rows || addr.column >= boardSize.columns) {
-        return false;
-      }
-      const i = addressToIndex(boardSize, addr);
-
-      return board[i] === TileStates.Empty;
-    },
+    (addr: BoardAddress) => isTileValidUtil(addr, boardSize, board),
     [board, boardSize],
   );
 
@@ -76,36 +63,33 @@ export default function Board({
   }, [hover, item, board, isTileValid, boardSize]);
 
   const tiles = React.useMemo(() => {
-    return tilesPreview.map((value, index) => {
-      const row = Math.floor(index / boardSize.rows);
-      const column = index % boardSize.columns;
+    const tiles: JSX.Element[] = [];
+    for (let column = 0; column < boardSize; column++) {
+      for (let row = 0; row < boardSize; row++) {
+        const index = addressToIndex(boardSize, { row, column });
+        const value = tilesPreview[index] || TileStates.Empty;
 
-      return (
-        <BoardTile
-          key={index}
-          value={value}
-          row={row}
-          column={column}
-          onHover={onHover}
-          isTileValid={isTileValid}
-          dispatch={dispatch}
-        />
-      );
-    });
-  }, [
-    tilesPreview,
-    boardSize.rows,
-    boardSize.columns,
-    onHover,
-    isTileValid,
-    dispatch,
-  ]);
+        tiles.push(
+          <BoardTile
+            key={index}
+            value={value}
+            row={row}
+            column={column}
+            onHover={onHover}
+            isTileValid={isTileValid}
+            dispatch={dispatch}
+          />,
+        );
+      }
+    }
+    return tiles;
+  }, [tilesPreview, boardSize, onHover, isTileValid, dispatch]);
   return (
     <div
       ref={dropRef}
       style={{
-        gridTemplateColumns: `repeat(${boardSize.columns}, minMax(0, 1fr))`,
-        gridTemplateRows: `repeat(${boardSize.rows}, minMax(0, 1fr))`,
+        gridTemplateColumns: `repeat(${boardSize}, minMax(0, 1fr))`,
+        gridTemplateRows: `repeat(${boardSize}, minMax(0, 1fr))`,
       }}
       className="grid max-w-lg"
     >

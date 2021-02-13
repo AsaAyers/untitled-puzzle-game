@@ -1,3 +1,5 @@
+import type { Action } from './app-state';
+
 export type BoardAddress = { column: number; row: number };
 
 export enum TileStates {
@@ -5,22 +7,7 @@ export enum TileStates {
   Filled,
 }
 
-export type BoardSize = {
-  rows: number;
-  columns: number;
-};
-
-export const addressToIndex = (board: BoardSize, addr: BoardAddress): number =>
-  addr.row * board.columns + addr.column;
-
-export const indexToAddress = (
-  board: BoardSize,
-  index: number,
-): BoardAddress => {
-  const row = Math.floor(index / board.columns);
-  const column = index % board.columns;
-  return { column, row };
-};
+export type BoardSize = number;
 
 export type ShapeData = {
   columns: number;
@@ -28,13 +15,4 @@ export type ShapeData = {
   offsets: BoardAddress[];
 };
 
-export const shiftShape = (
-  shape: ShapeData,
-  shift: BoardAddress,
-): ShapeData['offsets'] => {
-  const offsets = shape.offsets.map((tmp) => ({
-    row: shift.row + tmp.row,
-    column: shift.column + tmp.column,
-  }));
-  return offsets;
-};
+export type AppDispatch = React.Dispatch<Action>;
