@@ -16,13 +16,15 @@ const useLocalStorageReducer = (
     try {
       console.log('getItem');
       // @ts-ignore
-      return JSON.parse(localStorage.getItem(key));
+      return JSON.parse(localStorage.getItem(key)) ?? initializerArg;
     } catch (error) {
       // ignore parse errors and start with a clean game state
       console.error(error);
     }
     return initializerArg;
   });
+
+  console.log(i);
 
   const [state, dispatch] = React.useReducer(r, i, initializer);
 
@@ -57,7 +59,7 @@ function App(): JSX.Element {
         enableMouseEvents: true,
       }}
     >
-      <div className="container mx-auto max-w-lg bg-container min-h-screen ">
+      <div className="container mx-auto max-w-lg bg-container min-h-screen select-none">
         <header className="h-12 text-center">
           <div>Untitled Puzzle Game</div>
           Points: {state.points}

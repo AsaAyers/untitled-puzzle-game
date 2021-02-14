@@ -1,7 +1,7 @@
 import classNames from 'classnames';
 import React from 'react';
 import { useDrag } from 'react-dnd';
-import { BoardAddress, ShapeData, TileStates } from '../types';
+import { ShapeData, TileStates } from '../types';
 import { Tile } from './Tile';
 
 export const SHAPE = Symbol('Shape');
@@ -21,13 +21,13 @@ function parseShape(shape: string): ShapeData {
     (maxWidth, row) => Math.max(maxWidth, row.length),
     0,
   );
-  const offsets: BoardAddress[] = rowStrings.flatMap((rowString, row) => {
+  const offsets: ShapeData['offsets'] = rowStrings.flatMap((rowString, row) => {
     const rowTiles = [];
     for (let column = 0; column < columns; column++) {
       const element = rowString[column];
       switch (element) {
         case 'x':
-          rowTiles.push({ row, column });
+          rowTiles.push({ row, column, tileState: TileStates.Filled });
           break;
         default:
         // rowTiles.push(TileStates.Empty);
@@ -126,14 +126,14 @@ export const ShapeUI = React.forwardRef(
     { shape, className }: ShapeUIProps,
     ref: React.ForwardedRef<HTMLDivElement>,
   ) => {
-    const tiles = shape.offsets.flatMap(({ row, column }) => {
+    const tiles = shape.offsets.flatMap(({ row, column, tileState }) => {
       return [
         <Tile
           className={className}
           key={`${row}x${column}`}
           row={row}
           column={column}
-          value={TileStates.Filled}
+          value={tileState}
         />,
       ];
     });

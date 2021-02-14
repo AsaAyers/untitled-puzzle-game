@@ -19,6 +19,7 @@ export const shiftShape = (
   shift: BoardAddress,
 ): ShapeData['offsets'] => {
   const offsets = shape.offsets.map((tmp) => ({
+    ...tmp,
     row: shift.row + tmp.row,
     column: shift.column + tmp.column,
   }));
@@ -47,3 +48,8 @@ export const isShapeValid = (
   const offsets = shiftShape(shape, addr);
   return offsets.every((addr) => isTileValidUtil(addr, boardSize, board));
 };
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export function unreachable(_: never) {
+  // exhaustive case checking
+}

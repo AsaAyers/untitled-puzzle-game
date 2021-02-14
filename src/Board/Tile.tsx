@@ -26,10 +26,13 @@ function BoardTileImpl({
   isTileValid,
   dispatch,
 }: BoardTileProps) {
-  const isShapeValid = (shape: ShapeData, addr: BoardAddress) => {
-    const offsets = shiftShape(shape, addr);
-    return offsets.every((addr) => isTileValid(addr));
-  };
+  const isShapeValid = React.useCallback(
+    (shape: ShapeData, addr: BoardAddress) => {
+      const offsets = shiftShape(shape, addr);
+      return offsets.every((addr) => isTileValid(addr));
+    },
+    [isTileValid],
+  );
   const [{ item }, dropRef] = useDrop({
     accept: SHAPE,
     canDrop(item: DragShape, monitor) {
@@ -63,7 +66,7 @@ function BoardTileImpl({
         onHover(null);
       }
     }
-  });
+  }, [column, isShapeValid, item, onHover, row]);
 
   return <Tile ref={dropRef} value={value} row={row} column={column} />;
 }

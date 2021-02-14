@@ -5,6 +5,7 @@ export type BoardAddress = { column: number; row: number };
 export enum TileStates {
   Empty,
   Filled,
+  Debug,
 }
 
 export type BoardSize = number;
@@ -12,7 +13,11 @@ export type BoardSize = number;
 export type ShapeData = {
   columns: number;
   rows: number;
-  offsets: BoardAddress[];
+  offsets: Array<
+    BoardAddress & {
+      tileState: TileStates;
+    }
+  >;
 };
 
 export type AppDispatch = React.Dispatch<Action>;

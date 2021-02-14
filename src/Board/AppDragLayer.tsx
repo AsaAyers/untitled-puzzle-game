@@ -1,6 +1,6 @@
 import classNames from 'classnames';
 import React from 'react';
-import { useDragLayer } from 'react-dnd';
+import { useDragLayer, XYCoord } from 'react-dnd';
 import { DragShape, ShapeUI } from '../shared/Shape';
 import type { BoardAddress } from '../types';
 
@@ -25,37 +25,36 @@ export function AppDragLayer({
 }: AppDragLayerProps): JSX.Element | null {
   const myRef = React.useRef<HTMLDivElement>(null);
   const tmp = useDragLayer((monitor) => {
-    // const boardRef.current getB
+    if (!monitor.isDragging()) {
+      return null;
+    }
+
     const bbox = myRef.current?.getBoundingClientRect() ?? { x: 0, y: 0 };
-    // const bbox = { x: 0, y: 0 };
+
     return {
       item: monitor.getItem() as DragShape,
-      initialOffset: monitor.getInitialSourceClientOffset(),
+      // initialOffset: monitor.getInitialSourceClientOffset(),
+      sourceClientOffset: monitor.getSourceClientOffset(),
       // initialOffset: { x: 0, y: 0 },
       // foo: { x: 0, y: 0 },
-      foo: { x: -bbox.x, y: -bbox.y },
-      currentOffset: monitor.getDifferenceFromInitialOffset(),
-      // currentOffset: { x: 0, y: 0 },
+      boardCornerOffset: { x: -bbox.x, y: -bbox.y },
     };
   });
-  const collectedProps = useDragDebug(tmp, tmp.item != null);
+  const collectedProps = useDragDebug(tmp, tmp?.item != null);
 
   if (!collectedProps) {
     return null;
   }
-  const { item, currentOffset, initialOffset } = collectedProps;
-  if (!item || !currentOffset || !initialOffset) {
-    return null;
-  }
+  const { item, sourceClientOffset, boardCornerOffset } = collectedProps;
 
   let corner = { row: 0, column: 0 };
   let positionStyle = {};
   if (isOverBoard && hoverAddress) {
     corner = hoverAddress;
-  } else {
+  } else if (sourceClientOffset) {
     positionStyle = {
-      top: currentOffset?.y + initialOffset.y + collectedProps.foo.y,
-      left: currentOffset?.x + initialOffset.x + collectedProps.foo.x,
+      top: sourceClientOffset.y + boardCornerOffset.y,
+      left: sourceClientOffset.x + boardCornerOffset.x,
     };
   }
   const sizingStyle = {
