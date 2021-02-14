@@ -8,7 +8,7 @@ import type {
   ShapeData,
   TileStates,
 } from '../types';
-import { shiftShape } from '../utils';
+import { shiftOffsets } from '../utils';
 
 export type BoardTileProps = {
   value: TileStates;
@@ -28,7 +28,7 @@ function BoardTileImpl({
 }: BoardTileProps) {
   const isShapeValid = React.useCallback(
     (shape: ShapeData, addr: BoardAddress) => {
-      const offsets = shiftShape(shape, addr);
+      const offsets = shiftOffsets(shape.offsets, addr);
       return offsets.every((addr) => isTileValid(addr));
     },
     [isTileValid],
@@ -52,8 +52,9 @@ function BoardTileImpl({
     },
     collect(monitor) {
       const isOver = monitor.isOver();
+      const item = isOver ? monitor.getItem() : null;
       return {
-        item: isOver ? monitor.getItem() : null,
+        item,
       };
     },
   });

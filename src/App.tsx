@@ -62,8 +62,17 @@ function App(): JSX.Element {
       <div className="container mx-auto max-w-lg bg-container min-h-screen select-none">
         <header className="h-12 text-center">
           <div>Untitled Puzzle Game</div>
-          Points: {state.points}
+          <div>Score: {state.score}</div>
+          {state.highScore > 0 ? (
+            <div>High Score: {state.highScore}</div>
+          ) : null}
         </header>
+        <button
+          className="bg-blue-300 rounded-md px-2 py-2 mx-3 "
+          onClick={() => dispatch({ type: 'NewGame' })}
+        >
+          New Game
+        </button>
 
         <Board
           boardSize={state.boardSize}

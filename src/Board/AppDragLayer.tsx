@@ -1,6 +1,6 @@
 import classNames from 'classnames';
 import React from 'react';
-import { useDragLayer, XYCoord } from 'react-dnd';
+import { useDragLayer } from 'react-dnd';
 import { DragShape, ShapeUI } from '../shared/Shape';
 import type { BoardAddress } from '../types';
 

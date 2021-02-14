@@ -1,12 +1,18 @@
 import { shapes } from './shared/Shape';
 import { BoardSize, ShapeData, TileStates } from './types';
-import { addressToIndex, isTileValidUtil, shiftShape } from './utils';
+import {
+  addressToIndex,
+  isTileValidUtil,
+  rotateShape,
+  shiftOffsets,
+} from './utils';
 
 type State = {
   board: TileStates[];
   boardSize: BoardSize;
   currentSelection: [ShapeData | null, ShapeData | null, ShapeData | null];
-  points: number;
+  score: number;
+  highScore: number;
 };
 
 const boardSize: BoardSize = 10;
@@ -14,7 +20,8 @@ export const defaultState: State = {
   currentSelection: [null, null, null],
   boardSize,
   board: [],
-  points: 0,
+  score: 0,
+  highScore: 0,
 };
 
 type PlaceShape = {
@@ -29,7 +36,9 @@ type PlaceShape = {
 };
 type Init = { type: 'Init' };
 
-export type Action = PlaceShape | Init;
+type NewGame = { type: 'NewGame' };
+
+export type Action = PlaceShape | Init | NewGame;
 
 export const processActions: React.Reducer<State, Action> = (
   state = defaultState,
@@ -40,6 +49,12 @@ export const processActions: React.Reducer<State, Action> = (
       // Init triggers the rules section to setup the game
       return state;
     }
+    case 'NewGame': {
+      return {
+        ...defaultState,
+        highScore: Math.max(state.highScore ?? 0, state.score),
+      };
+    }
     case 'PlaceShape': {
       const { shapeIndex, boardAddress } = action.payload;
       const shape = state.currentSelection[shapeIndex];
@@ -48,7 +63,7 @@ export const processActions: React.Reducer<State, Action> = (
       ];
       currentSelection[shapeIndex] = null;
       if (shape) {
-        const offsets = shiftShape(shape, boardAddress);
+        const offsets = shiftOffsets(shape.offsets, boardAddress);
 
         const indexes = offsets.flatMap((addr) => {
           if (!isTileValidUtil(addr, state.boardSize, state.board)) {
@@ -81,9 +96,16 @@ function processCurrentSelection(state: State): State {
     ];
     // React didn't like map because it returns an array and not a 3-tuple
     currentSelection.forEach((v, index) => {
-      currentSelection[index] =
-        shapes[Math.floor(Math.random() * shapes.length)];
+      let tmp = shapes[Math.floor(Math.random() * shapes.length)];
+      const numRotations = Math.floor(Math.random() * 4);
+
+      for (let i = 0; i < numRotations; i++) {
+        tmp = rotateShape(tmp);
+      }
+
+      currentSelection[index] = tmp;
     });
+
     return {
       ...state,
       currentSelection,
@@ -127,27 +149,27 @@ function processLines(state: State): State {
 
   if (fullRows.length > 0 || fullColumns.length > 0) {
     const board = [...state.board];
-    let newPoints = 0;
+    let newScore = 0;
 
     fullRows.forEach((row) => {
       tmp.forEach((column) => {
         const idx = addressToIndex(state.boardSize, { row, column });
         board[idx] = TileStates.Empty;
-        newPoints++;
+        newScore++;
       });
     });
     fullColumns.forEach((column) => {
       tmp.forEach((row) => {
         const idx = addressToIndex(state.boardSize, { row, column });
         board[idx] = TileStates.Empty;
-        newPoints++;
+        newScore++;
       });
     });
 
     return {
       ...state,
       board,
-      points: state.points + newPoints,
+      score: state.score + newScore,
     };
   }
 

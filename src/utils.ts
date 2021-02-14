@@ -1,3 +1,4 @@
+import { shapes } from './shared/Shape';
 import { BoardAddress, BoardSize, ShapeData, TileStates } from './types';
 
 export const addressToIndex = (
@@ -14,16 +15,41 @@ export const indexToAddress = (
   return { column, row };
 };
 
-export const shiftShape = (
-  shape: ShapeData,
+export const shiftOffsets = (
+  offsets: ShapeData['offsets'],
   shift: BoardAddress,
 ): ShapeData['offsets'] => {
-  const offsets = shape.offsets.map((tmp) => ({
+  return offsets.map((tmp) => ({
     ...tmp,
     row: shift.row + tmp.row,
     column: shift.column + tmp.column,
   }));
-  return offsets;
+};
+
+export const rotateShape = (shape: ShapeData): ShapeData => {
+  let { offsets } = shape;
+
+  // Rotate 90 degrees
+  offsets = offsets.map((tmp) => ({
+    ...tmp,
+    row: -tmp.column,
+    column: tmp.row,
+  }));
+
+  // Shift everything back to the origin
+  const minRow = Math.min(...offsets.map((tmp) => tmp.row));
+  const minColumn = Math.min(...offsets.map((tmp) => tmp.column));
+  offsets = shiftOffsets(offsets, {
+    row: -minRow,
+    column: -minColumn,
+  });
+
+  return {
+    ...shape,
+    offsets,
+    rows: shape.columns,
+    columns: shape.rows,
+  };
 };
 
 export const isTileValidUtil = (
@@ -45,11 +71,11 @@ export const isShapeValid = (
   boardSize: BoardSize,
   board: TileStates[],
 ): boolean => {
-  const offsets = shiftShape(shape, addr);
+  const offsets = shiftOffsets(shape.offsets, addr);
   return offsets.every((addr) => isTileValidUtil(addr, boardSize, board));
 };
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-export function unreachable(_: never) {
+export function unreachable(_: never): void {
   // exhaustive case checking
 }
