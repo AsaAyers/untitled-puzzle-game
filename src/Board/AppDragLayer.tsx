@@ -123,7 +123,7 @@ function ShapePreview({
         <ShapeUI
           shape={s}
           className={classNames({
-            'ring-4 ring-preview': ghost,
+            'ring-4 ring-preview ring-inset': ghost,
           })}
         />
       </div>
