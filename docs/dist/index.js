@@ -10738,7 +10738,7 @@ var rotateShape = (shape) => {
   };
 };
 var isTileValidUtil = (addr, boardSize2, board) => {
-  if (addr.row >= boardSize2 || addr.column >= boardSize2) {
+  if (addr.row >= boardSize2 || addr.column >= boardSize2 || addr.row < 0 || addr.column < 0) {
     return false;
   }
   const i = addressToIndex(boardSize2, addr);
@@ -10817,12 +10817,27 @@ var shapes = [
   `xxxx`,
   `xxxxx`
 ].map(parseShape);
-function useShapeDrag(shape, shapeIndex) {
+function useShapeDrag(shape, shapeIndex, sizeRef) {
   return import_react_dnd.useDrag({
     item: {
       type: SHAPE,
       shape,
-      shapeIndex
+      shapeIndex,
+      row: -1,
+      column: -1
+    },
+    begin(monitor) {
+      const bbox = sizeRef.current.getBoundingClientRect();
+      const diff = monitor.getClientOffset();
+      const column = Math.floor((diff.x - bbox.x) / bbox.width * shape.columns);
+      const row = Math.floor((diff.y - bbox.y) / bbox.height * shape.rows);
+      return {
+        type: SHAPE,
+        shape,
+        shapeIndex,
+        row,
+        column
+      };
     },
     isDragging(monitor) {
       const item = monitor.getItem();
@@ -10839,11 +10854,13 @@ function Shape({
   shapeIndex,
   className
 }) {
-  const [{isDragging}, dragRef] = useShapeDrag(shape, shapeIndex);
+  const sizeRef = react.useRef(null);
+  const [{isDragging}, dragRef] = useShapeDrag(shape, shapeIndex, sizeRef);
   const maxSize = 80;
   const width = shape.columns / MAX_SHAPE_SIZE * maxSize;
   const height = shape.rows / MAX_SHAPE_SIZE * maxSize;
   return /* @__PURE__ */ react.createElement("div", {
+    ref: sizeRef,
     className: classnames_default(className, "absolute", {
       "opacity-40": isDragging
     }),
@@ -10978,19 +10995,18 @@ function processLines(state) {
   }
   if (fullRows.length > 0 || fullColumns.length > 0) {
     const board = [...state.board];
-    let newScore = 0;
+    const numLines = fullRows.length + fullColumns.length;
+    const newScore = state.boardSize * numLines;
     fullRows.forEach((row) => {
       tmp.forEach((column) => {
         const idx = addressToIndex(state.boardSize, {row, column});
         board[idx] = TileStates.Empty;
-        newScore++;
       });
     });
     fullColumns.forEach((column) => {
       tmp.forEach((row) => {
         const idx = addressToIndex(state.boardSize, {row, column});
         board[idx] = TileStates.Empty;
-        newScore++;
       });
     });
     return {
@@ -11030,11 +11046,21 @@ function AppDragLayer({
     if (!monitor.isDragging()) {
       return null;
     }
-    const bbox = myRef.current?.getBoundingClientRect() ?? {x: 0, y: 0};
+    const item2 = monitor.getItem();
+    const bbox = myRef.current?.getBoundingClientRect() ?? {
+      x: 0,
+      y: 0,
+      width: 0,
+      height: 0
+    };
     return {
-      item: monitor.getItem(),
-      sourceClientOffset: monitor.getSourceClientOffset(),
-      boardCornerOffset: {x: -bbox.x, y: -bbox.y}
+      item: item2,
+      sourceClientOffset: monitor.getClientOffset(),
+      boardCornerOffset: {x: -bbox.x, y: -bbox.y},
+      snapMouse: {
+        x: bbox.width * ((item2.column + 0.5) / item2.shape.columns),
+        y: bbox.height * ((item2.row + 0.5) / item2.shape.rows)
+      }
     };
   });
   const collectedProps = useDragDebug(tmp, tmp?.item != null);
@@ -11045,11 +11071,16 @@ function AppDragLayer({
   let corner = {row: 0, column: 0};
   let positionStyle = {};
   if (isOverBoard && hoverAddress) {
+    corner = {
+      row: hoverAddress.row - item.row,
+      column: hoverAddress.column - item.column
+    };
     corner = hoverAddress;
   } else if (sourceClientOffset) {
+    const snapMouse = tmp?.snapMouse ?? {x: 0, y: 0};
     positionStyle = {
-      top: sourceClientOffset.y + boardCornerOffset.y,
-      left: sourceClientOffset.x + boardCornerOffset.x
+      top: sourceClientOffset.y + boardCornerOffset.y - snapMouse.y,
+      left: sourceClientOffset.x + boardCornerOffset.x - snapMouse.x
     };
   }
   const sizingStyle = {
@@ -11093,15 +11124,23 @@ function BoardTileImpl({
     accept: SHAPE,
     canDrop(item2, monitor) {
       if (monitor.isOver()) {
-        return isShapeValid(item2.shape, {row, column});
+        const corner = {
+          row: row - item2.row,
+          column: column - item2.column
+        };
+        return isShapeValid(item2.shape, corner);
       }
       return false;
     },
     drop(item2) {
+      const corner = {
+        row: row - item2.row,
+        column: column - item2.column
+      };
       dispatch({
         type: "PlaceShape",
         payload: {
-          boardAddress: {row, column},
+          boardAddress: corner,
           shapeIndex: item2.shapeIndex
         }
       });
@@ -11116,8 +11155,12 @@ function BoardTileImpl({
   });
   react.useEffect(() => {
     if (item) {
-      if (isShapeValid(item.shape, {row, column})) {
-        onHover({row, column});
+      const corner = {
+        row: row - item.row,
+        column: column - item.column
+      };
+      if (isShapeValid(item.shape, corner)) {
+        onHover(corner);
       } else {
         onHover(null);
       }
@@ -11152,14 +11195,6 @@ function Board({
       setHover(null);
     }
   }, [isOver]);
-  const onHover = react.useCallback((addr) => {
-    setHover((current) => {
-      if (!current || !addr || current.row !== addr.row || current.column !== addr?.column) {
-        return addr;
-      }
-      return current;
-    });
-  }, []);
   const tiles = react.useMemo(() => {
     const tiles2 = [];
     for (let column = 0; column < boardSize2; column++) {
@@ -11171,14 +11206,14 @@ function Board({
           value,
           row,
           column,
-          onHover,
+          onHover: setHover,
           isTileValid,
           dispatch
         }));
       }
     }
     return tiles2;
-  }, [boardSize2, board, onHover, isTileValid, dispatch]);
+  }, [boardSize2, board, setHover, isTileValid, dispatch]);
   return /* @__PURE__ */ react.createElement("div", {
     ref: boardRef,
     style: {
@@ -11197,18 +11232,15 @@ var key = "gameState";
 var useLocalStorageReducer = (r, initializerArg, initializer) => {
   const [i] = react.useState(() => {
     try {
-      console.log("getItem");
       return JSON.parse(localStorage.getItem(key)) ?? initializerArg;
     } catch (error) {
       console.error(error);
     }
     return initializerArg;
   });
-  console.log(i);
   const [state, dispatch] = react.useReducer(r, i, initializer);
   react.useEffect(() => {
     const value = JSON.stringify(state);
-    console.log("setItem", value);
     localStorage.setItem(key, value);
   }, [state]);
   const wat = [state, dispatch];

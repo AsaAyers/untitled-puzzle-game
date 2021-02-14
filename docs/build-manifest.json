@@ -91,7 +91,7 @@
       "imports": []
     },
     "dist/utils.js": {
-      "bytes": 1414,
+      "bytes": 1449,
       "imports": [
         {
           "path": "dist/types.js",
@@ -121,7 +121,7 @@
       ]
     },
     "dist/shared/Shape.js": {
-      "bytes": 2704,
+      "bytes": 3210,
       "imports": [
         {
           "path": "snowpack/pkg/classnames.js",
@@ -146,7 +146,7 @@
       ]
     },
     "dist/app-state.js": {
-      "bytes": 3634,
+      "bytes": 3680,
       "imports": [
         {
           "path": "dist/shared/Shape.js",
@@ -163,7 +163,7 @@
       ]
     },
     "dist/Board/AppDragLayer.js": {
-      "bytes": 2024,
+      "bytes": 2448,
       "imports": [
         {
           "path": "snowpack/pkg/classnames.js",
@@ -184,7 +184,7 @@
       ]
     },
     "dist/Board/Tile.js": {
-      "bytes": 1476,
+      "bytes": 1754,
       "imports": [
         {
           "path": "snowpack/pkg/react.js",
@@ -209,7 +209,7 @@
       ]
     },
     "dist/Board/Board.js": {
-      "bytes": 2003,
+      "bytes": 1775,
       "imports": [
         {
           "path": "snowpack/pkg/react.js",
@@ -242,7 +242,7 @@
       ]
     },
     "dist/App.js": {
-      "bytes": 2680,
+      "bytes": 2597,
       "imports": [
         {
           "path": "snowpack/pkg/react.js",
@@ -327,7 +327,7 @@
           "bytesInOutput": 650
         },
         "dist/App.js": {
-          "bytesInOutput": 2446
+          "bytesInOutput": 2363
         },
         "snowpack/pkg/react-dnd-touch-backend.js": {
           "bytesInOutput": 19746
@@ -336,28 +336,28 @@
           "bytesInOutput": 1167
         },
         "dist/shared/Shape.js": {
-          "bytesInOutput": 2504
+          "bytesInOutput": 3010
         },
         "dist/types.js": {
           "bytesInOutput": 233
         },
         "dist/utils.js": {
-          "bytesInOutput": 978
+          "bytesInOutput": 1013
         },
         "dist/shared/Tile.js": {
           "bytesInOutput": 657
         },
         "dist/app-state.js": {
-          "bytesInOutput": 3425
+          "bytesInOutput": 3471
         },
         "dist/Board/Board.js": {
-          "bytesInOutput": 1749
+          "bytesInOutput": 1521
         },
         "dist/Board/AppDragLayer.js": {
-          "bytesInOutput": 1886
+          "bytesInOutput": 2310
         },
         "dist/Board/Tile.js": {
-          "bytesInOutput": 1312
+          "bytesInOutput": 1590
         },
         "dist/index.css": {
           "bytesInOutput": 0
@@ -366,7 +366,7 @@
           "bytesInOutput": 244
         }
       },
-      "bytes": 341158
+      "bytes": 342136
     },
     "../~~bundle~~/dist/index.css": {
       "imports": [],
