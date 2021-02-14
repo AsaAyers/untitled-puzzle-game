@@ -2,19 +2,24 @@ import { shapes } from './shared/Shape';
 import { BoardAddress, BoardSize, ShapeData, TileStates } from './types';
 import {
   addressToIndex,
+  indexToAddress,
   isShapeValid,
   isTileValidUtil,
   rotateShape,
   shiftOffsets,
+  unreachable,
 } from './utils';
 
-type State = {
+export type State = {
   board: TileStates[];
   boardSize: BoardSize;
   currentSelection: [ShapeData | null, ShapeData | null, ShapeData | null];
   score: number;
   highScore: number;
   gameOver: boolean;
+  options: {
+    gameOverEffect: 'none' | 'life' | 'invert';
+  };
 };
 
 const boardSize: BoardSize = 10;
@@ -25,6 +30,9 @@ export const defaultState: State = {
   score: 0,
   highScore: 0,
   gameOver: false,
+  options: {
+    gameOverEffect: 'invert',
+  },
 };
 
 type PlaceShape = {
@@ -41,7 +49,37 @@ type Init = { type: 'Init' };
 
 type NewGame = { type: 'NewGame' };
 
-export type Action = PlaceShape | Init | NewGame;
+type GameOverEffect = { type: 'GameOverEffect' };
+
+type NextGameOverEffect = { type: 'NextGameOverEffect' };
+
+export type Action =
+  | PlaceShape
+  | Init
+  | NewGame
+  | GameOverEffect
+  | NextGameOverEffect;
+
+const inBoardBoundary = (addr: BoardAddress, boardSize: number) =>
+  addr.row >= 0 &&
+  addr.row < boardSize &&
+  addr.column >= 0 &&
+  addr.column < boardSize;
+
+const getAdjacent = (addr: BoardAddress, boardSize: number): BoardAddress[] => {
+  const tiles = [];
+  for (let x = -1; x <= 1; x++) {
+    for (let y = -1; y <= 1; y++) {
+      if (x !== 0 || y !== 0) {
+        tiles.push({
+          row: (boardSize + addr.row + x) % boardSize,
+          column: (boardSize + addr.column + y) % boardSize,
+        });
+      }
+    }
+  }
+  return tiles;
+};
 
 export const processActions: React.Reducer<State, Action> = (
   state = defaultState,
@@ -87,7 +125,83 @@ export const processActions: React.Reducer<State, Action> = (
           };
         }
       }
+      break;
     }
+    case 'NextGameOverEffect': {
+      console.log('nextGameOverEffect');
+      let gameOverEffect: State['options']['gameOverEffect'] = 'none';
+      switch (state.options.gameOverEffect) {
+        case 'life':
+          gameOverEffect = 'invert';
+          break;
+        case 'invert':
+          gameOverEffect = 'none';
+          break;
+        default:
+          gameOverEffect = 'life';
+          break;
+      }
+      return {
+        ...state,
+        options: {
+          ...state.options,
+          gameOverEffect,
+        },
+      };
+    }
+    case 'GameOverEffect': {
+      let board = state.board;
+      if (state.options.gameOverEffect === 'invert') {
+        board = board.map((tile) =>
+          tile === TileStates.Filled ? TileStates.Empty : TileStates.Filled,
+        );
+      } else if (state.options.gameOverEffect === 'life') {
+        let totalAlive = 0;
+        const processTile = (self: TileStates, idx: number) => {
+          const addr = indexToAddress(state.boardSize, idx);
+          const adjacent = getAdjacent(addr, state.boardSize);
+          const neighbors = adjacent.reduce(
+            (total: number, tmp: BoardAddress) => {
+              if (inBoardBoundary(tmp, state.boardSize)) {
+                const idx = addressToIndex(state.boardSize, tmp);
+                if (state.board[idx] === TileStates.Filled) {
+                  return total + 1;
+                }
+              }
+              return total;
+            },
+            0,
+          );
+
+          if (self === TileStates.Filled) {
+            if (neighbors == 2 || neighbors == 3) {
+              totalAlive++;
+              return TileStates.Filled;
+            } else {
+              return TileStates.Empty;
+            }
+          } else if (neighbors == 3) {
+            totalAlive++;
+            return TileStates.Filled;
+          }
+          return TileStates.Empty;
+        };
+
+        board = board.map(processTile);
+        if (totalAlive === 0) {
+          board = board.map(() =>
+            Math.random() < 0.5 ? TileStates.Empty : TileStates.Filled,
+          );
+        }
+      }
+
+      return {
+        ...state,
+        board,
+      };
+    }
+    default:
+      unreachable(action);
   }
   return state;
 };
@@ -122,7 +236,6 @@ const rangeArray = (length: number) =>
   Array(length)
     .fill(null)
     .map((v, i) => i);
-
 function processLines(state: State): State {
   const tmp = rangeArray(state.boardSize);
   const fullRows: number[] = [];
@@ -194,7 +307,7 @@ function findValidMove(shape: ShapeData, state: State): BoardAddress | null {
 }
 
 function processGameOver(state: State): State {
-  let gameOver = state.gameOver;
+  const gameOver = state.gameOver;
   if (
     !gameOver &&
     !state.currentSelection.some((shape, index) => {
@@ -208,13 +321,14 @@ function processGameOver(state: State): State {
       return false;
     })
   ) {
-    gameOver = true;
+    return {
+      ...state,
+      gameOver: true,
+      highScore: Math.max(state.score, state.highScore),
+    };
   }
 
-  return {
-    ...state,
-    gameOver,
-  };
+  return state;
 }
 
 export const reducer: React.Reducer<State, Action> = (

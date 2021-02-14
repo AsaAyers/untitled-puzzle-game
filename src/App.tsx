@@ -6,6 +6,7 @@ import { defaultState, reducer } from './app-state';
 import Board from './Board/Board';
 import Shape from './shared/Shape';
 import type { AppDispatch } from './types';
+import { useGameOverEffect as useGameOferEffect } from './useGameOverEffect';
 
 function NewGameButton({ dispatch }: { dispatch: AppDispatch }): JSX.Element {
   return (
@@ -30,7 +31,12 @@ function GameOver({ dispatch }: { dispatch: AppDispatch }): JSX.Element {
         gridColumnEnd: 7,
       }}
     >
-      <div className="text-3xl rounded-md px-2">Game Over</div>
+      <div
+        onClick={() => dispatch({ type: 'NextGameOverEffect' })}
+        className="text-3xl rounded-md px-2"
+      >
+        Game Over
+      </div>
       <NewGameButton dispatch={dispatch} />
     </div>
   );
@@ -45,11 +51,13 @@ const useLocalStorageReducer = (
 ) => {
   const [i] = React.useState(() => {
     try {
-      // @ts-ignore
-      return JSON.parse(localStorage.getItem(key)) ?? initializerArg;
+      return {
+        ...initializerArg,
+        // @ts-ignore
+        ...JSON.parse(localStorage.getItem(key)),
+      };
     } catch (error) {
-      // ignore parse errors and start with a clean game state
-      console.error(error);
+      // Ignore parse errors
     }
     return initializerArg;
   });
@@ -72,6 +80,7 @@ function App(): JSX.Element {
       return reducer(state, { type: 'Init' });
     },
   );
+  useGameOferEffect(state, dispatch);
 
   React.useEffect(() => {
     document.body.classList.add('overflow-hidden');
