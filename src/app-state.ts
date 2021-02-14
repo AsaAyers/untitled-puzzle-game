@@ -383,7 +383,7 @@ export const reducer: React.Reducer<State, Action> = (
   action: Action,
 ): State => {
   let nextState = processActions(state, action);
-  if (!state.gameOver) {
+  if (!nextState.gameOver) {
     nextState = processCurrentSelection(nextState);
     nextState = processLines(nextState);
     nextState = processGameOver(nextState);
