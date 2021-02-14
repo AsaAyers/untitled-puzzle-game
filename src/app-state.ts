@@ -13,6 +13,7 @@ type State = {
   currentSelection: [ShapeData | null, ShapeData | null, ShapeData | null];
   score: number;
   highScore: number;
+  gameOver: boolean;
 };
 
 const boardSize: BoardSize = 10;
@@ -22,6 +23,7 @@ export const defaultState: State = {
   board: [],
   score: 0,
   highScore: 0,
+  gameOver: true,
 };
 
 type PlaceShape = {

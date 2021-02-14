@@ -2,7 +2,7 @@ import classNames from 'classnames';
 import React from 'react';
 import { useDragLayer } from 'react-dnd';
 import { DragShape, ShapeUI } from '../shared/Shape';
-import type { BoardAddress } from '../types';
+import { BoardAddress, ShapeData, TileStates } from '../types';
 
 function useDragDebug<T>(data: T, update: boolean): T {
   const debugRef = React.useRef<T>(data);
@@ -23,14 +23,14 @@ export function AppDragLayer({
   isOver: isOverBoard,
   hoverAddress,
 }: AppDragLayerProps): JSX.Element | null {
-  const myRef = React.useRef<HTMLDivElement>(null);
+  const sizingRef = React.useRef<HTMLDivElement>(null);
   const tmp = useDragLayer((monitor) => {
     if (!monitor.isDragging()) {
       return null;
     }
     const item = monitor.getItem() as DragShape;
 
-    const bbox = myRef.current?.getBoundingClientRect() ?? {
+    const bbox = sizingRef.current?.getBoundingClientRect() ?? {
       x: 0,
       y: 0,
       width: 0,
@@ -56,15 +56,8 @@ export function AppDragLayer({
   }
   const { item, sourceClientOffset, boardCornerOffset } = collectedProps;
 
-  let corner = { row: 0, column: 0 };
   let positionStyle = {};
-  if (isOverBoard && hoverAddress) {
-    corner = {
-      row: hoverAddress.row - item.row,
-      column: hoverAddress.column - item.column,
-    };
-    corner = hoverAddress;
-  } else if (sourceClientOffset) {
+  if (sourceClientOffset) {
     const snapMouse = tmp?.snapMouse ?? { x: 0, y: 0 };
 
     positionStyle = {
@@ -72,29 +65,79 @@ export function AppDragLayer({
       left: sourceClientOffset.x + boardCornerOffset.x - snapMouse.x,
     };
   }
-  const sizingStyle = {
-    gridRowStart: 1 + corner.row,
-    gridColumnStart: 1 + corner.column,
-    gridRowEnd: 1 + corner.row + item.shape.rows,
-    gridColumnEnd: 1 + corner.column + item.shape.columns,
-    height: '100%',
-    width: '100%',
-  };
+
+  return (
+    <React.Fragment>
+      {isOverBoard && hoverAddress && (
+        <ShapePreview
+          corner={hoverAddress}
+          shape={item.shape}
+          positionStyle={{}}
+          ghost={true}
+        />
+      )}
+      <ShapePreview
+        corner={{ row: 0, column: 0 }}
+        shape={item.shape}
+        sizingRef={sizingRef}
+        positionStyle={positionStyle}
+        ghost={false}
+      />
+    </React.Fragment>
+  );
+}
+function ShapePreview({
+  corner,
+  shape,
+  sizingRef,
+  positionStyle,
+  ghost,
+}: {
+  corner: { row: number; column: number };
+  shape: ShapeData;
+  sizingRef?: React.RefObject<HTMLDivElement>;
+  positionStyle: React.CSSProperties;
+  ghost: boolean | BoardAddress | null | undefined;
+}): JSX.Element | null {
+  const s = React.useMemo(() => {
+    if (ghost) {
+      return {
+        ...shape,
+        offsets: shape.offsets.map((o) => ({
+          ...o,
+          tileState: TileStates.Empty,
+        })),
+      };
+    }
+
+    return shape;
+  }, [ghost, shape]);
 
   return (
     <div
       className="absolute z-50 pointer-events-none"
-      style={sizingStyle}
-      ref={myRef}
+      style={makeSizingStyles(corner, s)}
+      ref={sizingRef}
     >
       <div className="relative pointer-events-none" style={positionStyle}>
         <ShapeUI
-          shape={item.shape}
+          shape={s}
           className={classNames({
-            'ring-4 ring-preview': isOverBoard && hoverAddress,
+            'ring-4 ring-preview': ghost,
           })}
         />
       </div>
     </div>
   );
+}
+
+function makeSizingStyles(corner: BoardAddress, shape: ShapeData) {
+  return {
+    gridRowStart: 1 + corner.row,
+    gridColumnStart: 1 + corner.column,
+    gridRowEnd: 1 + corner.row + shape.rows,
+    gridColumnEnd: 1 + corner.column + shape.columns,
+    height: '100%',
+    width: '100%',
+  };
 }

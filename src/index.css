@@ -66,7 +66,7 @@ code {
   grid-template-columns: 1fr 1fr 1fr;
   grid-template-areas:
     'header header header'
-    '. newGame .'
+    '. newGame options'
     'board board board'
     'shape1 shape2 shape3'
     '. . .';
@@ -77,6 +77,9 @@ code {
 }
 .app-new-game {
   grid-area: newGame;
+}
+.app-options {
+  grid-area: options;
 }
 .app-board {
   grid-area: board;
