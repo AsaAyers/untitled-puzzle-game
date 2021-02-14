@@ -55,8 +55,8 @@ function App(): JSX.Element {
         enableMouseEvents: true,
       }}
     >
-      <div className="container mx-auto max-w-lg bg-container min-h-screen select-none">
-        <header className="h-12 text-center">
+      <div className="app-container container gap-3 px-3 py-3 mx-auto max-w-lg bg-container min-h-screen select-none">
+        <header className="app-header text-center">
           <div>Untitled Puzzle Game</div>
           <div>Score: {state.score}</div>
           {state.highScore > 0 ? (
@@ -64,36 +64,37 @@ function App(): JSX.Element {
           ) : null}
         </header>
         <button
-          className="bg-blue-300 rounded-md px-2 py-2 mx-3 "
+          className="app-new-game bg-blue-300 rounded-md px-2 py-2 mx-3 "
           onClick={() => dispatch({ type: 'NewGame' })}
         >
           New Game
         </button>
 
         <Board
+          className="app-board"
           boardSize={state.boardSize}
           board={state.board}
           dispatch={dispatch}
         ></Board>
 
-        <div className="grid grid-cols-3 my-3 mx-3 gap-3">
-          {state.currentSelection.map((shape, index) => (
-            <div
-              key={index}
-              className="square rounded-2xl border-solid border-2 border-color relative"
-            >
-              <div className="square-content">
-                {shape != null && (
-                  <Shape
-                    shape={shape}
-                    shapeIndex={index}
-                    className="center-shape"
-                  />
-                )}
-              </div>
+        {state.currentSelection.map((shape, index) => (
+          <div
+            key={index}
+            className={`app-shape-${
+              index + 1
+            } square rounded-2xl border-solid border-2 border-color relative`}
+          >
+            <div className="square-content">
+              {shape != null && (
+                <Shape
+                  shape={shape}
+                  shapeIndex={index}
+                  className="center-shape"
+                />
+              )}
             </div>
-          ))}
-        </div>
+          </div>
+        ))}
       </div>
     </DndProvider>
   );

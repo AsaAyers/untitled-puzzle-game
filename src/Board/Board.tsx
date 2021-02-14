@@ -1,3 +1,4 @@
+import classNames from 'classnames';
 import React from 'react';
 import { useDrop } from 'react-dnd';
 import { SHAPE } from '../shared/Shape';
@@ -11,12 +12,14 @@ type BoardProps = {
   boardSize: BoardSize;
   board: TileStates[];
   dispatch: AppDispatch;
+  className?: string;
   children?: React.ReactNode;
 };
 export default function Board({
   boardSize,
   board,
   dispatch,
+  className,
   children,
 }: BoardProps): JSX.Element {
   // const boardRef = React.useRef(undefined) as any;
@@ -68,7 +71,7 @@ export default function Board({
         gridTemplateColumns: `repeat(${boardSize}, minMax(0, 1fr))`,
         gridTemplateRows: `repeat(${boardSize}, minMax(0, 1fr))`,
       }}
-      className="grid relative mx-3 my-3"
+      className={classNames(className, 'grid relative')}
     >
       <AppDragLayer isOver={isOver} hoverAddress={hover} />
       {tiles}

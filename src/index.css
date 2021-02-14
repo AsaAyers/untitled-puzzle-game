@@ -59,3 +59,34 @@ code {
   /* #344e41 */
   --tw-ring-color: rgba(52, 78, 65, var(--tw-ring-opacity));
 }
+
+.app-container {
+  display: grid;
+  grid-template-rows: min-content min-content min-content min-content auto;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-areas:
+    'header header header'
+    '. newGame .'
+    'board board board'
+    'shape1 shape2 shape3'
+    '. . .';
+}
+
+.app-header {
+  grid-area: header;
+}
+.app-new-game {
+  grid-area: newGame;
+}
+.app-board {
+  grid-area: board;
+}
+.app-shape-1 {
+  grid-area: shape1;
+}
+.app-shape-2 {
+  grid-area: shape2;
+}
+.app-shape-3 {
+  grid-area: shape3;
+}
