@@ -10916,7 +10916,8 @@ var defaultState = {
   boardSize,
   board: [],
   score: 0,
-  highScore: 0
+  highScore: 0,
+  gameOver: true
 };
 var processActions = (state = defaultState, action) => {
   switch (action.type) {
@@ -11053,13 +11054,13 @@ function AppDragLayer({
   isOver: isOverBoard,
   hoverAddress
 }) {
-  const myRef = react.useRef(null);
+  const sizingRef = react.useRef(null);
   const tmp = import_react_dnd2.useDragLayer((monitor) => {
     if (!monitor.isDragging()) {
       return null;
     }
     const item2 = monitor.getItem();
-    const bbox = myRef.current?.getBoundingClientRect() ?? {
+    const bbox = sizingRef.current?.getBoundingClientRect() ?? {
       x: 0,
       y: 0,
       width: 0,
@@ -11080,42 +11081,69 @@ function AppDragLayer({
     return null;
   }
   const {item, sourceClientOffset, boardCornerOffset} = collectedProps;
-  let corner = {row: 0, column: 0};
   let positionStyle = {};
-  if (isOverBoard && hoverAddress) {
-    corner = {
-      row: hoverAddress.row - item.row,
-      column: hoverAddress.column - item.column
-    };
-    corner = hoverAddress;
-  } else if (sourceClientOffset) {
+  if (sourceClientOffset) {
     const snapMouse = tmp?.snapMouse ?? {x: 0, y: 0};
     positionStyle = {
       top: sourceClientOffset.y + boardCornerOffset.y - snapMouse.y,
       left: sourceClientOffset.x + boardCornerOffset.x - snapMouse.x
     };
   }
-  const sizingStyle = {
-    gridRowStart: 1 + corner.row,
-    gridColumnStart: 1 + corner.column,
-    gridRowEnd: 1 + corner.row + item.shape.rows,
-    gridColumnEnd: 1 + corner.column + item.shape.columns,
-    height: "100%",
-    width: "100%"
-  };
+  return /* @__PURE__ */ react.createElement(react.Fragment, null, isOverBoard && hoverAddress && /* @__PURE__ */ react.createElement(ShapePreview, {
+    corner: hoverAddress,
+    shape: item.shape,
+    positionStyle: {},
+    ghost: true
+  }), /* @__PURE__ */ react.createElement(ShapePreview, {
+    corner: {row: 0, column: 0},
+    shape: item.shape,
+    sizingRef,
+    positionStyle,
+    ghost: false
+  }));
+}
+function ShapePreview({
+  corner,
+  shape,
+  sizingRef,
+  positionStyle,
+  ghost
+}) {
+  const s = react.useMemo(() => {
+    if (ghost) {
+      return {
+        ...shape,
+        offsets: shape.offsets.map((o) => ({
+          ...o,
+          tileState: TileStates.Empty
+        }))
+      };
+    }
+    return shape;
+  }, [ghost, shape]);
   return /* @__PURE__ */ react.createElement("div", {
     className: "absolute z-50 pointer-events-none",
-    style: sizingStyle,
-    ref: myRef
+    style: makeSizingStyles(corner, s),
+    ref: sizingRef
   }, /* @__PURE__ */ react.createElement("div", {
     className: "relative pointer-events-none",
     style: positionStyle
   }, /* @__PURE__ */ react.createElement(ShapeUI, {
-    shape: item.shape,
+    shape: s,
     className: classnames_default({
-      "ring-4 ring-preview": isOverBoard && hoverAddress
+      "ring-4 ring-preview": ghost
     })
   })));
+}
+function makeSizingStyles(corner, shape) {
+  return {
+    gridRowStart: 1 + corner.row,
+    gridColumnStart: 1 + corner.column,
+    gridRowEnd: 1 + corner.row + shape.rows,
+    gridColumnEnd: 1 + corner.column + shape.columns,
+    height: "100%",
+    width: "100%"
+  };
 }
 
 // dist/Board/Tile.js
