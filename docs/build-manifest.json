@@ -146,7 +146,7 @@
       ]
     },
     "dist/app-state.js": {
-      "bytes": 4431,
+      "bytes": 7107,
       "imports": [
         {
           "path": "dist/shared/Shape.js",
@@ -249,8 +249,17 @@
         }
       ]
     },
+    "dist/useGameOverEffect.js": {
+      "bytes": 428,
+      "imports": [
+        {
+          "path": "snowpack/pkg/react.js",
+          "kind": "import-statement"
+        }
+      ]
+    },
     "dist/App.js": {
-      "bytes": 3414,
+      "bytes": 3592,
       "imports": [
         {
           "path": "snowpack/pkg/react.js",
@@ -274,6 +283,10 @@
         },
         {
           "path": "dist/shared/Shape.js",
+          "kind": "import-statement"
+        },
+        {
+          "path": "dist/useGameOverEffect.js",
           "kind": "import-statement"
         }
       ]
@@ -335,7 +348,7 @@
           "bytesInOutput": 650
         },
         "dist/App.js": {
-          "bytesInOutput": 3180
+          "bytesInOutput": 3279
         },
         "snowpack/pkg/react-dnd-touch-backend.js": {
           "bytesInOutput": 19746
@@ -350,13 +363,13 @@
           "bytesInOutput": 233
         },
         "dist/utils.js": {
-          "bytesInOutput": 1204
+          "bytesInOutput": 1360
         },
         "dist/shared/Tile.js": {
           "bytesInOutput": 657
         },
         "dist/app-state.js": {
-          "bytesInOutput": 4206
+          "bytesInOutput": 6852
         },
         "dist/Board/Board.js": {
           "bytesInOutput": 1555
@@ -367,6 +380,9 @@
         "dist/Board/Tile.js": {
           "bytesInOutput": 1594
         },
+        "dist/useGameOverEffect.js": {
+          "bytesInOutput": 375
+        },
         "dist/index.css": {
           "bytesInOutput": 0
         },
@@ -374,7 +390,7 @@
           "bytesInOutput": 244
         }
       },
-      "bytes": 345076
+      "bytes": 348382
     },
     "../~~bundle~~/dist/index.css": {
       "imports": [],

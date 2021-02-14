@@ -10710,6 +10710,11 @@ var TileStates;
 
 // dist/utils.js
 var addressToIndex = (boardSize2, addr) => addr.row * boardSize2 + addr.column;
+var indexToAddress = (boardSize2, index) => {
+  const row = Math.floor(index / boardSize2);
+  const column = index % boardSize2;
+  return {column, row};
+};
 var shiftOffsets = (offsets, shift) => {
   return offsets.map((tmp) => ({
     ...tmp,
@@ -10925,7 +10930,25 @@ var defaultState = {
   board: [],
   score: 0,
   highScore: 0,
-  gameOver: false
+  gameOver: false,
+  options: {
+    gameOverEffect: "invert"
+  }
+};
+var inBoardBoundary = (addr, boardSize2) => addr.row >= 0 && addr.row < boardSize2 && addr.column >= 0 && addr.column < boardSize2;
+var getAdjacent = (addr, boardSize2) => {
+  const tiles = [];
+  for (let x = -1; x <= 1; x++) {
+    for (let y2 = -1; y2 <= 1; y2++) {
+      if (x !== 0 || y2 !== 0) {
+        tiles.push({
+          row: (boardSize2 + addr.row + x) % boardSize2,
+          column: (boardSize2 + addr.column + y2) % boardSize2
+        });
+      }
+    }
+  }
+  return tiles;
 };
 var processActions = (state = defaultState, action) => {
   switch (action.type) {
@@ -10963,7 +10986,73 @@ var processActions = (state = defaultState, action) => {
           };
         }
       }
+      break;
     }
+    case "NextGameOverEffect": {
+      console.log("nextGameOverEffect");
+      let gameOverEffect = "none";
+      switch (state.options.gameOverEffect) {
+        case "life":
+          gameOverEffect = "invert";
+          break;
+        case "invert":
+          gameOverEffect = "none";
+          break;
+        default:
+          gameOverEffect = "life";
+          break;
+      }
+      return {
+        ...state,
+        options: {
+          ...state.options,
+          gameOverEffect
+        }
+      };
+    }
+    case "GameOverEffect": {
+      let board = state.board;
+      if (state.options.gameOverEffect === "invert") {
+        board = board.map((tile) => tile === TileStates.Filled ? TileStates.Empty : TileStates.Filled);
+      } else if (state.options.gameOverEffect === "life") {
+        let totalAlive = 0;
+        const processTile = (self2, idx) => {
+          const addr = indexToAddress(state.boardSize, idx);
+          const adjacent = getAdjacent(addr, state.boardSize);
+          const neighbors = adjacent.reduce((total, tmp) => {
+            if (inBoardBoundary(tmp, state.boardSize)) {
+              const idx2 = addressToIndex(state.boardSize, tmp);
+              if (state.board[idx2] === TileStates.Filled) {
+                return total + 1;
+              }
+            }
+            return total;
+          }, 0);
+          if (self2 === TileStates.Filled) {
+            if (neighbors == 2 || neighbors == 3) {
+              totalAlive++;
+              return TileStates.Filled;
+            } else {
+              return TileStates.Empty;
+            }
+          } else if (neighbors == 3) {
+            totalAlive++;
+            return TileStates.Filled;
+          }
+          return TileStates.Empty;
+        };
+        board = board.map(processTile);
+        if (totalAlive === 0) {
+          board = board.map(() => Math.random() < 0.5 ? TileStates.Empty : TileStates.Filled);
+        }
+      }
+      return {
+        ...state,
+        board
+      };
+    }
+    default:
+      unreachable(action);
   }
   return state;
 };
@@ -11049,7 +11138,7 @@ function findValidMove(shape, state) {
   return null;
 }
 function processGameOver(state) {
-  let gameOver = state.gameOver;
+  const gameOver = state.gameOver;
   if (!gameOver && !state.currentSelection.some((shape, index) => {
     if (shape) {
       const address = findValidMove(shape, state);
@@ -11058,12 +11147,13 @@ function processGameOver(state) {
     }
     return false;
   })) {
-    gameOver = true;
+    return {
+      ...state,
+      gameOver: true,
+      highScore: Math.max(state.score, state.highScore)
+    };
   }
-  return {
-    ...state,
-    gameOver
-  };
+  return state;
 }
 var reducer = (state = defaultState, action) => {
   let nextState = processActions(state, action);
@@ -11304,6 +11394,22 @@ function Board({
   }), tiles, children);
 }
 
+// dist/useGameOverEffect.js
+function useGameOverEffect(state, dispatch) {
+  const {
+    options: {gameOverEffect},
+    gameOver
+  } = state;
+  react.useEffect(() => {
+    if (gameOver && gameOverEffect) {
+      const interval = setInterval(() => {
+        dispatch({type: "GameOverEffect"});
+      }, 1e3);
+      return () => clearInterval(interval);
+    }
+  }, [dispatch, gameOver, gameOverEffect]);
+}
+
 // dist/App.js
 function NewGameButton({dispatch}) {
   return /* @__PURE__ */ react.createElement("button", {
@@ -11321,6 +11427,7 @@ function GameOver({dispatch}) {
       gridColumnEnd: 7
     }
   }, /* @__PURE__ */ react.createElement("div", {
+    onClick: () => dispatch({type: "NextGameOverEffect"}),
     className: "text-3xl rounded-md px-2"
   }, "Game Over"), /* @__PURE__ */ react.createElement(NewGameButton, {
     dispatch
@@ -11330,9 +11437,11 @@ var key = "gameState";
 var useLocalStorageReducer = (r, initializerArg, initializer) => {
   const [i] = react.useState(() => {
     try {
-      return JSON.parse(localStorage.getItem(key)) ?? initializerArg;
+      return {
+        ...initializerArg,
+        ...JSON.parse(localStorage.getItem(key))
+      };
     } catch (error) {
-      console.error(error);
     }
     return initializerArg;
   });
@@ -11348,6 +11457,7 @@ function App() {
   const [state, dispatch] = useLocalStorageReducer(reducer, defaultState, (state2) => {
     return reducer(state2, {type: "Init"});
   });
+  useGameOverEffect(state, dispatch);
   react.useEffect(() => {
     document.body.classList.add("overflow-hidden");
     document.body.classList.add("bg-body");
