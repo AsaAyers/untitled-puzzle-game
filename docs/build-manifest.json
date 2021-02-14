@@ -47,15 +47,6 @@
         }
       ]
     },
-    "snowpack/pkg/classnames.js": {
-      "bytes": 1099,
-      "imports": [
-        {
-          "path": "snowpack/pkg/common/_commonjsHelpers-668e6127.js",
-          "kind": "import-statement"
-        }
-      ]
-    },
     "snowpack/pkg/common/invariant.esm-0fb995cf.js": {
       "bytes": 1114,
       "imports": []
@@ -86,8 +77,17 @@
         }
       ]
     },
+    "snowpack/pkg/classnames.js": {
+      "bytes": 1099,
+      "imports": [
+        {
+          "path": "snowpack/pkg/common/_commonjsHelpers-668e6127.js",
+          "kind": "import-statement"
+        }
+      ]
+    },
     "dist/types.js": {
-      "bytes": 240,
+      "bytes": 493,
       "imports": []
     },
     "dist/utils.js": {
@@ -121,7 +121,7 @@
       ]
     },
     "dist/shared/Shape.js": {
-      "bytes": 3816,
+      "bytes": 3866,
       "imports": [
         {
           "path": "snowpack/pkg/classnames.js",
@@ -146,7 +146,7 @@
       ]
     },
     "dist/app-state.js": {
-      "bytes": 7107,
+      "bytes": 8456,
       "imports": [
         {
           "path": "dist/shared/Shape.js",
@@ -163,7 +163,7 @@
       ]
     },
     "dist/Board/AppDragLayer.js": {
-      "bytes": 3038,
+      "bytes": 3049,
       "imports": [
         {
           "path": "snowpack/pkg/classnames.js",
@@ -249,9 +249,13 @@
         }
       ]
     },
-    "dist/useGameOverEffect.js": {
-      "bytes": 428,
+    "dist/GameOver.js": {
+      "bytes": 1449,
       "imports": [
+        {
+          "path": "snowpack/pkg/classnames.js",
+          "kind": "import-statement"
+        },
         {
           "path": "snowpack/pkg/react.js",
           "kind": "import-statement"
@@ -259,12 +263,8 @@
       ]
     },
     "dist/App.js": {
-      "bytes": 3752,
+      "bytes": 2795,
       "imports": [
-        {
-          "path": "snowpack/pkg/classnames.js",
-          "kind": "import-statement"
-        },
         {
           "path": "snowpack/pkg/react.js",
           "kind": "import-statement"
@@ -286,11 +286,11 @@
           "kind": "import-statement"
         },
         {
-          "path": "dist/shared/Shape.js",
+          "path": "dist/GameOver.js",
           "kind": "import-statement"
         },
         {
-          "path": "dist/useGameOverEffect.js",
+          "path": "dist/shared/Shape.js",
           "kind": "import-statement"
         }
       ]
@@ -348,23 +348,23 @@
         "snowpack/pkg/react-dom.js": {
           "bytesInOutput": 188736
         },
-        "snowpack/pkg/classnames.js": {
-          "bytesInOutput": 1167
-        },
         "snowpack/pkg/common/invariant.esm-0fb995cf.js": {
           "bytesInOutput": 650
         },
         "dist/App.js": {
-          "bytesInOutput": 3391
+          "bytesInOutput": 2506
         },
         "snowpack/pkg/react-dnd-touch-backend.js": {
           "bytesInOutput": 19746
         },
+        "snowpack/pkg/classnames.js": {
+          "bytesInOutput": 1167
+        },
         "dist/shared/Shape.js": {
-          "bytesInOutput": 3619
+          "bytesInOutput": 3660
         },
         "dist/types.js": {
-          "bytesInOutput": 233
+          "bytesInOutput": 479
         },
         "dist/utils.js": {
           "bytesInOutput": 1360
@@ -373,19 +373,19 @@
           "bytesInOutput": 657
         },
         "dist/app-state.js": {
-          "bytesInOutput": 6852
+          "bytesInOutput": 8172
         },
         "dist/Board/Board.js": {
           "bytesInOutput": 1555
         },
         "dist/Board/AppDragLayer.js": {
-          "bytesInOutput": 2860
+          "bytesInOutput": 2871
         },
         "dist/Board/Tile.js": {
           "bytesInOutput": 1594
         },
-        "dist/useGameOverEffect.js": {
-          "bytesInOutput": 375
+        "dist/GameOver.js": {
+          "bytesInOutput": 1341
         },
         "dist/index.css": {
           "bytesInOutput": 0
@@ -394,7 +394,7 @@
           "bytesInOutput": 244
         }
       },
-      "bytes": 348494
+      "bytes": 350184
     },
     "../~~bundle~~/dist/index.css": {
       "imports": [],

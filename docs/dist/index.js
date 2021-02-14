@@ -10064,49 +10064,6 @@ var reactDom = createCommonjsModule(function(module) {
 });
 var react_dom_default = reactDom;
 
-// snowpack/pkg/classnames.js
-var classnames = createCommonjsModule(function(module) {
-  /*!
-    Copyright (c) 2017 Jed Watson.
-    Licensed under the MIT License (MIT), see
-    http://jedwatson.github.io/classnames
-  */
-  (function() {
-    var hasOwn = {}.hasOwnProperty;
-    function classNames() {
-      var classes = [];
-      for (var i = 0; i < arguments.length; i++) {
-        var arg = arguments[i];
-        if (!arg)
-          continue;
-        var argType = typeof arg;
-        if (argType === "string" || argType === "number") {
-          classes.push(arg);
-        } else if (Array.isArray(arg) && arg.length) {
-          var inner = classNames.apply(null, arg);
-          if (inner) {
-            classes.push(inner);
-          }
-        } else if (argType === "object") {
-          for (var key2 in arg) {
-            if (hasOwn.call(arg, key2) && arg[key2]) {
-              classes.push(key2);
-            }
-          }
-        }
-      }
-      return classes.join(" ");
-    }
-    if (module.exports) {
-      classNames.default = classNames;
-      module.exports = classNames;
-    } else {
-      window.classNames = classNames;
-    }
-  })();
-});
-var classnames_default = classnames;
-
 // snowpack/pkg/common/invariant.esm-0fb995cf.js
 function invariant(condition, format) {
   for (var _len = arguments.length, args = new Array(_len > 2 ? _len - 2 : 0), _key = 2; _key < _len; _key++) {
@@ -10697,6 +10654,49 @@ var TouchBackend = function createBackend(manager) {
   return new TouchBackendImpl(manager, context, options);
 };
 
+// snowpack/pkg/classnames.js
+var classnames = createCommonjsModule(function(module) {
+  /*!
+    Copyright (c) 2017 Jed Watson.
+    Licensed under the MIT License (MIT), see
+    http://jedwatson.github.io/classnames
+  */
+  (function() {
+    var hasOwn = {}.hasOwnProperty;
+    function classNames() {
+      var classes = [];
+      for (var i = 0; i < arguments.length; i++) {
+        var arg = arguments[i];
+        if (!arg)
+          continue;
+        var argType = typeof arg;
+        if (argType === "string" || argType === "number") {
+          classes.push(arg);
+        } else if (Array.isArray(arg) && arg.length) {
+          var inner = classNames.apply(null, arg);
+          if (inner) {
+            classes.push(inner);
+          }
+        } else if (argType === "object") {
+          for (var key2 in arg) {
+            if (hasOwn.call(arg, key2) && arg[key2]) {
+              classes.push(key2);
+            }
+          }
+        }
+      }
+      return classes.join(" ");
+    }
+    if (module.exports) {
+      classNames.default = classNames;
+      module.exports = classNames;
+    } else {
+      window.classNames = classNames;
+    }
+  })();
+});
+var classnames_default = classnames;
+
 // dist/shared/Shape.js
 var import_react_dnd = __toModule(require_react_dnd());
 
@@ -10707,6 +10707,13 @@ var TileStates;
   TileStates2[TileStates2["Filled"] = 1] = "Filled";
   TileStates2[TileStates2["Debug"] = 2] = "Debug";
 })(TileStates || (TileStates = {}));
+var GameOverEffect;
+(function(GameOverEffect2) {
+  GameOverEffect2["None"] = "none";
+  GameOverEffect2["Life"] = "life";
+  GameOverEffect2["Invert"] = "invert";
+  GameOverEffect2["Glider"] = "glider";
+})(GameOverEffect || (GameOverEffect = {}));
 
 // dist/utils.js
 var addressToIndex = (boardSize2, addr) => addr.row * boardSize2 + addr.column;
@@ -10826,6 +10833,11 @@ var shapes = [
   `xxxx`,
   `xxxxx`
 ].map(parseShape);
+var glider = parseShape(`
+_x
+__x
+xxx
+`);
 function useShapeDrag(shape, shapeIndex, sizeRef, gameOver) {
   return import_react_dnd.useDrag({
     item: {
@@ -10932,7 +10944,7 @@ var defaultState = {
   highScore: 0,
   gameOver: false,
   options: {
-    gameOverEffect: "invert"
+    gameOverEffect: GameOverEffect.None
   }
 };
 var inBoardBoundary = (addr, boardSize2) => addr.row >= 0 && addr.row < boardSize2 && addr.column >= 0 && addr.column < boardSize2;
@@ -10956,9 +10968,13 @@ var processActions = (state = defaultState, action) => {
       return state;
     }
     case "NewGame": {
+      let highScore = state.highScore;
+      if (!state.gameOver) {
+        highScore = Math.max(state.highScore ?? 0, state.score);
+      }
       return {
         ...defaultState,
-        highScore: Math.max(state.highScore ?? 0, state.score)
+        highScore
       };
     }
     case "PlaceShape": {
@@ -10990,20 +11006,31 @@ var processActions = (state = defaultState, action) => {
     }
     case "NextGameOverEffect": {
       console.log("nextGameOverEffect");
-      let gameOverEffect = "none";
+      let gameOverEffect = GameOverEffect.None;
+      let board = state.board;
       switch (state.options.gameOverEffect) {
-        case "life":
-          gameOverEffect = "invert";
+        case GameOverEffect.Life: {
+          gameOverEffect = GameOverEffect.Glider;
+          const offsets = shiftOffsets(glider.offsets, {row: 0, column: 0});
+          board = [];
+          offsets.map((addr) => addressToIndex(boardSize, addr)).forEach((i) => board[i] = TileStates.Filled);
+          console.log("glider board", board);
           break;
-        case "invert":
-          gameOverEffect = "none";
+        }
+        case GameOverEffect.Glider: {
+          gameOverEffect = GameOverEffect.Invert;
+          break;
+        }
+        case GameOverEffect.Invert:
+          gameOverEffect = GameOverEffect.None;
           break;
         default:
-          gameOverEffect = "life";
+          gameOverEffect = GameOverEffect.Life;
           break;
       }
       return {
         ...state,
+        board,
         options: {
           ...state.options,
           gameOverEffect
@@ -11011,39 +11038,60 @@ var processActions = (state = defaultState, action) => {
       };
     }
     case "GameOverEffect": {
+      if (!state.gameOver) {
+        return state;
+      }
+      const {gameOverEffect} = state.options;
       let board = state.board;
-      if (state.options.gameOverEffect === "invert") {
-        board = board.map((tile) => tile === TileStates.Filled ? TileStates.Empty : TileStates.Filled);
-      } else if (state.options.gameOverEffect === "life") {
-        let totalAlive = 0;
-        const processTile = (self2, idx) => {
-          const addr = indexToAddress(state.boardSize, idx);
-          const adjacent = getAdjacent(addr, state.boardSize);
-          const neighbors = adjacent.reduce((total, tmp) => {
-            if (inBoardBoundary(tmp, state.boardSize)) {
-              const idx2 = addressToIndex(state.boardSize, tmp);
-              if (state.board[idx2] === TileStates.Filled) {
-                return total + 1;
+      switch (gameOverEffect) {
+        case "invert": {
+          board = board.map((tile) => tile === TileStates.Filled ? TileStates.Empty : TileStates.Filled);
+          break;
+        }
+        case "glider":
+        case "life": {
+          let totalAlive = 0;
+          let changed = 0;
+          const processTile = (self2, idx) => {
+            const addr = indexToAddress(state.boardSize, idx);
+            const adjacent = getAdjacent(addr, state.boardSize);
+            console.log("adj", adjacent.length);
+            const neighbors = adjacent.reduce((total, tmp) => {
+              if (inBoardBoundary(tmp, state.boardSize)) {
+                const idx2 = addressToIndex(state.boardSize, tmp);
+                if (state.board[idx2] === TileStates.Filled) {
+                  return total + 1;
+                }
               }
-            }
-            return total;
-          }, 0);
-          if (self2 === TileStates.Filled) {
-            if (neighbors == 2 || neighbors == 3) {
+              return total;
+            }, 0);
+            if (self2 === TileStates.Filled) {
+              if (neighbors == 2 || neighbors == 3) {
+                totalAlive++;
+                return TileStates.Filled;
+              } else {
+                changed++;
+                return TileStates.Empty;
+              }
+            } else if (self2 === TileStates.Empty && neighbors == 3) {
               totalAlive++;
+              changed++;
               return TileStates.Filled;
-            } else {
-              return TileStates.Empty;
             }
-          } else if (neighbors == 3) {
-            totalAlive++;
-            return TileStates.Filled;
+            return TileStates.Empty;
+          };
+          const numTiles = state.boardSize * state.boardSize;
+          if (board.length < numTiles) {
+            board = [...board];
+            for (let i = 0; i < numTiles; i++) {
+              board[i] = board[i] || TileStates.Empty;
+            }
           }
-          return TileStates.Empty;
-        };
-        board = board.map(processTile);
-        if (totalAlive === 0) {
-          board = board.map(() => Math.random() < 0.5 ? TileStates.Empty : TileStates.Filled);
+          console.log("board", board);
+          board = board.map(processTile);
+          if (totalAlive === 0 || changed === 0) {
+            board = board.map(() => Math.random() < 0.5 ? TileStates.Empty : TileStates.Filled);
+          }
         }
       }
       return {
@@ -11157,9 +11205,11 @@ function processGameOver(state) {
 }
 var reducer = (state = defaultState, action) => {
   let nextState = processActions(state, action);
-  nextState = processCurrentSelection(nextState);
-  nextState = processLines(nextState);
-  nextState = processGameOver(nextState);
+  if (!state.gameOver) {
+    nextState = processCurrentSelection(nextState);
+    nextState = processLines(nextState);
+    nextState = processGameOver(nextState);
+  }
   return nextState;
 };
 
@@ -11257,7 +11307,7 @@ function ShapePreview({
   }, /* @__PURE__ */ react.createElement(ShapeUI, {
     shape: s,
     className: classnames_default({
-      "ring-4 ring-preview": ghost
+      "ring-4 ring-preview ring-inset": ghost
     })
   })));
 }
@@ -11394,24 +11444,10 @@ function Board({
   }), tiles, children);
 }
 
-// dist/useGameOverEffect.js
-function useGameOverEffect(state, dispatch) {
-  const {
-    options: {gameOverEffect},
-    gameOver
-  } = state;
-  react.useEffect(() => {
-    if (gameOver && gameOverEffect) {
-      const interval = setInterval(() => {
-        dispatch({type: "GameOverEffect"});
-      }, 1e3);
-      return () => clearInterval(interval);
-    }
-  }, [dispatch, gameOver, gameOverEffect]);
-}
-
-// dist/App.js
-function NewGameButton({dispatch}) {
+// dist/GameOver.js
+function NewGameButton({
+  dispatch
+}) {
   return /* @__PURE__ */ react.createElement("button", {
     className: "app-new-game bg-blue-300 rounded-md px-2 py-2 mx-3 my-3 ",
     onClick: () => dispatch({type: "NewGame"})
@@ -11421,23 +11457,39 @@ function GameOver({
   dispatch,
   state
 }) {
+  const {
+    gameOver,
+    options: {gameOverEffect}
+  } = state;
+  react.useEffect(() => {
+    if (gameOver && gameOverEffect != "none") {
+      console.log("start interval");
+      const interval = setInterval(() => {
+        console.log("tick");
+        dispatch({type: "GameOverEffect"});
+      }, 1e3);
+      return () => clearInterval(interval);
+    }
+  }, [dispatch, gameOver, gameOverEffect]);
   return /* @__PURE__ */ react.createElement("div", {
-    className: classnames_default("relative z-50 justify-center text-center bg-game-over", {
-      effects: state.options.gameOverEffect != "none"
+    className: classnames_default("absolute z-50 justify-center text-center bg-game-over", {
+      effects: gameOverEffect != "none"
     }),
     style: {
-      gridRowStart: 4,
-      gridRowEnd: 7,
-      gridColumnStart: 4,
-      gridColumnEnd: 7
+      left: "20%",
+      right: "20%",
+      top: "30%",
+      height: "auto"
     }
   }, /* @__PURE__ */ react.createElement("div", {
     onClick: () => dispatch({type: "NextGameOverEffect"}),
     className: "text-3xl rounded-md px-2"
-  }, "Game Over"), /* @__PURE__ */ react.createElement(NewGameButton, {
+  }, "Game Over"), gameOverEffect !== "none" ? /* @__PURE__ */ react.createElement("div", null, "Animation: ", gameOverEffect) : null, /* @__PURE__ */ react.createElement(NewGameButton, {
     dispatch
   }));
 }
+
+// dist/App.js
 var key = "gameState";
 var useLocalStorageReducer = (r, initializerArg, initializer) => {
   const [i] = react.useState(() => {
@@ -11462,7 +11514,6 @@ function App() {
   const [state, dispatch] = useLocalStorageReducer(reducer, defaultState, (state2) => {
     return reducer(state2, {type: "Init"});
   });
-  useGameOverEffect(state, dispatch);
   react.useEffect(() => {
     document.body.classList.add("overflow-hidden");
     document.body.classList.add("bg-body");
