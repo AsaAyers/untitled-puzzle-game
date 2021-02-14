@@ -1,58 +1,12 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-import classNames from 'classnames';
 import React from 'react';
 import { DndProvider } from 'react-dnd';
 import { TouchBackend } from 'react-dnd-touch-backend';
-import { defaultState, reducer, State } from './app-state';
+import { defaultState, reducer } from './app-state';
 import Board from './Board/Board';
+import { GameOver, NewGameButton } from './GameOver';
 import Shape from './shared/Shape';
-import type { AppDispatch } from './types';
-import { useGameOverEffect as useGameOferEffect } from './useGameOverEffect';
 
-function NewGameButton({ dispatch }: { dispatch: AppDispatch }): JSX.Element {
-  return (
-    <button
-      className="app-new-game bg-blue-300 rounded-md px-2 py-2 mx-3 my-3 "
-      onClick={() => dispatch({ type: 'NewGame' })}
-    >
-      New Game
-    </button>
-  );
-}
-
-function GameOver({
-  dispatch,
-  state,
-}: {
-  dispatch: AppDispatch;
-  state: State;
-}): JSX.Element {
-  return (
-    <div
-      className={classNames(
-        'relative z-50 justify-center text-center bg-game-over',
-        {
-          effects: state.options.gameOverEffect != 'none',
-        },
-      )}
-      style={{
-        // gridRow: '4 / 7 / 4 / 7',
-        gridRowStart: 4,
-        gridRowEnd: 7,
-        gridColumnStart: 4,
-        gridColumnEnd: 7,
-      }}
-    >
-      <div
-        onClick={() => dispatch({ type: 'NextGameOverEffect' })}
-        className="text-3xl rounded-md px-2"
-      >
-        Game Over
-      </div>
-      <NewGameButton dispatch={dispatch} />
-    </div>
-  );
-}
 // TODO: appDispatchContext
 
 const key = 'gameState';
@@ -92,7 +46,6 @@ function App(): JSX.Element {
       return reducer(state, { type: 'Init' });
     },
   );
-  useGameOferEffect(state, dispatch);
 
   React.useEffect(() => {
     document.body.classList.add('overflow-hidden');

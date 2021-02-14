@@ -1,5 +1,11 @@
-import { shapes } from './shared/Shape';
-import { BoardAddress, BoardSize, ShapeData, TileStates } from './types';
+import { glider, shapes } from './shared/Shape';
+import {
+  BoardAddress,
+  BoardSize,
+  GameOverEffect,
+  ShapeData,
+  TileStates,
+} from './types';
 import {
   addressToIndex,
   indexToAddress,
@@ -18,7 +24,7 @@ export type State = {
   highScore: number;
   gameOver: boolean;
   options: {
-    gameOverEffect: 'none' | 'life' | 'invert';
+    gameOverEffect: GameOverEffect;
   };
 };
 
@@ -31,7 +37,7 @@ export const defaultState: State = {
   highScore: 0,
   gameOver: false,
   options: {
-    gameOverEffect: 'invert',
+    gameOverEffect: GameOverEffect.None,
   },
 };
 
@@ -49,7 +55,7 @@ type Init = { type: 'Init' };
 
 type NewGame = { type: 'NewGame' };
 
-type GameOverEffect = { type: 'GameOverEffect' };
+type GameOverEffectAction = { type: 'GameOverEffect' };
 
 type NextGameOverEffect = { type: 'NextGameOverEffect' };
 
@@ -57,7 +63,7 @@ export type Action =
   | PlaceShape
   | Init
   | NewGame
-  | GameOverEffect
+  | GameOverEffectAction
   | NextGameOverEffect;
 
 const inBoardBoundary = (addr: BoardAddress, boardSize: number) =>
@@ -91,9 +97,13 @@ export const processActions: React.Reducer<State, Action> = (
       return state;
     }
     case 'NewGame': {
+      let highScore = state.highScore;
+      if (!state.gameOver) {
+        highScore = Math.max(state.highScore ?? 0, state.score);
+      }
       return {
         ...defaultState,
-        highScore: Math.max(state.highScore ?? 0, state.score),
+        highScore,
       };
     }
     case 'PlaceShape': {
@@ -129,20 +139,35 @@ export const processActions: React.Reducer<State, Action> = (
     }
     case 'NextGameOverEffect': {
       console.log('nextGameOverEffect');
-      let gameOverEffect: State['options']['gameOverEffect'] = 'none';
+      let gameOverEffect: State['options']['gameOverEffect'] =
+        GameOverEffect.None;
+      let board = state.board;
       switch (state.options.gameOverEffect) {
-        case 'life':
-          gameOverEffect = 'invert';
+        case GameOverEffect.Life: {
+          gameOverEffect = GameOverEffect.Glider;
+          const offsets = shiftOffsets(glider.offsets, { row: 0, column: 0 });
+          board = [];
+          offsets
+            .map((addr) => addressToIndex(boardSize, addr))
+            .forEach((i) => (board[i] = TileStates.Filled));
+
+          console.log('glider board', board);
           break;
-        case 'invert':
-          gameOverEffect = 'none';
+        }
+        case GameOverEffect.Glider: {
+          gameOverEffect = GameOverEffect.Invert;
+          break;
+        }
+        case GameOverEffect.Invert:
+          gameOverEffect = GameOverEffect.None;
           break;
         default:
-          gameOverEffect = 'life';
+          gameOverEffect = GameOverEffect.Life;
           break;
       }
       return {
         ...state,
+        board,
         options: {
           ...state.options,
           gameOverEffect,
@@ -150,48 +175,70 @@ export const processActions: React.Reducer<State, Action> = (
       };
     }
     case 'GameOverEffect': {
+      if (!state.gameOver) {
+        return state;
+      }
+      const { gameOverEffect } = state.options;
       let board = state.board;
-      if (state.options.gameOverEffect === 'invert') {
-        board = board.map((tile) =>
-          tile === TileStates.Filled ? TileStates.Empty : TileStates.Filled,
-        );
-      } else if (state.options.gameOverEffect === 'life') {
-        let totalAlive = 0;
-        const processTile = (self: TileStates, idx: number) => {
-          const addr = indexToAddress(state.boardSize, idx);
-          const adjacent = getAdjacent(addr, state.boardSize);
-          const neighbors = adjacent.reduce(
-            (total: number, tmp: BoardAddress) => {
-              if (inBoardBoundary(tmp, state.boardSize)) {
-                const idx = addressToIndex(state.boardSize, tmp);
-                if (state.board[idx] === TileStates.Filled) {
-                  return total + 1;
+
+      switch (gameOverEffect) {
+        case 'invert': {
+          board = board.map((tile) =>
+            tile === TileStates.Filled ? TileStates.Empty : TileStates.Filled,
+          );
+          break;
+        }
+        case 'glider':
+        case 'life': {
+          let totalAlive = 0;
+          let changed = 0;
+          const processTile = (self: TileStates, idx: number) => {
+            const addr = indexToAddress(state.boardSize, idx);
+            const adjacent = getAdjacent(addr, state.boardSize);
+            console.log('adj', adjacent.length);
+            const neighbors = adjacent.reduce(
+              (total: number, tmp: BoardAddress) => {
+                if (inBoardBoundary(tmp, state.boardSize)) {
+                  const idx = addressToIndex(state.boardSize, tmp);
+                  if (state.board[idx] === TileStates.Filled) {
+                    return total + 1;
+                  }
                 }
+                return total;
+              },
+              0,
+            );
+
+            if (self === TileStates.Filled) {
+              if (neighbors == 2 || neighbors == 3) {
+                totalAlive++;
+                return TileStates.Filled;
+              } else {
+                changed++;
+                return TileStates.Empty;
               }
-              return total;
-            },
-            0,
-          );
-
-          if (self === TileStates.Filled) {
-            if (neighbors == 2 || neighbors == 3) {
+            } else if (self === TileStates.Empty && neighbors == 3) {
               totalAlive++;
+              changed++;
               return TileStates.Filled;
-            } else {
-              return TileStates.Empty;
             }
-          } else if (neighbors == 3) {
-            totalAlive++;
-            return TileStates.Filled;
-          }
-          return TileStates.Empty;
-        };
+            return TileStates.Empty;
+          };
 
-        board = board.map(processTile);
-        if (totalAlive === 0) {
-          board = board.map(() =>
-            Math.random() < 0.5 ? TileStates.Empty : TileStates.Filled,
-          );
+          const numTiles = state.boardSize * state.boardSize;
+          if (board.length < numTiles) {
+            board = [...board];
+            for (let i = 0; i < numTiles; i++) {
+              board[i] = board[i] || TileStates.Empty;
+            }
+          }
+          console.log('board', board);
+          board = board.map(processTile);
+          if (totalAlive === 0 || changed === 0) {
+            board = board.map(() =>
+              Math.random() < 0.5 ? TileStates.Empty : TileStates.Filled,
+            );
+          }
         }
       }
 
@@ -336,9 +383,11 @@ export const reducer: React.Reducer<State, Action> = (
   action: Action,
 ): State => {
   let nextState = processActions(state, action);
-  nextState = processCurrentSelection(nextState);
-  nextState = processLines(nextState);
-  nextState = processGameOver(nextState);
+  if (!state.gameOver) {
+    nextState = processCurrentSelection(nextState);
+    nextState = processLines(nextState);
+    nextState = processGameOver(nextState);
+  }
 
   return nextState;
 };

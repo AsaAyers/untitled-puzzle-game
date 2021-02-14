@@ -66,6 +66,12 @@ export const shapes = [
   `xxxxx`,
 ].map(parseShape);
 
+export const glider = parseShape(`
+_x
+__x
+xxx
+`);
+
 type Collected = { isDragging: boolean };
 function useShapeDrag(
   shape: ShapeData,

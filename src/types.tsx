@@ -21,3 +21,10 @@ export type ShapeData = {
 };
 
 export type AppDispatch = React.Dispatch<Action>;
+
+export enum GameOverEffect {
+  None = 'none',
+  Life = 'life',
+  Invert = 'invert',
+  Glider = 'glider',
+}
