@@ -121,7 +121,7 @@
       ]
     },
     "dist/shared/Shape.js": {
-      "bytes": 3210,
+      "bytes": 3737,
       "imports": [
         {
           "path": "snowpack/pkg/classnames.js",
@@ -209,8 +209,12 @@
       ]
     },
     "dist/Board/Board.js": {
-      "bytes": 1775,
+      "bytes": 1860,
       "imports": [
+        {
+          "path": "snowpack/pkg/classnames.js",
+          "kind": "import-statement"
+        },
         {
           "path": "snowpack/pkg/react.js",
           "kind": "import-statement"
@@ -242,7 +246,7 @@
       ]
     },
     "dist/App.js": {
-      "bytes": 2597,
+      "bytes": 2596,
       "imports": [
         {
           "path": "snowpack/pkg/react.js",
@@ -271,7 +275,7 @@
       ]
     },
     "dist/index.css": {
-      "bytes": 6789683,
+      "bytes": 6790306,
       "imports": []
     },
     "dist/index.js": {
@@ -327,7 +331,7 @@
           "bytesInOutput": 650
         },
         "dist/App.js": {
-          "bytesInOutput": 2363
+          "bytesInOutput": 2362
         },
         "snowpack/pkg/react-dnd-touch-backend.js": {
           "bytesInOutput": 19746
@@ -336,7 +340,7 @@
           "bytesInOutput": 1167
         },
         "dist/shared/Shape.js": {
-          "bytesInOutput": 3010
+          "bytesInOutput": 3540
         },
         "dist/types.js": {
           "bytesInOutput": 233
@@ -351,7 +355,7 @@
           "bytesInOutput": 3471
         },
         "dist/Board/Board.js": {
-          "bytesInOutput": 1521
+          "bytesInOutput": 1555
         },
         "dist/Board/AppDragLayer.js": {
           "bytesInOutput": 2310
@@ -366,16 +370,16 @@
           "bytesInOutput": 244
         }
       },
-      "bytes": 342136
+      "bytes": 342699
     },
     "../~~bundle~~/dist/index.css": {
       "imports": [],
       "inputs": {
         "dist/index.css": {
-          "bytesInOutput": 6719474
+          "bytesInOutput": 6720070
         }
       },
-      "bytes": 6719495
+      "bytes": 6720091
     }
   }
 }

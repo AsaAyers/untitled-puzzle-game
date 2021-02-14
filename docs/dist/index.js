@@ -10829,8 +10829,20 @@ function useShapeDrag(shape, shapeIndex, sizeRef) {
     begin(monitor) {
       const bbox = sizeRef.current.getBoundingClientRect();
       const diff = monitor.getClientOffset();
-      const column = Math.floor((diff.x - bbox.x) / bbox.width * shape.columns);
-      const row = Math.floor((diff.y - bbox.y) / bbox.height * shape.rows);
+      let column = Math.floor((diff.x - bbox.x) / bbox.width * shape.columns);
+      let row = Math.floor((diff.y - bbox.y) / bbox.height * shape.rows);
+      if (!shape.offsets.some((o) => o.row === row && o.column === column)) {
+        const distance2 = (a, b) => Math.sqrt(Math.pow(Math.abs(a.row - b.row), 2) + Math.pow(Math.abs(a.column - b.column), 2));
+        const original = {row, column};
+        const closest = shape.offsets.reduce((previous, next) => {
+          if (distance2(original, next) < distance2(original, previous)) {
+            return next;
+          }
+          return previous;
+        });
+        row = closest.row;
+        column = closest.column;
+      }
       return {
         type: SHAPE,
         shape,
@@ -11180,6 +11192,7 @@ function Board({
   boardSize: boardSize2,
   board,
   dispatch,
+  className,
   children
 }) {
   const [isOver, boardRef] = import_react_dnd4.useDrop({
@@ -11220,7 +11233,7 @@ function Board({
       gridTemplateColumns: `repeat(${boardSize2}, minMax(0, 1fr))`,
       gridTemplateRows: `repeat(${boardSize2}, minMax(0, 1fr))`
     },
-    className: "grid relative mx-3 my-3"
+    className: classnames_default(className, "grid relative")
   }, /* @__PURE__ */ react.createElement(AppDragLayer, {
     isOver,
     hoverAddress: hover
@@ -11261,28 +11274,27 @@ function App() {
       enableMouseEvents: true
     }
   }, /* @__PURE__ */ react.createElement("div", {
-    className: "container mx-auto max-w-lg bg-container min-h-screen select-none"
+    className: "app-container container gap-3 px-3 py-3 mx-auto max-w-lg bg-container min-h-screen select-none"
   }, /* @__PURE__ */ react.createElement("header", {
-    className: "h-12 text-center"
+    className: "app-header text-center"
   }, /* @__PURE__ */ react.createElement("div", null, "Untitled Puzzle Game"), /* @__PURE__ */ react.createElement("div", null, "Score: ", state.score), state.highScore > 0 ? /* @__PURE__ */ react.createElement("div", null, "High Score: ", state.highScore) : null), /* @__PURE__ */ react.createElement("button", {
-    className: "bg-blue-300 rounded-md px-2 py-2 mx-3 ",
+    className: "app-new-game bg-blue-300 rounded-md px-2 py-2 mx-3 ",
     onClick: () => dispatch({type: "NewGame"})
   }, "New Game"), /* @__PURE__ */ react.createElement(Board, {
+    className: "app-board",
     boardSize: state.boardSize,
     board: state.board,
     dispatch
-  }), /* @__PURE__ */ react.createElement("div", {
-    className: "grid grid-cols-3 my-3 mx-3 gap-3"
-  }, state.currentSelection.map((shape, index) => /* @__PURE__ */ react.createElement("div", {
+  }), state.currentSelection.map((shape, index) => /* @__PURE__ */ react.createElement("div", {
     key: index,
-    className: "square rounded-2xl border-solid border-2 border-color relative"
+    className: `app-shape-${index + 1} square rounded-2xl border-solid border-2 border-color relative`
   }, /* @__PURE__ */ react.createElement("div", {
     className: "square-content"
   }, shape != null && /* @__PURE__ */ react.createElement(Shape, {
     shape,
     shapeIndex: index,
     className: "center-shape"
-  })))))));
+  }))))));
 }
 var App_default = App;
 
