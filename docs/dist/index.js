@@ -10064,6 +10064,49 @@ var reactDom = createCommonjsModule(function(module) {
 });
 var react_dom_default = reactDom;
 
+// snowpack/pkg/classnames.js
+var classnames = createCommonjsModule(function(module) {
+  /*!
+    Copyright (c) 2017 Jed Watson.
+    Licensed under the MIT License (MIT), see
+    http://jedwatson.github.io/classnames
+  */
+  (function() {
+    var hasOwn = {}.hasOwnProperty;
+    function classNames() {
+      var classes = [];
+      for (var i = 0; i < arguments.length; i++) {
+        var arg = arguments[i];
+        if (!arg)
+          continue;
+        var argType = typeof arg;
+        if (argType === "string" || argType === "number") {
+          classes.push(arg);
+        } else if (Array.isArray(arg) && arg.length) {
+          var inner = classNames.apply(null, arg);
+          if (inner) {
+            classes.push(inner);
+          }
+        } else if (argType === "object") {
+          for (var key2 in arg) {
+            if (hasOwn.call(arg, key2) && arg[key2]) {
+              classes.push(key2);
+            }
+          }
+        }
+      }
+      return classes.join(" ");
+    }
+    if (module.exports) {
+      classNames.default = classNames;
+      module.exports = classNames;
+    } else {
+      window.classNames = classNames;
+    }
+  })();
+});
+var classnames_default = classnames;
+
 // snowpack/pkg/common/invariant.esm-0fb995cf.js
 function invariant(condition, format) {
   for (var _len = arguments.length, args = new Array(_len > 2 ? _len - 2 : 0), _key = 2; _key < _len; _key++) {
@@ -10653,49 +10696,6 @@ var TouchBackend = function createBackend(manager) {
   var options = arguments.length > 2 && arguments[2] !== void 0 ? arguments[2] : {};
   return new TouchBackendImpl(manager, context, options);
 };
-
-// snowpack/pkg/classnames.js
-var classnames = createCommonjsModule(function(module) {
-  /*!
-    Copyright (c) 2017 Jed Watson.
-    Licensed under the MIT License (MIT), see
-    http://jedwatson.github.io/classnames
-  */
-  (function() {
-    var hasOwn = {}.hasOwnProperty;
-    function classNames() {
-      var classes = [];
-      for (var i = 0; i < arguments.length; i++) {
-        var arg = arguments[i];
-        if (!arg)
-          continue;
-        var argType = typeof arg;
-        if (argType === "string" || argType === "number") {
-          classes.push(arg);
-        } else if (Array.isArray(arg) && arg.length) {
-          var inner = classNames.apply(null, arg);
-          if (inner) {
-            classes.push(inner);
-          }
-        } else if (argType === "object") {
-          for (var key2 in arg) {
-            if (hasOwn.call(arg, key2) && arg[key2]) {
-              classes.push(key2);
-            }
-          }
-        }
-      }
-      return classes.join(" ");
-    }
-    if (module.exports) {
-      classNames.default = classNames;
-      module.exports = classNames;
-    } else {
-      window.classNames = classNames;
-    }
-  })();
-});
-var classnames_default = classnames;
 
 // dist/shared/Shape.js
 var import_react_dnd = __toModule(require_react_dnd());
@@ -11417,9 +11417,14 @@ function NewGameButton({dispatch}) {
     onClick: () => dispatch({type: "NewGame"})
   }, "New Game");
 }
-function GameOver({dispatch}) {
+function GameOver({
+  dispatch,
+  state
+}) {
   return /* @__PURE__ */ react.createElement("div", {
-    className: "relative z-50 justify-center text-center bg-body",
+    className: classnames_default("relative z-50 justify-center text-center bg-game-over", {
+      effects: state.options.gameOverEffect != "none"
+    }),
     style: {
       gridRowStart: 4,
       gridRowEnd: 7,
@@ -11484,6 +11489,7 @@ function App() {
     board: state.board,
     dispatch
   }, state.gameOver ? /* @__PURE__ */ react.createElement(GameOver, {
+    state,
     dispatch
   }) : null), state.currentSelection.map((shape, index) => /* @__PURE__ */ react.createElement("div", {
     key: index,

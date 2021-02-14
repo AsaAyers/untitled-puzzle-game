@@ -47,6 +47,15 @@
         }
       ]
     },
+    "snowpack/pkg/classnames.js": {
+      "bytes": 1099,
+      "imports": [
+        {
+          "path": "snowpack/pkg/common/_commonjsHelpers-668e6127.js",
+          "kind": "import-statement"
+        }
+      ]
+    },
     "snowpack/pkg/common/invariant.esm-0fb995cf.js": {
       "bytes": 1114,
       "imports": []
@@ -73,15 +82,6 @@
       "imports": [
         {
           "path": "snowpack/pkg/common/invariant.esm-0fb995cf.js",
-          "kind": "import-statement"
-        }
-      ]
-    },
-    "snowpack/pkg/classnames.js": {
-      "bytes": 1099,
-      "imports": [
-        {
-          "path": "snowpack/pkg/common/_commonjsHelpers-668e6127.js",
           "kind": "import-statement"
         }
       ]
@@ -259,8 +259,12 @@
       ]
     },
     "dist/App.js": {
-      "bytes": 3592,
+      "bytes": 3752,
       "imports": [
+        {
+          "path": "snowpack/pkg/classnames.js",
+          "kind": "import-statement"
+        },
         {
           "path": "snowpack/pkg/react.js",
           "kind": "import-statement"
@@ -292,7 +296,7 @@
       ]
     },
     "dist/index.css": {
-      "bytes": 6790439,
+      "bytes": 6790569,
       "imports": []
     },
     "dist/index.js": {
@@ -344,17 +348,17 @@
         "snowpack/pkg/react-dom.js": {
           "bytesInOutput": 188736
         },
+        "snowpack/pkg/classnames.js": {
+          "bytesInOutput": 1167
+        },
         "snowpack/pkg/common/invariant.esm-0fb995cf.js": {
           "bytesInOutput": 650
         },
         "dist/App.js": {
-          "bytesInOutput": 3279
+          "bytesInOutput": 3391
         },
         "snowpack/pkg/react-dnd-touch-backend.js": {
           "bytesInOutput": 19746
-        },
-        "snowpack/pkg/classnames.js": {
-          "bytesInOutput": 1167
         },
         "dist/shared/Shape.js": {
           "bytesInOutput": 3619
@@ -390,16 +394,16 @@
           "bytesInOutput": 244
         }
       },
-      "bytes": 348382
+      "bytes": 348494
     },
     "../~~bundle~~/dist/index.css": {
       "imports": [],
       "inputs": {
         "dist/index.css": {
-          "bytesInOutput": 6720200
+          "bytesInOutput": 6720328
         }
       },
-      "bytes": 6720221
+      "bytes": 6720349
     }
   }
 }
