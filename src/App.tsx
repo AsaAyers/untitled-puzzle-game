@@ -31,7 +31,8 @@ const useLocalStorageReducer = (
     console.log('setItem', value);
     localStorage.setItem(key, value);
   }, [state]);
-  return [state, dispatch];
+  const wat: [typeof state, typeof dispatch] = [state, dispatch];
+  return wat;
 };
 
 function App(): JSX.Element {
