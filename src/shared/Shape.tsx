@@ -9,6 +9,8 @@ export type DragShape = {
   type: typeof SHAPE;
   shape: ShapeData;
   shapeIndex: number;
+  row: number;
+  column: number;
 };
 
 function parseShape(shape: string): ShapeData {
@@ -65,12 +67,39 @@ export const shapes = [
 ].map(parseShape);
 
 type Collected = { isDragging: boolean };
-function useShapeDrag(shape: ShapeData, shapeIndex: number) {
+function useShapeDrag(
+  shape: ShapeData,
+  shapeIndex: number,
+  sizeRef: React.MutableRefObject<HTMLDivElement | null>,
+) {
   return useDrag<DragShape, unknown, Collected>({
     item: {
       type: SHAPE,
       shape,
       shapeIndex,
+      row: -1,
+      column: -1,
+    },
+    begin(monitor): DragShape {
+      // Because this is in the begin callback, the ref will definitely be
+      // populated and we will have an offset because the drag is starting.
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      const bbox = sizeRef.current!.getBoundingClientRect();
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      const diff = monitor.getClientOffset()!;
+
+      const column = Math.floor(
+        ((diff.x - bbox.x) / bbox.width) * shape.columns,
+      );
+      const row = Math.floor(((diff.y - bbox.y) / bbox.height) * shape.rows);
+
+      return {
+        type: SHAPE,
+        shape,
+        shapeIndex,
+        row,
+        column,
+      };
     },
     isDragging(monitor) {
       const item = monitor.getItem();
@@ -93,7 +122,8 @@ export default function Shape({
   shapeIndex,
   className,
 }: ShapeProps): JSX.Element {
-  const [{ isDragging }, dragRef] = useShapeDrag(shape, shapeIndex);
+  const sizeRef = React.useRef<HTMLDivElement>(null);
+  const [{ isDragging }, dragRef] = useShapeDrag(shape, shapeIndex, sizeRef);
 
   const maxSize = 80; // %
   const width = (shape.columns / MAX_SHAPE_SIZE) * maxSize;
@@ -101,6 +131,7 @@ export default function Shape({
 
   return (
     <div
+      ref={sizeRef}
       className={classNames(className, 'absolute', {
         'opacity-40': isDragging,
       })}

@@ -28,16 +28,25 @@ export function AppDragLayer({
     if (!monitor.isDragging()) {
       return null;
     }
+    const item = monitor.getItem() as DragShape;
 
-    const bbox = myRef.current?.getBoundingClientRect() ?? { x: 0, y: 0 };
+    const bbox = myRef.current?.getBoundingClientRect() ?? {
+      x: 0,
+      y: 0,
+      width: 0,
+      height: 0,
+    };
 
     return {
-      item: monitor.getItem() as DragShape,
+      item,
       // initialOffset: monitor.getInitialSourceClientOffset(),
-      sourceClientOffset: monitor.getSourceClientOffset(),
+      sourceClientOffset: monitor.getClientOffset(),
       // initialOffset: { x: 0, y: 0 },
-      // foo: { x: 0, y: 0 },
       boardCornerOffset: { x: -bbox.x, y: -bbox.y },
+      snapMouse: {
+        x: bbox.width * ((item.column + 0.5) / item.shape.columns),
+        y: bbox.height * ((item.row + 0.5) / item.shape.rows),
+      },
     };
   });
   const collectedProps = useDragDebug(tmp, tmp?.item != null);
@@ -50,11 +59,17 @@ export function AppDragLayer({
   let corner = { row: 0, column: 0 };
   let positionStyle = {};
   if (isOverBoard && hoverAddress) {
+    corner = {
+      row: hoverAddress.row - item.row,
+      column: hoverAddress.column - item.column,
+    };
     corner = hoverAddress;
   } else if (sourceClientOffset) {
+    const snapMouse = tmp?.snapMouse ?? { x: 0, y: 0 };
+
     positionStyle = {
-      top: sourceClientOffset.y + boardCornerOffset.y,
-      left: sourceClientOffset.x + boardCornerOffset.x,
+      top: sourceClientOffset.y + boardCornerOffset.y - snapMouse.y,
+      left: sourceClientOffset.x + boardCornerOffset.x - snapMouse.x,
     };
   }
   const sizingStyle = {

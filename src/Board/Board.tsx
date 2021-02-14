@@ -38,19 +38,6 @@ export default function Board({
       setHover(null);
     }
   }, [isOver]);
-  const onHover = React.useCallback((addr: HoverAddress | null) => {
-    setHover((current) => {
-      if (
-        !current ||
-        !addr ||
-        current.row !== addr.row ||
-        current.column !== addr?.column
-      ) {
-        return addr;
-      }
-      return current;
-    });
-  }, []);
 
   const tiles = React.useMemo(() => {
     const tiles: JSX.Element[] = [];
@@ -65,7 +52,7 @@ export default function Board({
             value={value}
             row={row}
             column={column}
-            onHover={onHover}
+            onHover={setHover}
             isTileValid={isTileValid}
             dispatch={dispatch}
           />,
@@ -73,7 +60,7 @@ export default function Board({
       }
     }
     return tiles;
-  }, [boardSize, board, onHover, isTileValid, dispatch]);
+  }, [boardSize, board, setHover, isTileValid, dispatch]);
   return (
     <div
       ref={boardRef}

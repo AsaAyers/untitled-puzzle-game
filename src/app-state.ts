@@ -149,20 +149,19 @@ function processLines(state: State): State {
 
   if (fullRows.length > 0 || fullColumns.length > 0) {
     const board = [...state.board];
-    let newScore = 0;
+    const numLines = fullRows.length + fullColumns.length;
+    const newScore = state.boardSize * numLines;
 
     fullRows.forEach((row) => {
       tmp.forEach((column) => {
         const idx = addressToIndex(state.boardSize, { row, column });
         board[idx] = TileStates.Empty;
-        newScore++;
       });
     });
     fullColumns.forEach((column) => {
       tmp.forEach((row) => {
         const idx = addressToIndex(state.boardSize, { row, column });
         board[idx] = TileStates.Empty;
-        newScore++;
       });
     });
 

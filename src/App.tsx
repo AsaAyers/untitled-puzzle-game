@@ -14,7 +14,6 @@ const useLocalStorageReducer = (
 ) => {
   const [i] = React.useState(() => {
     try {
-      console.log('getItem');
       // @ts-ignore
       return JSON.parse(localStorage.getItem(key)) ?? initializerArg;
     } catch (error) {
@@ -24,13 +23,10 @@ const useLocalStorageReducer = (
     return initializerArg;
   });
 
-  console.log(i);
-
   const [state, dispatch] = React.useReducer(r, i, initializer);
 
   React.useEffect(() => {
     const value = JSON.stringify(state);
-    console.log('setItem', value);
     localStorage.setItem(key, value);
   }, [state]);
   const wat: [typeof state, typeof dispatch] = [state, dispatch];

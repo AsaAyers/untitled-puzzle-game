@@ -1,4 +1,3 @@
-import { shapes } from './shared/Shape';
 import { BoardAddress, BoardSize, ShapeData, TileStates } from './types';
 
 export const addressToIndex = (
@@ -57,7 +56,12 @@ export const isTileValidUtil = (
   boardSize: BoardSize,
   board: TileStates[],
 ): boolean => {
-  if (addr.row >= boardSize || addr.column >= boardSize) {
+  if (
+    addr.row >= boardSize ||
+    addr.column >= boardSize ||
+    addr.row < 0 ||
+    addr.column < 0
+  ) {
     return false;
   }
   const i = addressToIndex(boardSize, addr);

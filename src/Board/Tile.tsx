@@ -37,22 +37,30 @@ function BoardTileImpl({
     accept: SHAPE,
     canDrop(item: DragShape, monitor) {
       if (monitor.isOver()) {
-        return isShapeValid(item.shape, { row, column });
+        const corner = {
+          row: row - item.row,
+          column: column - item.column,
+        };
+        return isShapeValid(item.shape, corner);
       }
       return false;
     },
     drop(item) {
+      const corner = {
+        row: row - item.row,
+        column: column - item.column,
+      };
       dispatch({
         type: 'PlaceShape',
         payload: {
-          boardAddress: { row, column },
+          boardAddress: corner,
           shapeIndex: item.shapeIndex,
         },
       });
     },
     collect(monitor) {
       const isOver = monitor.isOver();
-      const item = isOver ? monitor.getItem() : null;
+      const item = isOver ? (monitor.getItem() as DragShape) : null;
       return {
         item,
       };
@@ -61,8 +69,12 @@ function BoardTileImpl({
 
   React.useEffect(() => {
     if (item) {
-      if (isShapeValid(item.shape, { row, column })) {
-        onHover({ row, column });
+      const corner = {
+        row: row - item.row,
+        column: column - item.column,
+      };
+      if (isShapeValid(item.shape, corner)) {
+        onHover(corner);
       } else {
         onHover(null);
       }
