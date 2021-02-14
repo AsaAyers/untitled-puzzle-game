@@ -10744,6 +10744,10 @@ var isTileValidUtil = (addr, boardSize2, board) => {
   const i = addressToIndex(boardSize2, addr);
   return board[i] === TileStates.Empty || board[i] == void 0;
 };
+var isShapeValid = (shape, addr, boardSize2, board) => {
+  const offsets = shiftOffsets(shape.offsets, addr);
+  return offsets.every((addr2) => isTileValidUtil(addr2, boardSize2, board));
+};
 function unreachable(_) {
 }
 
@@ -10817,7 +10821,7 @@ var shapes = [
   `xxxx`,
   `xxxxx`
 ].map(parseShape);
-function useShapeDrag(shape, shapeIndex, sizeRef) {
+function useShapeDrag(shape, shapeIndex, sizeRef, gameOver) {
   return import_react_dnd.useDrag({
     item: {
       type: SHAPE,
@@ -10825,6 +10829,9 @@ function useShapeDrag(shape, shapeIndex, sizeRef) {
       shapeIndex,
       row: -1,
       column: -1
+    },
+    canDrag() {
+      return !gameOver;
     },
     begin(monitor) {
       const bbox = sizeRef.current.getBoundingClientRect();
@@ -10864,10 +10871,11 @@ var MAX_SHAPE_SIZE = 5;
 function Shape({
   shape,
   shapeIndex,
-  className
+  className,
+  gameOver
 }) {
   const sizeRef = react.useRef(null);
-  const [{isDragging}, dragRef] = useShapeDrag(shape, shapeIndex, sizeRef);
+  const [{isDragging}, dragRef] = useShapeDrag(shape, shapeIndex, sizeRef, gameOver);
   const maxSize = 80;
   const width = shape.columns / MAX_SHAPE_SIZE * maxSize;
   const height = shape.rows / MAX_SHAPE_SIZE * maxSize;
@@ -10917,7 +10925,7 @@ var defaultState = {
   board: [],
   score: 0,
   highScore: 0,
-  gameOver: true
+  gameOver: false
 };
 var processActions = (state = defaultState, action) => {
   switch (action.type) {
@@ -11030,10 +11038,38 @@ function processLines(state) {
   }
   return state;
 }
+function findValidMove(shape, state) {
+  for (let row = 0; row < state.boardSize; row++) {
+    for (let column = 0; column < state.boardSize; column++) {
+      if (isShapeValid(shape, {row, column}, state.boardSize, state.board)) {
+        return {row, column};
+      }
+    }
+  }
+  return null;
+}
+function processGameOver(state) {
+  let gameOver = state.gameOver;
+  if (!gameOver && !state.currentSelection.some((shape, index) => {
+    if (shape) {
+      const address = findValidMove(shape, state);
+      console.log(index, shape, address);
+      return address != null;
+    }
+    return false;
+  })) {
+    gameOver = true;
+  }
+  return {
+    ...state,
+    gameOver
+  };
+}
 var reducer = (state = defaultState, action) => {
   let nextState = processActions(state, action);
   nextState = processCurrentSelection(nextState);
   nextState = processLines(nextState);
+  nextState = processGameOver(nextState);
   return nextState;
 };
 
@@ -11156,7 +11192,7 @@ function BoardTileImpl({
   isTileValid,
   dispatch
 }) {
-  const isShapeValid = react.useCallback((shape, addr) => {
+  const isShapeValid2 = react.useCallback((shape, addr) => {
     const offsets = shiftOffsets(shape.offsets, addr);
     return offsets.every((addr2) => isTileValid(addr2));
   }, [isTileValid]);
@@ -11168,7 +11204,7 @@ function BoardTileImpl({
           row: row - item2.row,
           column: column - item2.column
         };
-        return isShapeValid(item2.shape, corner);
+        return isShapeValid2(item2.shape, corner);
       }
       return false;
     },
@@ -11199,13 +11235,13 @@ function BoardTileImpl({
         row: row - item.row,
         column: column - item.column
       };
-      if (isShapeValid(item.shape, corner)) {
+      if (isShapeValid2(item.shape, corner)) {
         onHover(corner);
       } else {
         onHover(null);
       }
     }
-  }, [column, isShapeValid, item, onHover, row]);
+  }, [column, isShapeValid2, item, onHover, row]);
   return /* @__PURE__ */ react.createElement(Tile, {
     ref: dropRef,
     value,
@@ -11269,6 +11305,27 @@ function Board({
 }
 
 // dist/App.js
+function NewGameButton({dispatch}) {
+  return /* @__PURE__ */ react.createElement("button", {
+    className: "app-new-game bg-blue-300 rounded-md px-2 py-2 mx-3 my-3 ",
+    onClick: () => dispatch({type: "NewGame"})
+  }, "New Game");
+}
+function GameOver({dispatch}) {
+  return /* @__PURE__ */ react.createElement("div", {
+    className: "relative z-50 justify-center text-center bg-body",
+    style: {
+      gridRowStart: 4,
+      gridRowEnd: 7,
+      gridColumnStart: 4,
+      gridColumnEnd: 7
+    }
+  }, /* @__PURE__ */ react.createElement("div", {
+    className: "text-3xl rounded-md px-2"
+  }, "Game Over"), /* @__PURE__ */ react.createElement(NewGameButton, {
+    dispatch
+  }));
+}
 var key = "gameState";
 var useLocalStorageReducer = (r, initializerArg, initializer) => {
   const [i] = react.useState(() => {
@@ -11302,24 +11359,30 @@ function App() {
       enableMouseEvents: true
     }
   }, /* @__PURE__ */ react.createElement("div", {
-    className: "app-container container gap-3 px-3 py-3 mx-auto max-w-lg bg-container min-h-screen select-none"
+    className: "app-container text-white container gap-3 px-3 py-3 mx-auto max-w-lg bg-container min-h-screen select-none"
   }, /* @__PURE__ */ react.createElement("header", {
-    className: "app-header text-center"
-  }, /* @__PURE__ */ react.createElement("div", null, "Untitled Puzzle Game"), /* @__PURE__ */ react.createElement("div", null, "Score: ", state.score), state.highScore > 0 ? /* @__PURE__ */ react.createElement("div", null, "High Score: ", state.highScore) : null), /* @__PURE__ */ react.createElement("button", {
-    className: "app-new-game bg-blue-300 rounded-md px-2 py-2 mx-3 ",
-    onClick: () => dispatch({type: "NewGame"})
-  }, "New Game"), /* @__PURE__ */ react.createElement(Board, {
+    className: "app-header text-center text-xl"
+  }, /* @__PURE__ */ react.createElement("div", null, "Untitled Puzzle Game")), /* @__PURE__ */ react.createElement("div", {
+    className: "app-score text-center  text-lg"
+  }, "Score: ", state.score), state.highScore > 0 ? /* @__PURE__ */ react.createElement("div", {
+    className: "app-high-score text center text-lg"
+  }, "High Score: ", state.highScore) : null, /* @__PURE__ */ react.createElement(NewGameButton, {
+    dispatch
+  }), /* @__PURE__ */ react.createElement(Board, {
     className: "app-board",
     boardSize: state.boardSize,
     board: state.board,
     dispatch
-  }), state.currentSelection.map((shape, index) => /* @__PURE__ */ react.createElement("div", {
+  }, state.gameOver ? /* @__PURE__ */ react.createElement(GameOver, {
+    dispatch
+  }) : null), state.currentSelection.map((shape, index) => /* @__PURE__ */ react.createElement("div", {
     key: index,
     className: `app-shape-${index + 1} square rounded-2xl border-solid border-2 border-color relative`
   }, /* @__PURE__ */ react.createElement("div", {
     className: "square-content"
   }, shape != null && /* @__PURE__ */ react.createElement(Shape, {
     shape,
+    gameOver: state.gameOver,
     shapeIndex: index,
     className: "center-shape"
   }))))));

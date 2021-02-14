@@ -121,7 +121,7 @@
       ]
     },
     "dist/shared/Shape.js": {
-      "bytes": 3737,
+      "bytes": 3816,
       "imports": [
         {
           "path": "snowpack/pkg/classnames.js",
@@ -146,7 +146,7 @@
       ]
     },
     "dist/app-state.js": {
-      "bytes": 3698,
+      "bytes": 4431,
       "imports": [
         {
           "path": "dist/shared/Shape.js",
@@ -250,7 +250,7 @@
       ]
     },
     "dist/App.js": {
-      "bytes": 2596,
+      "bytes": 3414,
       "imports": [
         {
           "path": "snowpack/pkg/react.js",
@@ -279,7 +279,7 @@
       ]
     },
     "dist/index.css": {
-      "bytes": 6790352,
+      "bytes": 6790439,
       "imports": []
     },
     "dist/index.js": {
@@ -335,7 +335,7 @@
           "bytesInOutput": 650
         },
         "dist/App.js": {
-          "bytesInOutput": 2362
+          "bytesInOutput": 3180
         },
         "snowpack/pkg/react-dnd-touch-backend.js": {
           "bytesInOutput": 19746
@@ -344,19 +344,19 @@
           "bytesInOutput": 1167
         },
         "dist/shared/Shape.js": {
-          "bytesInOutput": 3540
+          "bytesInOutput": 3619
         },
         "dist/types.js": {
           "bytesInOutput": 233
         },
         "dist/utils.js": {
-          "bytesInOutput": 1013
+          "bytesInOutput": 1204
         },
         "dist/shared/Tile.js": {
           "bytesInOutput": 657
         },
         "dist/app-state.js": {
-          "bytesInOutput": 3489
+          "bytesInOutput": 4206
         },
         "dist/Board/Board.js": {
           "bytesInOutput": 1555
@@ -365,7 +365,7 @@
           "bytesInOutput": 2860
         },
         "dist/Board/Tile.js": {
-          "bytesInOutput": 1590
+          "bytesInOutput": 1594
         },
         "dist/index.css": {
           "bytesInOutput": 0
@@ -374,16 +374,16 @@
           "bytesInOutput": 244
         }
       },
-      "bytes": 343267
+      "bytes": 345076
     },
     "../~~bundle~~/dist/index.css": {
       "imports": [],
       "inputs": {
         "dist/index.css": {
-          "bytesInOutput": 6720115
+          "bytesInOutput": 6720200
         }
       },
-      "bytes": 6720136
+      "bytes": 6720221
     }
   }
 }
