@@ -18,9 +18,9 @@ var __export = (target, all) => {
 };
 var __exportStar = (target, module, desc) => {
   if (module && typeof module === "object" || typeof module === "function") {
-    for (let key of __getOwnPropNames(module))
-      if (!__hasOwnProp.call(target, key) && key !== "default")
-        __defProp(target, key, {get: () => module[key], enumerable: !(desc = __getOwnPropDesc(module, key)) || desc.enumerable});
+    for (let key2 of __getOwnPropNames(module))
+      if (!__hasOwnProp.call(target, key2) && key2 !== "default")
+        __defProp(target, key2, {get: () => module[key2], enumerable: !(desc = __getOwnPropDesc(module, key2)) || desc.enumerable});
   }
   return target;
 };
@@ -263,9 +263,9 @@ var require_react_dnd = __commonJS((exports, module) => {
     itemsA.forEach(insertItem);
     itemsB.forEach(insertItem);
     var result2 = [];
-    map.forEach(function(count, key) {
+    map.forEach(function(count, key2) {
       if (count === 1) {
-        result2.push(key);
+        result2.push(key2);
       }
     });
     return result2;
@@ -429,24 +429,24 @@ var require_react_dnd = __commonJS((exports, module) => {
     for (var i = 1; i < arguments.length; i++) {
       var source = arguments[i] != null ? arguments[i] : {};
       if (i % 2) {
-        ownKeys(Object(source), true).forEach(function(key) {
-          _defineProperty2(target, key, source[key]);
+        ownKeys(Object(source), true).forEach(function(key2) {
+          _defineProperty2(target, key2, source[key2]);
         });
       } else if (Object.getOwnPropertyDescriptors) {
         Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));
       } else {
-        ownKeys(Object(source)).forEach(function(key) {
-          Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
+        ownKeys(Object(source)).forEach(function(key2) {
+          Object.defineProperty(target, key2, Object.getOwnPropertyDescriptor(source, key2));
         });
       }
     }
     return target;
   }
-  function _defineProperty2(obj, key, value) {
-    if (key in obj) {
-      Object.defineProperty(obj, key, {value, enumerable: true, configurable: true, writable: true});
+  function _defineProperty2(obj, key2, value) {
+    if (key2 in obj) {
+      Object.defineProperty(obj, key2, {value, enumerable: true, configurable: true, writable: true});
     } else {
-      obj[key] = value;
+      obj[key2] = value;
     }
     return obj;
   }
@@ -558,24 +558,24 @@ var require_react_dnd = __commonJS((exports, module) => {
     for (var i = 1; i < arguments.length; i++) {
       var source = arguments[i] != null ? arguments[i] : {};
       if (i % 2) {
-        ownKeys$1(Object(source), true).forEach(function(key) {
-          _defineProperty$1(target, key, source[key]);
+        ownKeys$1(Object(source), true).forEach(function(key2) {
+          _defineProperty$1(target, key2, source[key2]);
         });
       } else if (Object.getOwnPropertyDescriptors) {
         Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));
       } else {
-        ownKeys$1(Object(source)).forEach(function(key) {
-          Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
+        ownKeys$1(Object(source)).forEach(function(key2) {
+          Object.defineProperty(target, key2, Object.getOwnPropertyDescriptor(source, key2));
         });
       }
     }
     return target;
   }
-  function _defineProperty$1(obj, key, value) {
-    if (key in obj) {
-      Object.defineProperty(obj, key, {value, enumerable: true, configurable: true, writable: true});
+  function _defineProperty$1(obj, key2, value) {
+    if (key2 in obj) {
+      Object.defineProperty(obj, key2, {value, enumerable: true, configurable: true, writable: true});
     } else {
-      obj[key] = value;
+      obj[key2] = value;
     }
     return obj;
   }
@@ -662,24 +662,24 @@ var require_react_dnd = __commonJS((exports, module) => {
     for (var i = 1; i < arguments.length; i++) {
       var source = arguments[i] != null ? arguments[i] : {};
       if (i % 2) {
-        ownKeys$2(Object(source), true).forEach(function(key) {
-          _defineProperty$2(target, key, source[key]);
+        ownKeys$2(Object(source), true).forEach(function(key2) {
+          _defineProperty$2(target, key2, source[key2]);
         });
       } else if (Object.getOwnPropertyDescriptors) {
         Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));
       } else {
-        ownKeys$2(Object(source)).forEach(function(key) {
-          Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
+        ownKeys$2(Object(source)).forEach(function(key2) {
+          Object.defineProperty(target, key2, Object.getOwnPropertyDescriptor(source, key2));
         });
       }
     }
     return target;
   }
-  function _defineProperty$2(obj, key, value) {
-    if (key in obj) {
-      Object.defineProperty(obj, key, {value, enumerable: true, configurable: true, writable: true});
+  function _defineProperty$2(obj, key2, value) {
+    if (key2 in obj) {
+      Object.defineProperty(obj, key2, {value, enumerable: true, configurable: true, writable: true});
     } else {
-      obj[key] = value;
+      obj[key2] = value;
     }
     return obj;
   }
@@ -824,24 +824,24 @@ var require_react_dnd = __commonJS((exports, module) => {
     for (var i = 1; i < arguments.length; i++) {
       var source = arguments[i] != null ? arguments[i] : {};
       if (i % 2) {
-        ownKeys$3(Object(source), true).forEach(function(key) {
-          _defineProperty$3(target, key, source[key]);
+        ownKeys$3(Object(source), true).forEach(function(key2) {
+          _defineProperty$3(target, key2, source[key2]);
         });
       } else if (Object.getOwnPropertyDescriptors) {
         Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));
       } else {
-        ownKeys$3(Object(source)).forEach(function(key) {
-          Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
+        ownKeys$3(Object(source)).forEach(function(key2) {
+          Object.defineProperty(target, key2, Object.getOwnPropertyDescriptor(source, key2));
         });
       }
     }
     return target;
   }
-  function _defineProperty$3(obj, key, value) {
-    if (key in obj) {
-      Object.defineProperty(obj, key, {value, enumerable: true, configurable: true, writable: true});
+  function _defineProperty$3(obj, key2, value) {
+    if (key2 in obj) {
+      Object.defineProperty(obj, key2, {value, enumerable: true, configurable: true, writable: true});
     } else {
-      obj[key] = value;
+      obj[key2] = value;
     }
     return obj;
   }
@@ -1554,9 +1554,9 @@ var require_react_dnd = __commonJS((exports, module) => {
           };
         }
         var actions = createDragDropActions(this);
-        return Object.keys(actions).reduce(function(boundActions, key) {
-          var action = actions[key];
-          boundActions[key] = bindActionCreator(action);
+        return Object.keys(actions).reduce(function(boundActions, key2) {
+          var action = actions[key2];
+          boundActions[key2] = bindActionCreator(action);
           return boundActions;
         }, {});
       }
@@ -1644,16 +1644,16 @@ var require_react_dnd = __commonJS((exports, module) => {
     if (source == null)
       return {};
     var target = _objectWithoutPropertiesLoose(source, excluded);
-    var key, i;
+    var key2, i;
     if (Object.getOwnPropertySymbols) {
       var sourceSymbolKeys = Object.getOwnPropertySymbols(source);
       for (i = 0; i < sourceSymbolKeys.length; i++) {
-        key = sourceSymbolKeys[i];
-        if (excluded.indexOf(key) >= 0)
+        key2 = sourceSymbolKeys[i];
+        if (excluded.indexOf(key2) >= 0)
           continue;
-        if (!Object.prototype.propertyIsEnumerable.call(source, key))
+        if (!Object.prototype.propertyIsEnumerable.call(source, key2))
           continue;
-        target[key] = source[key];
+        target[key2] = source[key2];
       }
     }
     return target;
@@ -1663,12 +1663,12 @@ var require_react_dnd = __commonJS((exports, module) => {
       return {};
     var target = {};
     var sourceKeys = Object.keys(source);
-    var key, i;
+    var key2, i;
     for (i = 0; i < sourceKeys.length; i++) {
-      key = sourceKeys[i];
-      if (excluded.indexOf(key) >= 0)
+      key2 = sourceKeys[i];
+      if (excluded.indexOf(key2) >= 0)
         continue;
-      target[key] = source[key];
+      target[key2] = source[key2];
     }
     return target;
   }
@@ -1739,13 +1739,13 @@ var require_react_dnd = __commonJS((exports, module) => {
     }
     var bHasOwnProperty = Object.prototype.hasOwnProperty.bind(objB);
     for (var idx = 0; idx < keysA.length; idx++) {
-      var key = keysA[idx];
-      if (!bHasOwnProperty(key)) {
+      var key2 = keysA[idx];
+      if (!bHasOwnProperty(key2)) {
         return false;
       }
-      var valueA = objA[key];
-      var valueB = objB[key];
-      compareResult = compare ? compare.call(compareContext, valueA, valueB, key) : void 0;
+      var valueA = objA[key2];
+      var valueB = objB[key2];
+      compareResult = compare ? compare.call(compareContext, valueA, valueB, key2) : void 0;
       if (compareResult === false || compareResult === void 0 && valueA !== valueB) {
         return false;
       }
@@ -2123,13 +2123,13 @@ var require_react_dnd = __commonJS((exports, module) => {
   }
   function wrapConnectorHooks(hooks) {
     var wrappedHooks = {};
-    Object.keys(hooks).forEach(function(key) {
-      var hook = hooks[key];
-      if (key.endsWith("Ref")) {
-        wrappedHooks[key] = hooks[key];
+    Object.keys(hooks).forEach(function(key2) {
+      var hook = hooks[key2];
+      if (key2.endsWith("Ref")) {
+        wrappedHooks[key2] = hooks[key2];
       } else {
         var wrappedHook = wrapHookToRecognizeElement(hook);
-        wrappedHooks[key] = function() {
+        wrappedHooks[key2] = function() {
           return wrappedHook;
         };
       }
@@ -3135,9 +3135,9 @@ var objectAssign = shouldUseNative() ? Object.assign : function(target, source) 
   var symbols;
   for (var s = 1; s < arguments.length; s++) {
     from = Object(arguments[s]);
-    for (var key in from) {
-      if (hasOwnProperty.call(from, key)) {
-        to[key] = from[key];
+    for (var key2 in from) {
+      if (hasOwnProperty.call(from, key2)) {
+        to[key2] = from[key2];
       }
     }
     if (getOwnPropertySymbols) {
@@ -10196,9 +10196,9 @@ var OptionsReader = /* @__PURE__ */ function() {
     this.context = context;
     this.delayTouchStart = incoming.delayTouchStart || incoming.delay || 0;
     this.delayMouseStart = incoming.delayMouseStart || incoming.delay || 0;
-    Object.keys(incoming).forEach(function(key) {
-      if (incoming[key] != null) {
-        _this[key] = incoming[key];
+    Object.keys(incoming).forEach(function(key2) {
+      if (incoming[key2] != null) {
+        _this[key2] = incoming[key2];
       }
     });
   }
@@ -10246,11 +10246,11 @@ function _createClass$1(Constructor, protoProps, staticProps) {
     _defineProperties$1(Constructor, staticProps);
   return Constructor;
 }
-function _defineProperty(obj, key, value) {
-  if (key in obj) {
-    Object.defineProperty(obj, key, {value, enumerable: true, configurable: true, writable: true});
+function _defineProperty(obj, key2, value) {
+  if (key2 in obj) {
+    Object.defineProperty(obj, key2, {value, enumerable: true, configurable: true, writable: true});
   } else {
-    obj[key] = value;
+    obj[key2] = value;
   }
   return obj;
 }
@@ -10347,8 +10347,8 @@ var TouchBackendImpl = /* @__PURE__ */ function() {
       _this.actions.publishDragSource();
       if (e.cancelable)
         e.preventDefault();
-      var dragOverTargetNodes = (dragOverTargetIds || []).map(function(key) {
-        return _this.targetNodes.get(key);
+      var dragOverTargetNodes = (dragOverTargetIds || []).map(function(key2) {
+        return _this.targetNodes.get(key2);
       }).filter(function(e2) {
         return !!e2;
       });
@@ -10678,9 +10678,9 @@ var classnames = createCommonjsModule(function(module) {
             classes.push(inner);
           }
         } else if (argType === "object") {
-          for (var key in arg) {
-            if (hasOwn.call(arg, key) && arg[key]) {
-              classes.push(key);
+          for (var key2 in arg) {
+            if (hasOwn.call(arg, key2) && arg[key2]) {
+              classes.push(key2);
             }
           }
         }
@@ -10697,7 +10697,7 @@ var classnames = createCommonjsModule(function(module) {
 });
 var classnames_default = classnames;
 
-// dist/Shape.js
+// dist/shared/Shape.js
 var import_react_dnd = __toModule(require_react_dnd());
 
 // dist/types.js
@@ -10705,16 +10705,66 @@ var TileStates;
 (function(TileStates2) {
   TileStates2[TileStates2["Empty"] = 0] = "Empty";
   TileStates2[TileStates2["Filled"] = 1] = "Filled";
+  TileStates2[TileStates2["Debug"] = 2] = "Debug";
 })(TileStates || (TileStates = {}));
 
-// dist/Tile.js
+// dist/utils.js
+var addressToIndex = (boardSize2, addr) => addr.row * boardSize2 + addr.column;
+var shiftOffsets = (offsets, shift) => {
+  return offsets.map((tmp) => ({
+    ...tmp,
+    row: shift.row + tmp.row,
+    column: shift.column + tmp.column
+  }));
+};
+var rotateShape = (shape) => {
+  let {offsets} = shape;
+  offsets = offsets.map((tmp) => ({
+    ...tmp,
+    row: -tmp.column,
+    column: tmp.row
+  }));
+  const minRow = Math.min(...offsets.map((tmp) => tmp.row));
+  const minColumn = Math.min(...offsets.map((tmp) => tmp.column));
+  offsets = shiftOffsets(offsets, {
+    row: -minRow,
+    column: -minColumn
+  });
+  return {
+    ...shape,
+    offsets,
+    rows: shape.columns,
+    columns: shape.rows
+  };
+};
+var isTileValidUtil = (addr, boardSize2, board) => {
+  if (addr.row >= boardSize2 || addr.column >= boardSize2) {
+    return false;
+  }
+  const i = addressToIndex(boardSize2, addr);
+  return board[i] === TileStates.Empty || board[i] == void 0;
+};
+function unreachable(_) {
+}
+
+// dist/shared/Tile.js
 var Tile = react.forwardRef(({row, column, value, className}, ref) => {
+  let stateClass = "";
+  switch (value) {
+    case TileStates.Empty:
+      stateClass = "bg-tile-empty";
+      break;
+    case TileStates.Filled:
+      stateClass = "bg-tile-filled";
+      break;
+    case TileStates.Debug:
+      break;
+    default:
+      unreachable(value);
+  }
   return /* @__PURE__ */ react.createElement("div", {
     ref,
-    className: classnames_default(className, "rounded-lg square border-2 border-black", {
-      "bg-green-800": value === TileStates.Empty,
-      "bg-blue-800": value === TileStates.Filled
-    }),
+    className: classnames_default(className, stateClass, "rounded-lg square border-2 border-color"),
     style: {
       gridRowStart: row != void 0 ? row + 1 : row,
       gridColumnStart: column != void 0 ? column + 1 : column
@@ -10722,7 +10772,7 @@ var Tile = react.forwardRef(({row, column, value, className}, ref) => {
   });
 });
 
-// dist/Shape.js
+// dist/shared/Shape.js
 var SHAPE = Symbol("Shape");
 function parseShape(shape) {
   const rowStrings = shape.trim().split("\n").map((str) => str.trim());
@@ -10734,7 +10784,7 @@ function parseShape(shape) {
       const element = rowString[column];
       switch (element) {
         case "x":
-          rowTiles.push({row, column});
+          rowTiles.push({row, column, tileState: TileStates.Filled});
           break;
         default:
       }
@@ -10755,49 +10805,45 @@ var shapes = [
   `
   x
   x
-  xx
+  xxx
   `,
   `
-  _x
-  _x
+  x
   xx
-  `
+  `,
+  `x`,
+  `xx`,
+  `xxx`,
+  `xxxx`,
+  `xxxxx`
 ].map(parseShape);
+function useShapeDrag(shape, shapeIndex) {
+  return import_react_dnd.useDrag({
+    item: {
+      type: SHAPE,
+      shape,
+      shapeIndex
+    },
+    isDragging(monitor) {
+      const item = monitor.getItem();
+      return item && item.type === SHAPE && Object.is(item.shape, shape);
+    },
+    collect: (monitor) => ({
+      isDragging: !!monitor.isDragging()
+    })
+  });
+}
 var MAX_SHAPE_SIZE = 5;
 function Shape({
   shape,
   shapeIndex,
   className
 }) {
-  const shapeRef = react.useRef(null);
-  const [{isDragging}, dragRef] = import_react_dnd.useDrag({
-    item: {
-      type: SHAPE,
-      shape,
-      shapeIndex,
-      width: 0,
-      height: 0
-    },
-    begin() {
-      const bbox = shapeRef.current?.getBoundingClientRect();
-      console.log("begin", bbox?.width, bbox?.height);
-      return {
-        type: SHAPE,
-        shape,
-        shapeIndex,
-        width: bbox?.width ?? 0,
-        height: bbox?.height ?? 0
-      };
-    },
-    collect: (monitor) => ({
-      isDragging: !!monitor.isDragging()
-    })
-  });
+  const [{isDragging}, dragRef] = useShapeDrag(shape, shapeIndex);
   const maxSize = 80;
   const width = shape.columns / MAX_SHAPE_SIZE * maxSize;
   const height = shape.rows / MAX_SHAPE_SIZE * maxSize;
   return /* @__PURE__ */ react.createElement("div", {
-    ref: dragRef,
     className: classnames_default(className, "absolute", {
       "opacity-40": isDragging
     }),
@@ -10809,17 +10855,18 @@ function Shape({
     }
   }, /* @__PURE__ */ react.createElement(ShapeUI, {
     shape,
-    ref: shapeRef
+    ref: dragRef
   }));
 }
-var ShapeUI = react.forwardRef(({shape}, ref) => {
-  const tiles = shape.offsets.flatMap(({row, column}) => {
+var ShapeUI = react.forwardRef(({shape, className}, ref) => {
+  const tiles = shape.offsets.flatMap(({row, column, tileState}) => {
     return [
       /* @__PURE__ */ react.createElement(Tile, {
+        className,
         key: `${row}x${column}`,
         row,
         column,
-        value: TileStates.Filled
+        value: tileState
       })
     ];
   });
@@ -10833,35 +10880,25 @@ var ShapeUI = react.forwardRef(({shape}, ref) => {
   }, tiles);
 });
 
-// dist/utils.js
-var addressToIndex = (boardSize2, addr) => addr.row * boardSize2 + addr.column;
-var shiftShape = (shape, shift) => {
-  const offsets = shape.offsets.map((tmp) => ({
-    row: shift.row + tmp.row,
-    column: shift.column + tmp.column
-  }));
-  return offsets;
-};
-var isTileValidUtil = (addr, boardSize2, board) => {
-  if (addr.row >= boardSize2 || addr.column >= boardSize2) {
-    return false;
-  }
-  const i = addressToIndex(boardSize2, addr);
-  return board[i] === TileStates.Empty || board[i] == void 0;
-};
-
 // dist/app-state.js
 var boardSize = 10;
 var defaultState = {
   currentSelection: [null, null, null],
   boardSize,
   board: [],
-  points: 0
+  score: 0,
+  highScore: 0
 };
 var processActions = (state = defaultState, action) => {
   switch (action.type) {
     case "Init": {
-      return defaultState;
+      return state;
+    }
+    case "NewGame": {
+      return {
+        ...defaultState,
+        highScore: Math.max(state.highScore ?? 0, state.score)
+      };
     }
     case "PlaceShape": {
       const {shapeIndex, boardAddress} = action.payload;
@@ -10871,7 +10908,7 @@ var processActions = (state = defaultState, action) => {
       ];
       currentSelection[shapeIndex] = null;
       if (shape) {
-        const offsets = shiftShape(shape, boardAddress);
+        const offsets = shiftOffsets(shape.offsets, boardAddress);
         const indexes = offsets.flatMap((addr) => {
           if (!isTileValidUtil(addr, state.boardSize, state.board)) {
             return [];
@@ -10881,7 +10918,6 @@ var processActions = (state = defaultState, action) => {
         if (indexes.length === shape.offsets.length) {
           const board = [...state.board];
           indexes.forEach((i) => board[i] = TileStates.Filled);
-          console.log(shapeIndex, currentSelection, board);
           return {
             ...state,
             board,
@@ -10899,7 +10935,12 @@ function processCurrentSelection(state) {
       ...state.currentSelection
     ];
     currentSelection.forEach((v, index) => {
-      currentSelection[index] = shapes[Math.floor(Math.random() * shapes.length)];
+      let tmp = shapes[Math.floor(Math.random() * shapes.length)];
+      const numRotations = Math.floor(Math.random() * 4);
+      for (let i = 0; i < numRotations; i++) {
+        tmp = rotateShape(tmp);
+      }
+      currentSelection[index] = tmp;
     });
     return {
       ...state,
@@ -10937,38 +10978,40 @@ function processLines(state) {
   }
   if (fullRows.length > 0 || fullColumns.length > 0) {
     const board = [...state.board];
-    let newPoints = 0;
+    let newScore = 0;
     fullRows.forEach((row) => {
       tmp.forEach((column) => {
         const idx = addressToIndex(state.boardSize, {row, column});
         board[idx] = TileStates.Empty;
-        newPoints++;
+        newScore++;
       });
     });
     fullColumns.forEach((column) => {
       tmp.forEach((row) => {
         const idx = addressToIndex(state.boardSize, {row, column});
         board[idx] = TileStates.Empty;
-        newPoints++;
+        newScore++;
       });
     });
     return {
       ...state,
       board,
-      points: state.points + newPoints
+      score: state.score + newScore
     };
   }
   return state;
 }
 var reducer = (state = defaultState, action) => {
-  console.log("action", action);
   let nextState = processActions(state, action);
   nextState = processCurrentSelection(nextState);
   nextState = processLines(nextState);
   return nextState;
 };
 
-// dist/AppDragLayer.js
+// dist/Board/Board.js
+var import_react_dnd4 = __toModule(require_react_dnd());
+
+// dist/Board/AppDragLayer.js
 var import_react_dnd2 = __toModule(require_react_dnd());
 function useDragDebug(data, update) {
   const debugRef = react.useRef(data);
@@ -10978,40 +11021,61 @@ function useDragDebug(data, update) {
   debugRef.current = data;
   return debugRef.current;
 }
-function AppDragLayer() {
+function AppDragLayer({
+  isOver: isOverBoard,
+  hoverAddress
+}) {
+  const myRef = react.useRef(null);
   const tmp = import_react_dnd2.useDragLayer((monitor) => {
+    if (!monitor.isDragging()) {
+      return null;
+    }
+    const bbox = myRef.current?.getBoundingClientRect() ?? {x: 0, y: 0};
     return {
       item: monitor.getItem(),
-      initialOffset: {x: 0, y: 0},
-      currentOffset: monitor.getSourceClientOffset()
+      sourceClientOffset: monitor.getSourceClientOffset(),
+      boardCornerOffset: {x: -bbox.x, y: -bbox.y}
     };
   });
-  const collectedProps = useDragDebug(tmp, tmp.item != null);
+  const collectedProps = useDragDebug(tmp, tmp?.item != null);
   if (!collectedProps) {
     return null;
   }
-  const {item, currentOffset, initialOffset} = collectedProps;
-  if (!item || !currentOffset || !initialOffset) {
-    return null;
+  const {item, sourceClientOffset, boardCornerOffset} = collectedProps;
+  let corner = {row: 0, column: 0};
+  let positionStyle = {};
+  if (isOverBoard && hoverAddress) {
+    corner = hoverAddress;
+  } else if (sourceClientOffset) {
+    positionStyle = {
+      top: sourceClientOffset.y + boardCornerOffset.y,
+      left: sourceClientOffset.x + boardCornerOffset.x
+    };
   }
-  console.log("w,h", item.width, item.height);
+  const sizingStyle = {
+    gridRowStart: 1 + corner.row,
+    gridColumnStart: 1 + corner.column,
+    gridRowEnd: 1 + corner.row + item.shape.rows,
+    gridColumnEnd: 1 + corner.column + item.shape.columns,
+    height: "100%",
+    width: "100%"
+  };
   return /* @__PURE__ */ react.createElement("div", {
     className: "absolute z-50 pointer-events-none",
-    style: {
-      top: currentOffset?.y + initialOffset.x,
-      left: currentOffset?.x + initialOffset.y,
-      height: item.height,
-      width: item.width
-    }
+    style: sizingStyle,
+    ref: myRef
+  }, /* @__PURE__ */ react.createElement("div", {
+    className: "relative pointer-events-none",
+    style: positionStyle
   }, /* @__PURE__ */ react.createElement(ShapeUI, {
-    shape: item.shape
-  }));
+    shape: item.shape,
+    className: classnames_default({
+      "ring-4 ring-preview": isOverBoard && hoverAddress
+    })
+  })));
 }
 
-// dist/Board.js
-var import_react_dnd4 = __toModule(require_react_dnd());
-
-// dist/BoardTile.js
+// dist/Board/Tile.js
 var import_react_dnd3 = __toModule(require_react_dnd());
 function BoardTileImpl({
   value,
@@ -11021,10 +11085,10 @@ function BoardTileImpl({
   isTileValid,
   dispatch
 }) {
-  const isShapeValid = (shape, addr) => {
-    const offsets = shiftShape(shape, addr);
+  const isShapeValid = react.useCallback((shape, addr) => {
+    const offsets = shiftOffsets(shape.offsets, addr);
     return offsets.every((addr2) => isTileValid(addr2));
-  };
+  }, [isTileValid]);
   const [{item}, dropRef] = import_react_dnd3.useDrop({
     accept: SHAPE,
     canDrop(item2, monitor) {
@@ -11034,7 +11098,6 @@ function BoardTileImpl({
       return false;
     },
     drop(item2) {
-      console.log("drop", item2);
       dispatch({
         type: "PlaceShape",
         payload: {
@@ -11045,8 +11108,9 @@ function BoardTileImpl({
     },
     collect(monitor) {
       const isOver = monitor.isOver();
+      const item2 = isOver ? monitor.getItem() : null;
       return {
-        item: isOver ? monitor.getItem() : null
+        item: item2
       };
     }
   });
@@ -11058,7 +11122,7 @@ function BoardTileImpl({
         onHover(null);
       }
     }
-  });
+  }, [column, isShapeValid, item, onHover, row]);
   return /* @__PURE__ */ react.createElement(Tile, {
     ref: dropRef,
     value,
@@ -11068,19 +11132,17 @@ function BoardTileImpl({
 }
 var BoardTile = react.memo(BoardTileImpl);
 
-// dist/Board.js
+// dist/Board/Board.js
 function Board({
   boardSize: boardSize2,
   board,
-  dispatch
+  dispatch,
+  children
 }) {
-  const [{isOver, item}, dropRef] = import_react_dnd4.useDrop({
+  const [isOver, boardRef] = import_react_dnd4.useDrop({
     accept: SHAPE,
     collect(monitor) {
-      return {
-        isOver: monitor.isOver(),
-        item: monitor.getItem()
-      };
+      return monitor.isOver();
     }
   });
   const isTileValid = react.useCallback((addr) => isTileValidUtil(addr, boardSize2, board), [board, boardSize2]);
@@ -11091,31 +11153,19 @@ function Board({
     }
   }, [isOver]);
   const onHover = react.useCallback((addr) => {
-    setHover(addr);
-  }, []);
-  const tilesPreview = react.useMemo(() => {
-    if (hover && item) {
-      const offsets = shiftShape(item.shape, hover);
-      const indexes = offsets.flatMap((addr) => {
-        if (!isTileValid(addr)) {
-          return [];
-        }
-        return [addressToIndex(boardSize2, addr)];
-      });
-      if (indexes.length === item.shape.offsets.length) {
-        const tmpBoard = [...board];
-        indexes.forEach((i) => tmpBoard[i] = TileStates.Filled);
-        return tmpBoard;
+    setHover((current) => {
+      if (!current || !addr || current.row !== addr.row || current.column !== addr?.column) {
+        return addr;
       }
-    }
-    return board;
-  }, [hover, item, board, isTileValid, boardSize2]);
+      return current;
+    });
+  }, []);
   const tiles = react.useMemo(() => {
     const tiles2 = [];
     for (let column = 0; column < boardSize2; column++) {
       for (let row = 0; row < boardSize2; row++) {
         const index = addressToIndex(boardSize2, {row, column});
-        const value = tilesPreview[index] || TileStates.Empty;
+        const value = board[index] || TileStates.Empty;
         tiles2.push(/* @__PURE__ */ react.createElement(BoardTile, {
           key: index,
           value,
@@ -11128,24 +11178,49 @@ function Board({
       }
     }
     return tiles2;
-  }, [tilesPreview, boardSize2, onHover, isTileValid, dispatch]);
+  }, [boardSize2, board, onHover, isTileValid, dispatch]);
   return /* @__PURE__ */ react.createElement("div", {
-    ref: dropRef,
+    ref: boardRef,
     style: {
       gridTemplateColumns: `repeat(${boardSize2}, minMax(0, 1fr))`,
       gridTemplateRows: `repeat(${boardSize2}, minMax(0, 1fr))`
     },
-    className: "grid max-w-lg"
-  }, tiles);
+    className: "grid relative mx-3 my-3"
+  }, /* @__PURE__ */ react.createElement(AppDragLayer, {
+    isOver,
+    hoverAddress: hover
+  }), tiles, children);
 }
 
 // dist/App.js
+var key = "gameState";
+var useLocalStorageReducer = (r, initializerArg, initializer) => {
+  const [i] = react.useState(() => {
+    try {
+      console.log("getItem");
+      return JSON.parse(localStorage.getItem(key)) ?? initializerArg;
+    } catch (error) {
+      console.error(error);
+    }
+    return initializerArg;
+  });
+  console.log(i);
+  const [state, dispatch] = react.useReducer(r, i, initializer);
+  react.useEffect(() => {
+    const value = JSON.stringify(state);
+    console.log("setItem", value);
+    localStorage.setItem(key, value);
+  }, [state]);
+  const wat = [state, dispatch];
+  return wat;
+};
 function App() {
-  const [state, dispatch] = react.useReducer(reducer, defaultState, (state2) => {
+  const [state, dispatch] = useLocalStorageReducer(reducer, defaultState, (state2) => {
     return reducer(state2, {type: "Init"});
   });
   react.useEffect(() => {
     document.body.classList.add("overflow-hidden");
+    document.body.classList.add("bg-body");
   }, []);
   return /* @__PURE__ */ react.createElement(import_react_dnd5.DndProvider, {
     debugMode: true,
@@ -11153,11 +11228,14 @@ function App() {
     options: {
       enableMouseEvents: true
     }
-  }, /* @__PURE__ */ react.createElement(AppDragLayer, null), /* @__PURE__ */ react.createElement("div", {
-    className: "container mx-auto bg-blue-300 min-h-screen "
+  }, /* @__PURE__ */ react.createElement("div", {
+    className: "container mx-auto max-w-lg bg-container min-h-screen select-none"
   }, /* @__PURE__ */ react.createElement("header", {
     className: "h-12 text-center"
-  }, /* @__PURE__ */ react.createElement("div", null, "Untitled Puzzle Game"), "Points: ", state.points), /* @__PURE__ */ react.createElement(Board, {
+  }, /* @__PURE__ */ react.createElement("div", null, "Untitled Puzzle Game"), /* @__PURE__ */ react.createElement("div", null, "Score: ", state.score), state.highScore > 0 ? /* @__PURE__ */ react.createElement("div", null, "High Score: ", state.highScore) : null), /* @__PURE__ */ react.createElement("button", {
+    className: "bg-blue-300 rounded-md px-2 py-2 mx-3 ",
+    onClick: () => dispatch({type: "NewGame"})
+  }, "New Game"), /* @__PURE__ */ react.createElement(Board, {
     boardSize: state.boardSize,
     board: state.board,
     dispatch
@@ -11165,7 +11243,7 @@ function App() {
     className: "grid grid-cols-3 my-3 mx-3 gap-3"
   }, state.currentSelection.map((shape, index) => /* @__PURE__ */ react.createElement("div", {
     key: index,
-    className: "square rounded-2xl border-solid border-2 border-black relative"
+    className: "square rounded-2xl border-solid border-2 border-color relative"
   }, /* @__PURE__ */ react.createElement("div", {
     className: "square-content"
   }, shape != null && /* @__PURE__ */ react.createElement(Shape, {

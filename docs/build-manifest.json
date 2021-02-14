@@ -87,11 +87,20 @@
       ]
     },
     "dist/types.js": {
-      "bytes": 189,
+      "bytes": 240,
       "imports": []
     },
-    "dist/Tile.js": {
-      "bytes": 616,
+    "dist/utils.js": {
+      "bytes": 1414,
+      "imports": [
+        {
+          "path": "dist/types.js",
+          "kind": "import-statement"
+        }
+      ]
+    },
+    "dist/shared/Tile.js": {
+      "bytes": 847,
       "imports": [
         {
           "path": "snowpack/pkg/classnames.js",
@@ -102,13 +111,17 @@
           "kind": "import-statement"
         },
         {
+          "path": "dist/utils.js",
+          "kind": "import-statement"
+        },
+        {
           "path": "dist/types.js",
           "kind": "import-statement"
         }
       ]
     },
-    "dist/Shape.js": {
-      "bytes": 2735,
+    "dist/shared/Shape.js": {
+      "bytes": 2704,
       "imports": [
         {
           "path": "snowpack/pkg/classnames.js",
@@ -123,29 +136,20 @@
           "kind": "import-statement"
         },
         {
-          "path": "dist/Tile.js",
+          "path": "dist/types.js",
           "kind": "import-statement"
         },
         {
-          "path": "dist/types.js",
-          "kind": "import-statement"
-        }
-      ]
-    },
-    "dist/utils.js": {
-      "bytes": 918,
-      "imports": [
-        {
-          "path": "dist/types.js",
+          "path": "dist/shared/Tile.js",
           "kind": "import-statement"
         }
       ]
     },
     "dist/app-state.js": {
-      "bytes": 3377,
+      "bytes": 3634,
       "imports": [
         {
-          "path": "dist/Shape.js",
+          "path": "dist/shared/Shape.js",
           "kind": "import-statement"
         },
         {
@@ -158,9 +162,13 @@
         }
       ]
     },
-    "dist/AppDragLayer.js": {
-      "bytes": 1187,
+    "dist/Board/AppDragLayer.js": {
+      "bytes": 2024,
       "imports": [
+        {
+          "path": "snowpack/pkg/classnames.js",
+          "kind": "import-statement"
+        },
         {
           "path": "snowpack/pkg/react.js",
           "kind": "import-statement"
@@ -170,20 +178,16 @@
           "kind": "import-statement"
         },
         {
-          "path": "dist/Shape.js",
+          "path": "dist/shared/Shape.js",
           "kind": "import-statement"
         }
       ]
     },
-    "dist/BoardTile.js": {
-      "bytes": 1370,
+    "dist/Board/Tile.js": {
+      "bytes": 1476,
       "imports": [
         {
           "path": "snowpack/pkg/react.js",
-          "kind": "import-statement"
-        },
-        {
-          "path": "dist/Tile.js",
           "kind": "import-statement"
         },
         {
@@ -191,7 +195,11 @@
           "kind": "import-statement"
         },
         {
-          "path": "dist/Shape.js",
+          "path": "dist/shared/Shape.js",
+          "kind": "import-statement"
+        },
+        {
+          "path": "dist/shared/Tile.js",
           "kind": "import-statement"
         },
         {
@@ -200,8 +208,8 @@
         }
       ]
     },
-    "dist/Board.js": {
-      "bytes": 2315,
+    "dist/Board/Board.js": {
+      "bytes": 2003,
       "imports": [
         {
           "path": "snowpack/pkg/react.js",
@@ -212,11 +220,7 @@
           "kind": "import-statement"
         },
         {
-          "path": "dist/BoardTile.js",
-          "kind": "import-statement"
-        },
-        {
-          "path": "dist/Shape.js",
+          "path": "dist/shared/Shape.js",
           "kind": "import-statement"
         },
         {
@@ -225,12 +229,20 @@
         },
         {
           "path": "dist/utils.js",
+          "kind": "import-statement"
+        },
+        {
+          "path": "dist/Board/AppDragLayer.js",
+          "kind": "import-statement"
+        },
+        {
+          "path": "dist/Board/Tile.js",
           "kind": "import-statement"
         }
       ]
     },
     "dist/App.js": {
-      "bytes": 1753,
+      "bytes": 2680,
       "imports": [
         {
           "path": "snowpack/pkg/react.js",
@@ -249,21 +261,17 @@
           "kind": "import-statement"
         },
         {
-          "path": "dist/AppDragLayer.js",
+          "path": "dist/Board/Board.js",
           "kind": "import-statement"
         },
         {
-          "path": "dist/Board.js",
-          "kind": "import-statement"
-        },
-        {
-          "path": "dist/Shape.js",
+          "path": "dist/shared/Shape.js",
           "kind": "import-statement"
         }
       ]
     },
     "dist/index.css": {
-      "bytes": 6789329,
+      "bytes": 6789683,
       "imports": []
     },
     "dist/index.js": {
@@ -298,7 +306,7 @@
       "exports": [],
       "inputs": {
         "snowpack/pkg/react-dnd.js": {
-          "bytesInOutput": 102257
+          "bytesInOutput": 102324
         },
         "snowpack/env.js": {
           "bytesInOutput": 186
@@ -307,7 +315,7 @@
           "bytesInOutput": 418
         },
         "snowpack/pkg/common/index-4f86a9c5.js": {
-          "bytesInOutput": 10627
+          "bytesInOutput": 10631
         },
         "snowpack/pkg/react.js": {
           "bytesInOutput": 0
@@ -319,37 +327,37 @@
           "bytesInOutput": 650
         },
         "dist/App.js": {
-          "bytesInOutput": 1488
+          "bytesInOutput": 2446
         },
         "snowpack/pkg/react-dnd-touch-backend.js": {
-          "bytesInOutput": 19736
+          "bytesInOutput": 19746
         },
         "snowpack/pkg/classnames.js": {
-          "bytesInOutput": 1163
+          "bytesInOutput": 1167
         },
-        "dist/Shape.js": {
-          "bytesInOutput": 2545
+        "dist/shared/Shape.js": {
+          "bytesInOutput": 2504
         },
         "dist/types.js": {
-          "bytesInOutput": 182
-        },
-        "dist/Tile.js": {
-          "bytesInOutput": 474
+          "bytesInOutput": 233
         },
         "dist/utils.js": {
-          "bytesInOutput": 508
+          "bytesInOutput": 978
+        },
+        "dist/shared/Tile.js": {
+          "bytesInOutput": 657
         },
         "dist/app-state.js": {
-          "bytesInOutput": 3200
+          "bytesInOutput": 3425
         },
-        "dist/AppDragLayer.js": {
-          "bytesInOutput": 1114
+        "dist/Board/Board.js": {
+          "bytesInOutput": 1749
         },
-        "dist/Board.js": {
-          "bytesInOutput": 2110
+        "dist/Board/AppDragLayer.js": {
+          "bytesInOutput": 1886
         },
-        "dist/BoardTile.js": {
-          "bytesInOutput": 1231
+        "dist/Board/Tile.js": {
+          "bytesInOutput": 1312
         },
         "dist/index.css": {
           "bytesInOutput": 0
@@ -358,16 +366,16 @@
           "bytesInOutput": 244
         }
       },
-      "bytes": 338689
+      "bytes": 341158
     },
     "../~~bundle~~/dist/index.css": {
       "imports": [],
       "inputs": {
         "dist/index.css": {
-          "bytesInOutput": 6719142
+          "bytesInOutput": 6719474
         }
       },
-      "bytes": 6719163
+      "bytes": 6719495
     }
   }
 }
