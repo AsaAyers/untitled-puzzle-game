@@ -5,6 +5,37 @@ import { TouchBackend } from 'react-dnd-touch-backend';
 import { defaultState, reducer } from './app-state';
 import Board from './Board/Board';
 import Shape from './shared/Shape';
+import type { AppDispatch } from './types';
+
+function NewGameButton({ dispatch }: { dispatch: AppDispatch }): JSX.Element {
+  return (
+    <button
+      className="app-new-game bg-blue-300 rounded-md px-2 py-2 mx-3 my-3 "
+      onClick={() => dispatch({ type: 'NewGame' })}
+    >
+      New Game
+    </button>
+  );
+}
+
+function GameOver({ dispatch }: { dispatch: AppDispatch }): JSX.Element {
+  return (
+    <div
+      className="relative z-50 justify-center text-center bg-body"
+      style={{
+        // gridRow: '4 / 7 / 4 / 7',
+        gridRowStart: 4,
+        gridRowEnd: 7,
+        gridColumnStart: 4,
+        gridColumnEnd: 7,
+      }}
+    >
+      <div className="text-3xl rounded-md px-2">Game Over</div>
+      <NewGameButton dispatch={dispatch} />
+    </div>
+  );
+}
+// TODO: appDispatchContext
 
 const key = 'gameState';
 const useLocalStorageReducer = (
@@ -67,19 +98,16 @@ function App(): JSX.Element {
             High Score: {state.highScore}
           </div>
         ) : null}
-        <button
-          className="app-new-game bg-blue-300 rounded-md px-2 py-2 mx-3 "
-          onClick={() => dispatch({ type: 'NewGame' })}
-        >
-          New Game
-        </button>
+        <NewGameButton dispatch={dispatch} />
 
         <Board
           className="app-board"
           boardSize={state.boardSize}
           board={state.board}
           dispatch={dispatch}
-        ></Board>
+        >
+          {state.gameOver ? <GameOver dispatch={dispatch} /> : null}
+        </Board>
 
         {state.currentSelection.map((shape, index) => (
           <div
@@ -92,6 +120,7 @@ function App(): JSX.Element {
               {shape != null && (
                 <Shape
                   shape={shape}
+                  gameOver={state.gameOver}
                   shapeIndex={index}
                   className="center-shape"
                 />

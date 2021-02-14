@@ -1,7 +1,8 @@
 import { shapes } from './shared/Shape';
-import { BoardSize, ShapeData, TileStates } from './types';
+import { BoardAddress, BoardSize, ShapeData, TileStates } from './types';
 import {
   addressToIndex,
+  isShapeValid,
   isTileValidUtil,
   rotateShape,
   shiftOffsets,
@@ -23,7 +24,7 @@ export const defaultState: State = {
   board: [],
   score: 0,
   highScore: 0,
-  gameOver: true,
+  gameOver: false,
 };
 
 type PlaceShape = {
@@ -134,6 +135,7 @@ function processLines(state: State): State {
       });
       return state.board[idx] === TileStates.Filled;
     });
+
     if (fullRow) {
       fullRows.push(i);
     }
@@ -177,6 +179,44 @@ function processLines(state: State): State {
   return state;
 }
 
+function findValidMove(shape: ShapeData, state: State): BoardAddress | null {
+  for (let row = 0; row < state.boardSize; row++) {
+    //   let numFilled = 0
+    for (let column = 0; column < state.boardSize; column++) {
+      if (isShapeValid(shape, { row, column }, state.boardSize, state.board)) {
+        return { row, column };
+      }
+    }
+  }
+
+  // return { row: 0, column: 0 };
+  return null;
+}
+
+function processGameOver(state: State): State {
+  let gameOver = state.gameOver;
+  if (
+    !gameOver &&
+    !state.currentSelection.some((shape, index) => {
+      if (shape) {
+        const address = findValidMove(shape, state);
+
+        console.log(index, shape, address);
+
+        return address != null;
+      }
+      return false;
+    })
+  ) {
+    gameOver = true;
+  }
+
+  return {
+    ...state,
+    gameOver,
+  };
+}
+
 export const reducer: React.Reducer<State, Action> = (
   state = defaultState,
   action: Action,
@@ -184,5 +224,7 @@ export const reducer: React.Reducer<State, Action> = (
   let nextState = processActions(state, action);
   nextState = processCurrentSelection(nextState);
   nextState = processLines(nextState);
+  nextState = processGameOver(nextState);
+
   return nextState;
 };

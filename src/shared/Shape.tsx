@@ -71,6 +71,7 @@ function useShapeDrag(
   shape: ShapeData,
   shapeIndex: number,
   sizeRef: React.MutableRefObject<HTMLDivElement | null>,
+  gameOver: boolean,
 ) {
   return useDrag<DragShape, unknown, Collected>({
     item: {
@@ -79,6 +80,9 @@ function useShapeDrag(
       shapeIndex,
       row: -1,
       column: -1,
+    },
+    canDrag() {
+      return !gameOver;
     },
     begin(monitor): DragShape {
       // Because this is in the begin callback, the ref will definitely be
@@ -134,14 +138,21 @@ type ShapeProps = {
   className?: string;
   shape: ShapeData;
   shapeIndex: number;
+  gameOver: boolean;
 };
 export default function Shape({
   shape,
   shapeIndex,
   className,
+  gameOver,
 }: ShapeProps): JSX.Element {
   const sizeRef = React.useRef<HTMLDivElement>(null);
-  const [{ isDragging }, dragRef] = useShapeDrag(shape, shapeIndex, sizeRef);
+  const [{ isDragging }, dragRef] = useShapeDrag(
+    shape,
+    shapeIndex,
+    sizeRef,
+    gameOver,
+  );
 
   const maxSize = 80; // %
   const width = (shape.columns / MAX_SHAPE_SIZE) * maxSize;
