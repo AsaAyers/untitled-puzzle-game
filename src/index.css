@@ -38,6 +38,12 @@ code {
 .bg-body {
   background-color: #3a5a40;
 }
+.bg-game-over {
+  background-color: rgba(58, 90, 64, 1);
+}
+.bg-game-over.effects {
+  background-color: rgba(58, 90, 64, 0.6);
+}
 
 .bg-container {
   background-color: #588157;

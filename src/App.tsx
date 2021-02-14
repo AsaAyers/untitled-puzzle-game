@@ -1,8 +1,9 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
+import classNames from 'classnames';
 import React from 'react';
 import { DndProvider } from 'react-dnd';
 import { TouchBackend } from 'react-dnd-touch-backend';
-import { defaultState, reducer } from './app-state';
+import { defaultState, reducer, State } from './app-state';
 import Board from './Board/Board';
 import Shape from './shared/Shape';
 import type { AppDispatch } from './types';
@@ -19,10 +20,21 @@ function NewGameButton({ dispatch }: { dispatch: AppDispatch }): JSX.Element {
   );
 }
 
-function GameOver({ dispatch }: { dispatch: AppDispatch }): JSX.Element {
+function GameOver({
+  dispatch,
+  state,
+}: {
+  dispatch: AppDispatch;
+  state: State;
+}): JSX.Element {
   return (
     <div
-      className="relative z-50 justify-center text-center bg-body"
+      className={classNames(
+        'relative z-50 justify-center text-center bg-game-over',
+        {
+          effects: state.options.gameOverEffect != 'none',
+        },
+      )}
       style={{
         // gridRow: '4 / 7 / 4 / 7',
         gridRowStart: 4,
@@ -115,7 +127,9 @@ function App(): JSX.Element {
           board={state.board}
           dispatch={dispatch}
         >
-          {state.gameOver ? <GameOver dispatch={dispatch} /> : null}
+          {state.gameOver ? (
+            <GameOver state={state} dispatch={dispatch} />
+          ) : null}
         </Board>
 
         {state.currentSelection.map((shape, index) => (
