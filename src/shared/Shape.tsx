@@ -1,7 +1,7 @@
 import classNames from 'classnames';
 import React from 'react';
 import { useDrag } from 'react-dnd';
-import { ShapeData, TileStates } from '../types';
+import { BoardAddress, ShapeData, TileStates } from '../types';
 import { Tile } from './Tile';
 
 export const SHAPE = Symbol('Shape');
@@ -88,10 +88,28 @@ function useShapeDrag(
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       const diff = monitor.getClientOffset()!;
 
-      const column = Math.floor(
-        ((diff.x - bbox.x) / bbox.width) * shape.columns,
-      );
-      const row = Math.floor(((diff.y - bbox.y) / bbox.height) * shape.rows);
+      let column = Math.floor(((diff.x - bbox.x) / bbox.width) * shape.columns);
+      let row = Math.floor(((diff.y - bbox.y) / bbox.height) * shape.rows);
+
+      // If the current row/column isn't part of the shape then snap to the
+      // nearest tile. This prevents holding empty space on a corner shape.
+      if (!shape.offsets.some((o) => o.row === row && o.column === column)) {
+        const distance = (a: BoardAddress, b: BoardAddress) =>
+          Math.sqrt(
+            Math.pow(Math.abs(a.row - b.row), 2) +
+              Math.pow(Math.abs(a.column - b.column), 2),
+          );
+
+        const original = { row, column };
+        const closest = shape.offsets.reduce((previous, next) => {
+          if (distance(original, next) < distance(original, previous)) {
+            return next;
+          }
+          return previous;
+        });
+        row = closest.row;
+        column = closest.column;
+      }
 
       return {
         type: SHAPE,
