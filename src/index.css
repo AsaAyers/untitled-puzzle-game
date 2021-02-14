@@ -66,7 +66,7 @@ code {
   grid-template-columns: 1fr 1fr 1fr;
   grid-template-areas:
     'header header header'
-    '. newGame options'
+    'score newGame highScore'
     'board board board'
     'shape1 shape2 shape3'
     '. . .';
@@ -74,6 +74,12 @@ code {
 
 .app-header {
   grid-area: header;
+}
+.app-score {
+  grid-area: score;
+}
+.app-high-score {
+  grid-area: highScore;
 }
 .app-new-game {
   grid-area: newGame;

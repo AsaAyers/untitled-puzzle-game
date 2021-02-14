@@ -55,14 +55,18 @@ function App(): JSX.Element {
         enableMouseEvents: true,
       }}
     >
-      <div className="app-container container gap-3 px-3 py-3 mx-auto max-w-lg bg-container min-h-screen select-none">
-        <header className="app-header text-center">
+      <div className="app-container text-white container gap-3 px-3 py-3 mx-auto max-w-lg bg-container min-h-screen select-none">
+        <header className="app-header text-center text-xl">
           <div>Untitled Puzzle Game</div>
-          <div>Score: {state.score}</div>
-          {state.highScore > 0 ? (
-            <div>High Score: {state.highScore}</div>
-          ) : null}
         </header>
+        <div className="app-score text-center  text-lg">
+          Score: {state.score}
+        </div>
+        {state.highScore > 0 ? (
+          <div className="app-high-score text center text-lg">
+            High Score: {state.highScore}
+          </div>
+        ) : null}
         <button
           className="app-new-game bg-blue-300 rounded-md px-2 py-2 mx-3 "
           onClick={() => dispatch({ type: 'NewGame' })}
