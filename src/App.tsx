@@ -81,23 +81,13 @@ function App(): JSX.Element {
         </Board>
 
         {state.currentSelection.map((shape, index) => (
-          <div
+          <Shape
             key={index}
-            className={`app-shape-${
-              index + 1
-            } square rounded-2xl border-solid border-2 border-color relative`}
-          >
-            <div className="square-content">
-              {shape != null && (
-                <Shape
-                  shape={shape}
-                  gameOver={state.gameOver}
-                  shapeIndex={index}
-                  className="center-shape"
-                />
-              )}
-            </div>
-          </div>
+            shape={shape}
+            gameOver={state.gameOver}
+            shapeIndex={index}
+            className="center-shape"
+          />
         ))}
       </div>
     </DndProvider>

@@ -74,7 +74,7 @@ xxx
 
 type Collected = { isDragging: boolean };
 function useShapeDrag(
-  shape: ShapeData,
+  shape: ShapeData | null,
   shapeIndex: number,
   sizeRef: React.MutableRefObject<HTMLDivElement | null>,
   gameOver: boolean,
@@ -82,15 +82,19 @@ function useShapeDrag(
   return useDrag<DragShape, unknown, Collected>({
     item: {
       type: SHAPE,
-      shape,
+      // Since begin() will override this item, it's ok if this is null
+      shape: shape!,
       shapeIndex,
       row: -1,
       column: -1,
     },
     canDrag() {
-      return !gameOver;
+      return !gameOver && shape != null;
     },
-    begin(monitor): DragShape {
+    begin(monitor) {
+      if (!shape) {
+        return;
+      }
       // Because this is in the begin callback, the ref will definitely be
       // populated and we will have an offset because the drag is starting.
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -142,7 +146,7 @@ function useShapeDrag(
 const MAX_SHAPE_SIZE = 5;
 type ShapeProps = {
   className?: string;
-  shape: ShapeData;
+  shape: ShapeData | null;
   shapeIndex: number;
   gameOver: boolean;
 };
@@ -161,23 +165,35 @@ export default function Shape({
   );
 
   const maxSize = 80; // %
-  const width = (shape.columns / MAX_SHAPE_SIZE) * maxSize;
-  const height = (shape.rows / MAX_SHAPE_SIZE) * maxSize;
+  const width = ((shape?.columns ?? 1) / MAX_SHAPE_SIZE) * maxSize;
+  const height = ((shape?.rows ?? 1) / MAX_SHAPE_SIZE) * maxSize;
 
   return (
     <div
-      ref={sizeRef}
-      className={classNames(className, 'absolute', {
-        'opacity-40': isDragging,
-      })}
-      style={{
-        width: `${width}%`,
-        height: `${height}%`,
-        top: `${(100 - height) / 2}%`,
-        left: `${(100 - width) / 2}%`,
-      }}
+      key={shapeIndex}
+      ref={dragRef}
+      className={`app-shape-${
+        shapeIndex + 1
+      } square rounded-2xl border-solid border-2 border-color relative`}
     >
-      <ShapeUI shape={shape} ref={dragRef} />
+      {shape != null && (
+        <div className="square-content">
+          <div
+            ref={sizeRef}
+            className={classNames(className, 'absolute', {
+              'opacity-40': isDragging,
+            })}
+            style={{
+              width: `${width}%`,
+              height: `${height}%`,
+              top: `${(100 - height) / 2}%`,
+              left: `${(100 - width) / 2}%`,
+            }}
+          >
+            <ShapeUI shape={shape} />
+          </div>
+        </div>
+      )}
     </div>
   );
 }
