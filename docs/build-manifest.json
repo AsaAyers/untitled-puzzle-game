@@ -121,7 +121,7 @@
       ]
     },
     "dist/shared/Shape.js": {
-      "bytes": 3866,
+      "bytes": 4223,
       "imports": [
         {
           "path": "snowpack/pkg/classnames.js",
@@ -276,7 +276,7 @@
       ]
     },
     "dist/App.js": {
-      "bytes": 2803,
+      "bytes": 2549,
       "imports": [
         {
           "path": "snowpack/pkg/react.js",
@@ -377,7 +377,7 @@
           "bytesInOutput": 650
         },
         "dist/App.js": {
-          "bytesInOutput": 2464
+          "bytesInOutput": 2210
         },
         "snowpack/pkg/react-dnd-touch-backend.js": {
           "bytesInOutput": 19746
@@ -386,7 +386,7 @@
           "bytesInOutput": 1167
         },
         "dist/shared/Shape.js": {
-          "bytesInOutput": 3660
+          "bytesInOutput": 4017
         },
         "dist/types.js": {
           "bytesInOutput": 479
@@ -425,7 +425,7 @@
           "bytesInOutput": 244
         }
       },
-      "bytes": 351259
+      "bytes": 351362
     },
     "../~~bundle~~/dist/index.css": {
       "imports": [],

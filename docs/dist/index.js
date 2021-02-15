@@ -10848,9 +10848,12 @@ function useShapeDrag(shape, shapeIndex, sizeRef, gameOver) {
       column: -1
     },
     canDrag() {
-      return !gameOver;
+      return !gameOver && shape != null;
     },
     begin(monitor) {
+      if (!shape) {
+        return;
+      }
       const bbox = sizeRef.current.getBoundingClientRect();
       const diff = monitor.getClientOffset();
       let column = Math.floor((diff.x - bbox.x) / bbox.width * shape.columns);
@@ -10894,9 +10897,15 @@ function Shape({
   const sizeRef = react.useRef(null);
   const [{isDragging}, dragRef] = useShapeDrag(shape, shapeIndex, sizeRef, gameOver);
   const maxSize = 80;
-  const width = shape.columns / MAX_SHAPE_SIZE * maxSize;
-  const height = shape.rows / MAX_SHAPE_SIZE * maxSize;
+  const width = (shape?.columns ?? 1) / MAX_SHAPE_SIZE * maxSize;
+  const height = (shape?.rows ?? 1) / MAX_SHAPE_SIZE * maxSize;
   return /* @__PURE__ */ react.createElement("div", {
+    key: shapeIndex,
+    ref: dragRef,
+    className: `app-shape-${shapeIndex + 1} square rounded-2xl border-solid border-2 border-color relative`
+  }, shape != null && /* @__PURE__ */ react.createElement("div", {
+    className: "square-content"
+  }, /* @__PURE__ */ react.createElement("div", {
     ref: sizeRef,
     className: classnames_default(className, "absolute", {
       "opacity-40": isDragging
@@ -10908,9 +10917,8 @@ function Shape({
       left: `${(100 - width) / 2}%`
     }
   }, /* @__PURE__ */ react.createElement(ShapeUI, {
-    shape,
-    ref: dragRef
-  }));
+    shape
+  }))));
 }
 var ShapeUI = react.forwardRef(({shape, className}, ref) => {
   const tiles = shape.offsets.flatMap(({row, column, tileState}) => {
@@ -11579,17 +11587,13 @@ function App() {
   }, state.gameOver ? /* @__PURE__ */ react.createElement(GameOver, {
     state,
     dispatch
-  }) : null), state.currentSelection.map((shape, index) => /* @__PURE__ */ react.createElement("div", {
+  }) : null), state.currentSelection.map((shape, index) => /* @__PURE__ */ react.createElement(Shape, {
     key: index,
-    className: `app-shape-${index + 1} square rounded-2xl border-solid border-2 border-color relative`
-  }, /* @__PURE__ */ react.createElement("div", {
-    className: "square-content"
-  }, shape != null && /* @__PURE__ */ react.createElement(Shape, {
     shape,
     gameOver: state.gameOver,
     shapeIndex: index,
     className: "center-shape"
-  }))))));
+  }))));
 }
 var App_default = App;
 
