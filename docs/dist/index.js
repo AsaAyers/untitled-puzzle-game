@@ -11205,7 +11205,7 @@ function processGameOver(state) {
 }
 var reducer = (state = defaultState, action) => {
   let nextState = processActions(state, action);
-  if (!state.gameOver) {
+  if (!nextState.gameOver) {
     nextState = processCurrentSelection(nextState);
     nextState = processLines(nextState);
     nextState = processGameOver(nextState);
@@ -11449,7 +11449,7 @@ function NewGameButton({
   dispatch
 }) {
   return /* @__PURE__ */ react.createElement("button", {
-    className: "app-new-game bg-blue-300 rounded-md px-2 py-2 mx-3 my-3 ",
+    className: "app-new-game app-btn",
     onClick: () => dispatch({type: "NewGame"})
   }, "New Game");
 }
@@ -11484,9 +11484,47 @@ function GameOver({
   }, /* @__PURE__ */ react.createElement("div", {
     onClick: () => dispatch({type: "NextGameOverEffect"}),
     className: "text-3xl rounded-md px-2"
-  }, "Game Over"), gameOverEffect !== "none" ? /* @__PURE__ */ react.createElement("div", null, "Animation: ", gameOverEffect) : null, /* @__PURE__ */ react.createElement(NewGameButton, {
-    dispatch
-  }));
+  }, "Game Over"), gameOverEffect !== "none" ? /* @__PURE__ */ react.createElement("div", null, "Animation: ", gameOverEffect) : null);
+}
+
+// dist/InstallPrompt.js
+function InstallPrompt({
+  className,
+  state
+}) {
+  const [
+    deferredPrompt,
+    setPrompt
+  ] = react.useState(null);
+  react.useEffect(() => {
+    window.addEventListener("beforeinstallprompt", (e) => {
+      e.preventDefault();
+      setPrompt(e);
+      console.log("beforeinstallevent", e);
+    });
+  }, []);
+  const handleClick = async () => {
+    if (!deferredPrompt) {
+      return;
+    }
+    setPrompt(null);
+    deferredPrompt.prompt();
+    const choiceResult = await deferredPrompt.userChoice;
+    if (choiceResult.outcome === "accepted") {
+      console.log("User accepted the A2HS prompt");
+    } else {
+      console.log("User dismissed the A2HS prompt");
+    }
+  };
+  if (!deferredPrompt || !state.gameOver) {
+    return null;
+  }
+  return /* @__PURE__ */ react.createElement("div", {
+    className: classnames_default(className, "bg-body z-50 rounded-xl flex flex-row justify-center align-middle")
+  }, /* @__PURE__ */ react.createElement("button", {
+    onClick: handleClick,
+    className: "app-btn my-auto"
+  }, "Install Block Puzzle"));
 }
 
 // dist/App.js
@@ -11514,10 +11552,6 @@ function App() {
   const [state, dispatch] = useLocalStorageReducer(reducer, defaultState, (state2) => {
     return reducer(state2, {type: "Init"});
   });
-  react.useEffect(() => {
-    document.body.classList.add("overflow-hidden");
-    document.body.classList.add("bg-body");
-  }, []);
   return /* @__PURE__ */ react.createElement(import_react_dnd5.DndProvider, {
     debugMode: true,
     backend: TouchBackend,
@@ -11528,12 +11562,15 @@ function App() {
     className: "app-container text-white container gap-3 px-3 py-3 mx-auto max-w-lg bg-container min-h-screen select-none"
   }, /* @__PURE__ */ react.createElement("header", {
     className: "app-header text-center text-xl"
-  }, /* @__PURE__ */ react.createElement("div", null, "Untitled Puzzle Game")), /* @__PURE__ */ react.createElement("div", {
-    className: "app-score text-center  text-lg"
+  }, /* @__PURE__ */ react.createElement("div", null, "Block Puzzle")), /* @__PURE__ */ react.createElement("div", {
+    className: "app-score text-center text-lg"
   }, "Score: ", state.score), state.highScore > 0 ? /* @__PURE__ */ react.createElement("div", {
     className: "app-high-score text center text-lg"
   }, "High Score: ", state.highScore) : null, /* @__PURE__ */ react.createElement(NewGameButton, {
     dispatch
+  }), /* @__PURE__ */ react.createElement(InstallPrompt, {
+    state,
+    className: "app-install"
   }), /* @__PURE__ */ react.createElement(Board, {
     className: "app-board",
     boardSize: state.boardSize,
@@ -11555,6 +11592,12 @@ function App() {
   }))))));
 }
 var App_default = App;
+
+// dist/load-service-worker.js
+var swPath = "./sw.js";
+if (navigator.serviceWorker) {
+  navigator.serviceWorker.register(swPath);
+}
 
 // dist/index.js
 import.meta.env = env_exports;

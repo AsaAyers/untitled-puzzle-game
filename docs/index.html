@@ -2,10 +2,11 @@
     <meta charset="utf-8">
     <link rel="icon" href="favicon.ico">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="manifest" href="manifest.json">
     <meta name="description" content="Web site created using create-snowpack-app">
-    <title>Untitled Puzzle Game</title>
+    <title>Block Puzzle</title>
   <link rel="stylesheet" href="./dist/index.css"></head>
-  <body>
+  <body class="overflow-hidden bg-body">
     <div id="root"></div>
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <script type="module" src="dist/index.js"></script>
@@ -19,6 +20,12 @@
       To begin the development, run `npm start` or `yarn start`.
       To create a production bundle, use `npm run build` or `yarn build`.
     -->
+
+    <!--
+      Using an invalid type gets Snowpack to pick this up and bundle it, but
+      it won't execute in the browser.
+    -->
+    <script type="ServiceWorkerHack" src="/_dist_/push.sw.js"></script>
   
 
 </body></html>

@@ -146,7 +146,7 @@
       ]
     },
     "dist/app-state.js": {
-      "bytes": 8456,
+      "bytes": 8460,
       "imports": [
         {
           "path": "dist/shared/Shape.js",
@@ -250,7 +250,20 @@
       ]
     },
     "dist/GameOver.js": {
-      "bytes": 1449,
+      "bytes": 1341,
+      "imports": [
+        {
+          "path": "snowpack/pkg/classnames.js",
+          "kind": "import-statement"
+        },
+        {
+          "path": "snowpack/pkg/react.js",
+          "kind": "import-statement"
+        }
+      ]
+    },
+    "dist/InstallPrompt.js": {
+      "bytes": 1163,
       "imports": [
         {
           "path": "snowpack/pkg/classnames.js",
@@ -263,7 +276,7 @@
       ]
     },
     "dist/App.js": {
-      "bytes": 2795,
+      "bytes": 2803,
       "imports": [
         {
           "path": "snowpack/pkg/react.js",
@@ -290,17 +303,25 @@
           "kind": "import-statement"
         },
         {
+          "path": "dist/InstallPrompt.js",
+          "kind": "import-statement"
+        },
+        {
           "path": "dist/shared/Shape.js",
           "kind": "import-statement"
         }
       ]
     },
     "dist/index.css": {
-      "bytes": 6790569,
+      "bytes": 15142,
+      "imports": []
+    },
+    "dist/load-service-worker.js": {
+      "bytes": 103,
       "imports": []
     },
     "dist/index.js": {
-      "bytes": 510,
+      "bytes": 545,
       "imports": [
         {
           "path": "snowpack/env.js",
@@ -320,6 +341,10 @@
         },
         {
           "path": "dist/index.css",
+          "kind": "import-statement"
+        },
+        {
+          "path": "dist/load-service-worker.js",
           "kind": "import-statement"
         }
       ]
@@ -352,7 +377,7 @@
           "bytesInOutput": 650
         },
         "dist/App.js": {
-          "bytesInOutput": 2506
+          "bytesInOutput": 2464
         },
         "snowpack/pkg/react-dnd-touch-backend.js": {
           "bytesInOutput": 19746
@@ -373,7 +398,7 @@
           "bytesInOutput": 657
         },
         "dist/app-state.js": {
-          "bytesInOutput": 8172
+          "bytesInOutput": 8176
         },
         "dist/Board/Board.js": {
           "bytesInOutput": 1555
@@ -385,25 +410,31 @@
           "bytesInOutput": 1594
         },
         "dist/GameOver.js": {
-          "bytesInOutput": 1341
+          "bytesInOutput": 1233
+        },
+        "dist/InstallPrompt.js": {
+          "bytesInOutput": 1062
         },
         "dist/index.css": {
           "bytesInOutput": 0
+        },
+        "dist/load-service-worker.js": {
+          "bytesInOutput": 101
         },
         "dist/index.js": {
           "bytesInOutput": 244
         }
       },
-      "bytes": 350184
+      "bytes": 351259
     },
     "../~~bundle~~/dist/index.css": {
       "imports": [],
       "inputs": {
         "dist/index.css": {
-          "bytesInOutput": 6720328
+          "bytesInOutput": 8352
         }
       },
-      "bytes": 6720349
+      "bytes": 8373
     }
   }
 }
