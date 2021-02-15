@@ -124,6 +124,8 @@ function useShapeDrag(
         row = closest.row;
         column = closest.column;
       }
+      column = Math.floor(shape.columns / 2);
+      row = shape.rows - 1;
 
       return {
         type: SHAPE,
