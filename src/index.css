@@ -2,20 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
-}
-
 .square {
   position: relative;
   /* margin: 5px; */
@@ -36,67 +22,83 @@ code {
   width: 100%;
 }
 
-.bg-body {
-  background-color: #3a5a40;
-}
-.bg-game-over {
-  background-color: rgba(58, 90, 64, 1);
-}
-.bg-game-over.effects {
-  background-color: rgba(58, 90, 64, 0.6);
+@layer utilities {
+  .bg-body {
+    background-color: #3a5a40;
+  }
+  .bg-game-over {
+    background-color: rgba(58, 90, 64, 1);
+  }
+  .bg-game-over.effects {
+    background-color: rgba(58, 90, 64, 0.6);
+  }
+
+  .bg-container {
+    background-color: #588157;
+  }
+
+  .bg-tile-filled {
+    background-color: #dad7cd;
+  }
+  .bg-tile-empty {
+    background-color: #a3b18a;
+  }
+
+  .border-color {
+    border-color: #344e41;
+  }
+
+  .ring-preview {
+    --tw-ring-opacity: 1;
+    /* #344e41 */
+    --tw-ring-color: rgba(52, 78, 65, var(--tw-ring-opacity));
+  }
 }
 
-.bg-container {
-  background-color: #588157;
+@layer components {
+  .app-container {
+    display: grid;
+    grid-template-rows: min-content min-content min-content min-content auto;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-areas:
+      'header header header'
+      'score newGame highScore'
+      'board board board'
+      'shape1 shape2 shape3'
+      '. . .';
+  }
+
+  .app-header {
+    grid-area: header;
+  }
+  .app-score {
+    grid-area: score;
+  }
+  .app-high-score {
+    grid-area: highScore;
+  }
+  .app-new-game {
+    grid-area: newGame;
+  }
+  .app-options {
+    grid-area: options;
+  }
+  .app-board {
+    grid-area: board;
+  }
+
+  .app-install {
+    grid-row-start: shape1-start;
+    grid-column-start: shape1-start;
+    grid-column-end: shape3-end;
+  }
+
+  .app-btn {
+    @apply bg-blue-300 rounded-md p-2 m-3;
+  }
 }
 
-.bg-tile-filled {
-  background-color: #dad7cd;
-}
-.bg-tile-empty {
-  background-color: #a3b18a;
-}
-
-.border-color {
-  border-color: #344e41;
-}
-
-.ring-preview {
-  --tw-ring-opacity: 1;
-  /* #344e41 */
-  --tw-ring-color: rgba(52, 78, 65, var(--tw-ring-opacity));
-}
-
-.app-container {
-  display: grid;
-  grid-template-rows: min-content min-content min-content min-content auto;
-  grid-template-columns: 1fr 1fr 1fr;
-  grid-template-areas:
-    'header header header'
-    'score newGame highScore'
-    'board board board'
-    'shape1 shape2 shape3'
-    '. . .';
-}
-
-.app-header {
-  grid-area: header;
-}
-.app-score {
-  grid-area: score;
-}
-.app-high-score {
-  grid-area: highScore;
-}
-.app-new-game {
-  grid-area: newGame;
-}
-.app-options {
-  grid-area: options;
-}
-.app-board {
-  grid-area: board;
-}
+/* Keep these out of @layer components so they don't get removed */
 .app-shape-1 {
   grid-area: shape1;
 }
@@ -105,16 +107,4 @@ code {
 }
 .app-shape-3 {
   grid-area: shape3;
-}
-
-.app-install {
-  grid-row-start: shape1-start;
-  grid-column-start: shape1-start;
-  grid-column-end: shape3-end;
-}
-
-@layer components {
-  .app-btn {
-    @apply bg-blue-300 rounded-md p-2 m-3;
-  }
 }

@@ -6,8 +6,6 @@ import type { State } from './app-state';
 /**
  * The BeforeInstallPromptEvent is fired at the Window.onbeforeinstallprompt handler
  * before a user is prompted to "install" a web site to a home screen on mobile.
- *
- * @deprecated Only supported on Chrome and Android Webview.
  */
 interface BeforeInstallPromptEvent extends Event {
   /**
@@ -37,7 +35,10 @@ type InstallPromptProps = {
   className: string;
   state: State;
 };
-export function InstallPrompt({ className, state }: InstallPromptProps) {
+export function InstallPrompt({
+  className,
+  state,
+}: InstallPromptProps): JSX.Element | null {
   const [
     deferredPrompt,
     setPrompt,

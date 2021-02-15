@@ -46,11 +46,6 @@ function App(): JSX.Element {
     },
   );
 
-  React.useEffect(() => {
-    document.body.classList.add('overflow-hidden');
-    document.body.classList.add('bg-body');
-  }, []);
-
   return (
     <DndProvider
       debugMode={true}
