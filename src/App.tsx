@@ -5,9 +5,8 @@ import { TouchBackend } from 'react-dnd-touch-backend';
 import { defaultState, reducer } from './app-state';
 import Board from './Board/Board';
 import { GameOver, NewGameButton } from './GameOver';
+import { InstallPrompt } from './InstallPrompt';
 import Shape from './shared/Shape';
-
-// TODO: appDispatchContext
 
 const key = 'gameState';
 const useLocalStorageReducer = (
@@ -62,9 +61,9 @@ function App(): JSX.Element {
     >
       <div className="app-container text-white container gap-3 px-3 py-3 mx-auto max-w-lg bg-container min-h-screen select-none">
         <header className="app-header text-center text-xl">
-          <div>Untitled Puzzle Game</div>
+          <div>Block Puzzle</div>
         </header>
-        <div className="app-score text-center  text-lg">
+        <div className="app-score text-center text-lg">
           Score: {state.score}
         </div>
         {state.highScore > 0 ? (
@@ -73,6 +72,7 @@ function App(): JSX.Element {
           </div>
         ) : null}
         <NewGameButton dispatch={dispatch} />
+        <InstallPrompt state={state} className="app-install" />
 
         <Board
           className="app-board"

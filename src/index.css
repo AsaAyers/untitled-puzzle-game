@@ -35,6 +35,7 @@ code {
   height: 100%;
   width: 100%;
 }
+
 .bg-body {
   background-color: #3a5a40;
 }
@@ -104,4 +105,16 @@ code {
 }
 .app-shape-3 {
   grid-area: shape3;
+}
+
+.app-install {
+  grid-row-start: shape1-start;
+  grid-column-start: shape1-start;
+  grid-column-end: shape3-end;
+}
+
+@layer components {
+  .app-btn {
+    @apply bg-blue-300 rounded-md p-2 m-3;
+  }
 }

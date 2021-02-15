@@ -10,7 +10,7 @@ export function NewGameButton({
 }): JSX.Element {
   return (
     <button
-      className="app-new-game bg-blue-300 rounded-md px-2 py-2 mx-3 my-3 "
+      className="app-new-game app-btn"
       onClick={() => dispatch({ type: 'NewGame' })}
     >
       New Game
@@ -64,7 +64,6 @@ export function GameOver({
       {gameOverEffect !== 'none' ? (
         <div>Animation: {gameOverEffect}</div>
       ) : null}
-      <NewGameButton dispatch={dispatch} />
     </div>
   );
 }

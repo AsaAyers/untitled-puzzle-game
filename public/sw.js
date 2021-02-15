@@ -14,6 +14,10 @@ Copyright 2015, 2019 Google Inc. All Rights Reserved.
 // Incrementing OFFLINE_VERSION will kick off the install event and force
 // previously cached resources to be updated from the network.
 
+// This SW doesn't really work offline, but it caches just enough that I can
+// verify Chrome will "install" it in development. This whole file is replaced
+// in the published build.
+
 const OFFLINE_VERSION = 1;
 const CACHE_NAME = 'offline';
 // Customize this with a different URL if needed.
