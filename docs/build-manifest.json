@@ -276,7 +276,7 @@
       ]
     },
     "dist/App.js": {
-      "bytes": 2549,
+      "bytes": 2565,
       "imports": [
         {
           "path": "snowpack/pkg/react.js",
@@ -377,7 +377,7 @@
           "bytesInOutput": 650
         },
         "dist/App.js": {
-          "bytesInOutput": 2210
+          "bytesInOutput": 2226
         },
         "snowpack/pkg/react-dnd-touch-backend.js": {
           "bytesInOutput": 19746
@@ -425,7 +425,7 @@
           "bytesInOutput": 244
         }
       },
-      "bytes": 351436
+      "bytes": 351452
     },
     "../~~bundle~~/dist/index.css": {
       "imports": [],

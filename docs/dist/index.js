@@ -11569,7 +11569,7 @@ function App() {
       enableMouseEvents: true
     }
   }, /* @__PURE__ */ react.createElement("div", {
-    className: "app-container text-white container gap-3 px-3 py-3 mx-auto max-w-lg bg-container min-h-screen select-none"
+    className: "app-container text-white overflow-hidden container gap-3 px-3 py-3 mx-auto max-w-lg bg-container min-h-screen select-none"
   }, /* @__PURE__ */ react.createElement("header", {
     className: "app-header text-center text-xl"
   }, /* @__PURE__ */ react.createElement("div", null, "Block Puzzle")), /* @__PURE__ */ react.createElement("div", {
