@@ -54,7 +54,7 @@ function App(): JSX.Element {
         enableMouseEvents: true,
       }}
     >
-      <div className="app-container text-white container gap-3 px-3 py-3 mx-auto max-w-lg bg-container min-h-screen select-none">
+      <div className="app-container text-white overflow-hidden container gap-3 px-3 py-3 mx-auto max-w-lg bg-container min-h-screen select-none">
         <header className="app-header text-center text-xl">
           <div>Block Puzzle</div>
         </header>
